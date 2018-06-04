@@ -4,6 +4,8 @@
 #include "QSpacerItem"
 #include "QString"
 
+#include "controlelementdescription.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -128,33 +130,32 @@ void MainWindow::initUserUIAdjustments(void)
 
     /*****************************MODBUS ADJUSTMENT PARAMITERS*********************/
     // Set baud rate list items
-    QStringList baudRateList = {"1200",
-                                "2400",
-                                "4800",
-                                "7200",
-                                "9600",
-                                "4800",
-                                "14400",
-                                "19200",
-                                "38400",
-                                "57600",
-                                "115200"};
+    QStringList baudRateList = {LIST_OF_RS485_SPEED};
     ui->comboBoxModbusBoadrate->addItems(baudRateList);
     ui->comboBoxModbusBoadrate->setCurrentIndex(4);
 
     // Set baud rate list items
-    QStringList parityList = {"None",
-                              "Even",
-                              "Odd"};
+    QStringList parityList = {LIST_OF_PARITY};
     ui->comboBoxModbusParity->addItems(parityList);
     ui->comboBoxModbusParity->setCurrentIndex(0);
 
     // Set adress area of device
-    uint32_t addressIndex = 1;
-    for(;addressIndex < 254; addressIndex++)
+    for(uint32_t addressIndex = 1;addressIndex < 254; addressIndex++)
     {
         ui->comboBoxModbusAddress->addItem(QString::number(addressIndex), 0);
     }
+
+    /*****************************FREQUENCY METERING  PARAMITERS*********************/
+
+    QStringList listOfSign = {LIST_OF_SIGN};
+    ui->comboBoxFrqMeteringSign->addItems(listOfSign);
+    for(uint32_t correction = 0; correction < 10; correction++)
+    {
+        ui->comboBoxFrqMeteringNum1->addItem(QString::number(correction), 0);
+        ui->comboBoxFrqMeteringNum01->addItem(QString::number(correction), 0);
+        ui->comboBoxFrqMeteringNum001->addItem(QString::number(correction), 0);
+    }
+
     /*****************************LCD ADJUSTMENT PARAMITERS*********************/
     QString baseLCDName = "Индикатор №";
     for(uint8_t cnt = 0; cnt < NumberOdLCD; cnt++)

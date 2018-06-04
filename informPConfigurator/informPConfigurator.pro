@@ -19,7 +19,8 @@ SOURCES += main.cpp\
 
 HEADERS += mainwindow.h \
            userhidinterfaces.h \
-    lcdstr.h
+    lcdstr.h \
+    controlelementdescription.h
 
 FORMS   += mainwindow.ui \
            lcdstr.ui \
