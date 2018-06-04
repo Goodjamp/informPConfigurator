@@ -120,6 +120,12 @@ void MainWindow::on_pushButtonCloseDevice_clicked()
 
 void MainWindow::initUserUIAdjustments(void)
 {
+    // Set main window paramiters
+    QRect size = this->geometry();
+    this->setFixedWidth(size.width());
+    this->setFixedHeight(size.height());
+    //this->setWi
+
     /*****************************MODBUS ADJUSTMENT PARAMITERS*********************/
     // Set baud rate list items
     QStringList baudRateList = {"1200",

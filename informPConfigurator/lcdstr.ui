@@ -66,13 +66,13 @@
       <widget class="QLabel" name="labelLCDName">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>150</width>
          <height>10</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
+         <width>150</width>
          <height>20</height>
         </size>
        </property>
@@ -98,13 +98,13 @@
       <widget class="QCheckBox" name="checkBoxPar1">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -130,13 +130,13 @@
       <widget class="QCheckBox" name="checkBoxPar2">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -162,13 +162,13 @@
       <widget class="QCheckBox" name="checkBoxPar3">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -194,13 +194,13 @@
       <widget class="QCheckBox" name="checkBoxPar4">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -226,13 +226,13 @@
       <widget class="QCheckBox" name="checkBoxPar5">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -258,13 +258,13 @@
       <widget class="QCheckBox" name="checkBoxPar6">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -290,13 +290,13 @@
       <widget class="QCheckBox" name="checkBoxPar7">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -322,13 +322,13 @@
       <widget class="QCheckBox" name="checkBoxPar8">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
@@ -354,13 +354,13 @@
       <widget class="QCheckBox" name="checkBoxPar9">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2000</width>
+         <width>120</width>
          <height>20</height>
         </size>
        </property>

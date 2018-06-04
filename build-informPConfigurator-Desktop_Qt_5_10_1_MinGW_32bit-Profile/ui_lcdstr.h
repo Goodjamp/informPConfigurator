@@ -75,8 +75,8 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         labelLCDName = new QLabel(lcdStr);
         labelLCDName->setObjectName(QStringLiteral("labelLCDName"));
-        labelLCDName->setMinimumSize(QSize(20, 10));
-        labelLCDName->setMaximumSize(QSize(80, 20));
+        labelLCDName->setMinimumSize(QSize(150, 10));
+        labelLCDName->setMaximumSize(QSize(150, 20));
 
         horizontalLayout->addWidget(labelLCDName);
 
@@ -86,8 +86,8 @@ public:
 
         checkBoxPar1 = new QCheckBox(lcdStr);
         checkBoxPar1->setObjectName(QStringLiteral("checkBoxPar1"));
-        checkBoxPar1->setMinimumSize(QSize(20, 20));
-        checkBoxPar1->setMaximumSize(QSize(2000, 20));
+        checkBoxPar1->setMinimumSize(QSize(120, 20));
+        checkBoxPar1->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar1);
 
@@ -97,8 +97,8 @@ public:
 
         checkBoxPar2 = new QCheckBox(lcdStr);
         checkBoxPar2->setObjectName(QStringLiteral("checkBoxPar2"));
-        checkBoxPar2->setMinimumSize(QSize(20, 20));
-        checkBoxPar2->setMaximumSize(QSize(2000, 20));
+        checkBoxPar2->setMinimumSize(QSize(120, 20));
+        checkBoxPar2->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar2);
 
@@ -108,8 +108,8 @@ public:
 
         checkBoxPar3 = new QCheckBox(lcdStr);
         checkBoxPar3->setObjectName(QStringLiteral("checkBoxPar3"));
-        checkBoxPar3->setMinimumSize(QSize(20, 20));
-        checkBoxPar3->setMaximumSize(QSize(2000, 20));
+        checkBoxPar3->setMinimumSize(QSize(120, 20));
+        checkBoxPar3->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar3);
 
@@ -119,8 +119,8 @@ public:
 
         checkBoxPar4 = new QCheckBox(lcdStr);
         checkBoxPar4->setObjectName(QStringLiteral("checkBoxPar4"));
-        checkBoxPar4->setMinimumSize(QSize(20, 20));
-        checkBoxPar4->setMaximumSize(QSize(2000, 20));
+        checkBoxPar4->setMinimumSize(QSize(120, 20));
+        checkBoxPar4->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar4);
 
@@ -130,8 +130,8 @@ public:
 
         checkBoxPar5 = new QCheckBox(lcdStr);
         checkBoxPar5->setObjectName(QStringLiteral("checkBoxPar5"));
-        checkBoxPar5->setMinimumSize(QSize(20, 20));
-        checkBoxPar5->setMaximumSize(QSize(2000, 20));
+        checkBoxPar5->setMinimumSize(QSize(120, 20));
+        checkBoxPar5->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar5);
 
@@ -141,8 +141,8 @@ public:
 
         checkBoxPar6 = new QCheckBox(lcdStr);
         checkBoxPar6->setObjectName(QStringLiteral("checkBoxPar6"));
-        checkBoxPar6->setMinimumSize(QSize(20, 20));
-        checkBoxPar6->setMaximumSize(QSize(2000, 20));
+        checkBoxPar6->setMinimumSize(QSize(120, 20));
+        checkBoxPar6->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar6);
 
@@ -152,8 +152,8 @@ public:
 
         checkBoxPar7 = new QCheckBox(lcdStr);
         checkBoxPar7->setObjectName(QStringLiteral("checkBoxPar7"));
-        checkBoxPar7->setMinimumSize(QSize(20, 20));
-        checkBoxPar7->setMaximumSize(QSize(2000, 20));
+        checkBoxPar7->setMinimumSize(QSize(120, 20));
+        checkBoxPar7->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar7);
 
@@ -163,8 +163,8 @@ public:
 
         checkBoxPar8 = new QCheckBox(lcdStr);
         checkBoxPar8->setObjectName(QStringLiteral("checkBoxPar8"));
-        checkBoxPar8->setMinimumSize(QSize(20, 20));
-        checkBoxPar8->setMaximumSize(QSize(2000, 20));
+        checkBoxPar8->setMinimumSize(QSize(120, 20));
+        checkBoxPar8->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar8);
 
@@ -174,8 +174,8 @@ public:
 
         checkBoxPar9 = new QCheckBox(lcdStr);
         checkBoxPar9->setObjectName(QStringLiteral("checkBoxPar9"));
-        checkBoxPar9->setMinimumSize(QSize(20, 20));
-        checkBoxPar9->setMaximumSize(QSize(2000, 20));
+        checkBoxPar9->setMinimumSize(QSize(120, 20));
+        checkBoxPar9->setMaximumSize(QSize(120, 20));
 
         horizontalLayout->addWidget(checkBoxPar9);
 
