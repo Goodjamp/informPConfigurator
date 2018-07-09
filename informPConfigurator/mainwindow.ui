@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1343</width>
-    <height>440</height>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -216,7 +216,7 @@
          </font>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <property name="iconSize">
          <size>
@@ -574,13 +574,13 @@
              <widget class="QLabel" name="label_28">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -601,13 +601,13 @@
              <widget class="QLabel" name="label_31">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -628,13 +628,13 @@
              <widget class="QLabel" name="label_29">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -655,13 +655,13 @@
              <widget class="QLabel" name="label_30">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -723,13 +723,13 @@
              <widget class="QComboBox" name="comboBoxFrqMeteringSign">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>40</width>
                 <height>25</height>
                </size>
               </property>
@@ -739,13 +739,13 @@
              <widget class="QComboBox" name="comboBoxFrqMeteringNum1">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -755,13 +755,13 @@
              <widget class="QComboBox" name="comboBoxFrqMeteringNum01">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -771,13 +771,13 @@
              <widget class="QComboBox" name="comboBoxFrqMeteringNum001">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>35</width>
                 <height>25</height>
                </size>
               </property>
@@ -926,7 +926,23 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBoxClockCorrection">
+             <widget class="QComboBox" name="comboBoxClockCorrectionSign">
+              <property name="minimumSize">
+               <size>
+                <width>35</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>25</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBoxClockCorrectionHours">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -943,6 +959,75 @@
                <font>
                 <pointsize>10</pointsize>
                </font>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelClockCorrection_4">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>часов</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBoxClockCorrectionMinutes">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelClockCorrection_5">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>минут</string>
               </property>
              </widget>
             </item>
@@ -1096,7 +1181,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>317</height>
+              <height>40</height>
              </size>
             </property>
            </spacer>

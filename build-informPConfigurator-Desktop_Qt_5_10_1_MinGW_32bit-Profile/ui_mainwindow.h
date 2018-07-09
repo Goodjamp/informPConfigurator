@@ -98,7 +98,11 @@ public:
     QFrame *line_4;
     QHBoxLayout *horizontalLayout_14;
     QLabel *labelClockCorrection;
-    QComboBox *comboBoxClockCorrection;
+    QComboBox *comboBoxClockCorrectionSign;
+    QComboBox *comboBoxClockCorrectionHours;
+    QLabel *labelClockCorrection_4;
+    QComboBox *comboBoxClockCorrectionMinutes;
+    QLabel *labelClockCorrection_5;
     QSpacerItem *horizontalSpacer_13;
     QHBoxLayout *horizontalLayout_15;
     QLabel *labelClockCorrection_2;
@@ -190,7 +194,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1343, 440);
+        MainWindow->resize(1343, 455);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -435,8 +439,8 @@ public:
 
         label_28 = new QLabel(tab_FRQMetering);
         label_28->setObjectName(QStringLiteral("label_28"));
-        label_28->setMinimumSize(QSize(50, 25));
-        label_28->setMaximumSize(QSize(50, 25));
+        label_28->setMinimumSize(QSize(35, 25));
+        label_28->setMaximumSize(QSize(35, 25));
         QFont font3;
         font3.setPointSize(11);
         label_28->setFont(font3);
@@ -446,8 +450,8 @@ public:
 
         label_31 = new QLabel(tab_FRQMetering);
         label_31->setObjectName(QStringLiteral("label_31"));
-        label_31->setMinimumSize(QSize(50, 25));
-        label_31->setMaximumSize(QSize(50, 25));
+        label_31->setMinimumSize(QSize(35, 25));
+        label_31->setMaximumSize(QSize(35, 25));
         label_31->setFont(font3);
         label_31->setAlignment(Qt::AlignCenter);
 
@@ -455,8 +459,8 @@ public:
 
         label_29 = new QLabel(tab_FRQMetering);
         label_29->setObjectName(QStringLiteral("label_29"));
-        label_29->setMinimumSize(QSize(50, 25));
-        label_29->setMaximumSize(QSize(50, 25));
+        label_29->setMinimumSize(QSize(35, 25));
+        label_29->setMaximumSize(QSize(35, 25));
         label_29->setFont(font3);
         label_29->setAlignment(Qt::AlignCenter);
 
@@ -464,8 +468,8 @@ public:
 
         label_30 = new QLabel(tab_FRQMetering);
         label_30->setObjectName(QStringLiteral("label_30"));
-        label_30->setMinimumSize(QSize(50, 25));
-        label_30->setMaximumSize(QSize(50, 25));
+        label_30->setMinimumSize(QSize(35, 25));
+        label_30->setMaximumSize(QSize(35, 25));
         label_30->setFont(font3);
         label_30->setAlignment(Qt::AlignCenter);
 
@@ -491,29 +495,29 @@ public:
 
         comboBoxFrqMeteringSign = new QComboBox(tab_FRQMetering);
         comboBoxFrqMeteringSign->setObjectName(QStringLiteral("comboBoxFrqMeteringSign"));
-        comboBoxFrqMeteringSign->setMinimumSize(QSize(50, 25));
-        comboBoxFrqMeteringSign->setMaximumSize(QSize(50, 25));
+        comboBoxFrqMeteringSign->setMinimumSize(QSize(35, 25));
+        comboBoxFrqMeteringSign->setMaximumSize(QSize(40, 25));
 
         horizontalLayout_12->addWidget(comboBoxFrqMeteringSign);
 
         comboBoxFrqMeteringNum1 = new QComboBox(tab_FRQMetering);
         comboBoxFrqMeteringNum1->setObjectName(QStringLiteral("comboBoxFrqMeteringNum1"));
-        comboBoxFrqMeteringNum1->setMinimumSize(QSize(50, 25));
-        comboBoxFrqMeteringNum1->setMaximumSize(QSize(50, 25));
+        comboBoxFrqMeteringNum1->setMinimumSize(QSize(35, 25));
+        comboBoxFrqMeteringNum1->setMaximumSize(QSize(35, 25));
 
         horizontalLayout_12->addWidget(comboBoxFrqMeteringNum1);
 
         comboBoxFrqMeteringNum01 = new QComboBox(tab_FRQMetering);
         comboBoxFrqMeteringNum01->setObjectName(QStringLiteral("comboBoxFrqMeteringNum01"));
-        comboBoxFrqMeteringNum01->setMinimumSize(QSize(50, 25));
-        comboBoxFrqMeteringNum01->setMaximumSize(QSize(50, 25));
+        comboBoxFrqMeteringNum01->setMinimumSize(QSize(35, 25));
+        comboBoxFrqMeteringNum01->setMaximumSize(QSize(35, 25));
 
         horizontalLayout_12->addWidget(comboBoxFrqMeteringNum01);
 
         comboBoxFrqMeteringNum001 = new QComboBox(tab_FRQMetering);
         comboBoxFrqMeteringNum001->setObjectName(QStringLiteral("comboBoxFrqMeteringNum001"));
-        comboBoxFrqMeteringNum001->setMinimumSize(QSize(50, 25));
-        comboBoxFrqMeteringNum001->setMaximumSize(QSize(50, 25));
+        comboBoxFrqMeteringNum001->setMinimumSize(QSize(35, 25));
+        comboBoxFrqMeteringNum001->setMaximumSize(QSize(35, 25));
 
         horizontalLayout_12->addWidget(comboBoxFrqMeteringNum001);
 
@@ -581,13 +585,44 @@ public:
 
         horizontalLayout_14->addWidget(labelClockCorrection);
 
-        comboBoxClockCorrection = new QComboBox(tab_Clock);
-        comboBoxClockCorrection->setObjectName(QStringLiteral("comboBoxClockCorrection"));
-        comboBoxClockCorrection->setMinimumSize(QSize(100, 25));
-        comboBoxClockCorrection->setMaximumSize(QSize(100, 25));
-        comboBoxClockCorrection->setFont(font2);
+        comboBoxClockCorrectionSign = new QComboBox(tab_Clock);
+        comboBoxClockCorrectionSign->setObjectName(QStringLiteral("comboBoxClockCorrectionSign"));
+        comboBoxClockCorrectionSign->setMinimumSize(QSize(35, 25));
+        comboBoxClockCorrectionSign->setMaximumSize(QSize(40, 25));
 
-        horizontalLayout_14->addWidget(comboBoxClockCorrection);
+        horizontalLayout_14->addWidget(comboBoxClockCorrectionSign);
+
+        comboBoxClockCorrectionHours = new QComboBox(tab_Clock);
+        comboBoxClockCorrectionHours->setObjectName(QStringLiteral("comboBoxClockCorrectionHours"));
+        comboBoxClockCorrectionHours->setMinimumSize(QSize(100, 25));
+        comboBoxClockCorrectionHours->setMaximumSize(QSize(100, 25));
+        comboBoxClockCorrectionHours->setFont(font2);
+
+        horizontalLayout_14->addWidget(comboBoxClockCorrectionHours);
+
+        labelClockCorrection_4 = new QLabel(tab_Clock);
+        labelClockCorrection_4->setObjectName(QStringLiteral("labelClockCorrection_4"));
+        labelClockCorrection_4->setMinimumSize(QSize(50, 25));
+        labelClockCorrection_4->setMaximumSize(QSize(50, 25));
+        labelClockCorrection_4->setFont(font2);
+
+        horizontalLayout_14->addWidget(labelClockCorrection_4);
+
+        comboBoxClockCorrectionMinutes = new QComboBox(tab_Clock);
+        comboBoxClockCorrectionMinutes->setObjectName(QStringLiteral("comboBoxClockCorrectionMinutes"));
+        comboBoxClockCorrectionMinutes->setMinimumSize(QSize(100, 25));
+        comboBoxClockCorrectionMinutes->setMaximumSize(QSize(100, 25));
+        comboBoxClockCorrectionMinutes->setFont(font2);
+
+        horizontalLayout_14->addWidget(comboBoxClockCorrectionMinutes);
+
+        labelClockCorrection_5 = new QLabel(tab_Clock);
+        labelClockCorrection_5->setObjectName(QStringLiteral("labelClockCorrection_5"));
+        labelClockCorrection_5->setMinimumSize(QSize(50, 25));
+        labelClockCorrection_5->setMaximumSize(QSize(50, 25));
+        labelClockCorrection_5->setFont(font2);
+
+        horizontalLayout_14->addWidget(labelClockCorrection_5);
 
         horizontalSpacer_13 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -648,7 +683,7 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout_16);
 
-        verticalSpacer_3 = new QSpacerItem(20, 317, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_5->addItem(verticalSpacer_3);
 
@@ -1192,7 +1227,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1219,6 +1254,8 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_FRQMetering), QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\202\320\276\321\202\320\276\320\274\320\265\321\200", nullptr));
         labelClockStatus->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));
         labelClockCorrection->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\277\321\200\320\260\320\262\320\272\320\260 \320\275\320\260 \321\207\320\260\321\201\320\276\320\262\320\276\320\271 \320\277\320\276\321\217\321\201", nullptr));
+        labelClockCorrection_4->setText(QApplication::translate("MainWindow", "\321\207\320\260\321\201\320\276\320\262", nullptr));
+        labelClockCorrection_5->setText(QApplication::translate("MainWindow", "\320\274\320\270\320\275\321\203\321\202", nullptr));
         labelClockCorrection_2->setText(QApplication::translate("MainWindow", "\320\220\320\262\321\202. \320\277\320\265\321\200\320\265\321\205\320\276\320\264 \320\275\320\260 \320\273\320\265\321\202\320\275\320\265\320\265 \320\262\321\200\320\265\320\274\321\217", nullptr));
         checkBoxClockSetDaylight->setText(QString());
         labelClockCorrection_3->setText(QApplication::translate("MainWindow", "\320\230\321\201\321\202\320\276\321\207\320\275\320\270\320\272 \321\201\320\270\320\263\320\275\320\260\320\273\320\260 \321\201\320\270\320\275\321\205\321\200\320\276\320\275\320\270\320\267\320\260\321\206\320\270\320\270", nullptr));

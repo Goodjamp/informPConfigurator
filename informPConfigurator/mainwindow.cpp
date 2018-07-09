@@ -126,7 +126,10 @@ void MainWindow::initUserUIAdjustments(void)
     QRect size = this->geometry();
     this->setFixedWidth(size.width());
     this->setFixedHeight(size.height());
-    //this->setWi
+
+    // Set state
+    QStringList stateList = {LIST_OF_STATE};
+    QStringList listOfSign = {LIST_OF_SIGN};
 
     /*****************************MODBUS ADJUSTMENT PARAMITERS*********************/
     // Set baud rate list items
@@ -147,8 +150,13 @@ void MainWindow::initUserUIAdjustments(void)
 
     /*****************************FREQUENCY METERING  PARAMITERS*********************/
 
-    QStringList listOfSign = {LIST_OF_SIGN};
+
+    ui->comboBoxFrqMeteringState->addItems(stateList);
+    ui->comboBoxFrqMeteringState->setCurrentIndex(0);
+
     ui->comboBoxFrqMeteringSign->addItems(listOfSign);
+    ui->comboBoxFrqMeteringSign->setCurrentIndex(0);
+
     for(uint32_t correction = 0; correction < 10; correction++)
     {
         ui->comboBoxFrqMeteringNum1->addItem(QString::number(correction), 0);
@@ -164,6 +172,27 @@ void MainWindow::initUserUIAdjustments(void)
         ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 1,lcdStrVector[cnt]);
         lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
     }
+    /*****************************CLOCK  PARAMITERS*********************/
+
+    ui->comboBoxClockState->addItems(stateList);
+    ui->comboBoxClockState->setCurrentIndex(0);
+
+    ui->comboBoxClockCorrectionSign->addItems(listOfSign);
+    ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
+
+    QStringList minutesCorrectionList = {LIST_MINUTES_CORRECTION};
+    ui->comboBoxClockCorrectionMinutes->addItems(minutesCorrectionList);
+    ui->comboBoxClockCorrectionMinutes->setCurrentIndex(0);
+
+    for(uint32_t correction = 0; correction < 12; correction++)
+    {
+        ui->comboBoxClockCorrectionHours->addItem(QString::number(correction), 0);
+    }
+
+    QStringList syncSourceList = {LIST_SYNC_SOURCE};
+    ui->comboBoxClockSyncSource->addItems(syncSourceList);
+    ui->comboBoxClockSyncSource->setCurrentIndex(0);
+
 }
 
 
