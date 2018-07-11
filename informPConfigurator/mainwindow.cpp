@@ -3,6 +3,8 @@
 #include "QDebug"
 #include "QSpacerItem"
 #include "QString"
+#include "QMessageBox"
+
 
 #include "controlelementdescription.h"
 
@@ -17,10 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     deviceList = new QStringListModel(this);
     //ui->listViewDeviceList->setModel(deviceList);
 
-    hidWorkspace = new userHIDInterfaces();
-
-    ui->pushButtonOpenDevice->setDisabled(true);
-    ui->pushButtonCloseDevice->setDisabled(true);
+    userHID = new hidInterface();
 }
 
 MainWindow::~MainWindow()
@@ -28,93 +27,39 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButtonGetDevice_clicked()
+
+void MainWindow::setDeviseCloseUIState(void)
 {
+    ui->pushButtonCloseDevice->setDisabled(true);
+    ui->pushButtonOpenDevice->setDisabled(false);
+    ui->pushButtonRead->setDisabled(true);
+    ui->pushButtonWrite->setDisabled(true);
+}
 
-    QStringList List;
-    deviceList->removeRows(0,deviceList->rowCount());
 
-    hidWorkspace->hidWPathList.clear();
-    hidWorkspace->initUSB();
-
-    for(uint8_t k = 0; k < hidWorkspace->hidWPathList.size(); k++ )
-    {
-        List.push_back( QString::fromStdWString(hidWorkspace->hidWPathList[k]) );
-    }
-
-    deviceList->setStringList(List);
+void MainWindow::setDeviseOpenUIState(void)
+{
+    ui->pushButtonCloseDevice->setDisabled(false);
     ui->pushButtonOpenDevice->setDisabled(true);
+    ui->pushButtonRead->setDisabled(false);
+    ui->pushButtonWrite->setDisabled(false);
 }
 
-void MainWindow::on_listViewDeviceList_clicked(const QModelIndex &index)
+
+void MainWindow::messageErrorWindowShow(QString errorString)
 {
-    std::wstring VID;
-    std::wstring PID;
-    std::wstring Manufactor;
-    std::wstring Product;
-
-    if( !hidWorkspace->getDInterfaceInfo( index.row(), VID, PID, Manufactor, Product))
-    {
-        return;
-    }
-    qDebug()<<"SelectedRow"<<index.row()<<"\n";
-
-   // ui->labelPIDString->setText(QString::fromStdWString(PID));
-    //ui->labelVIDstring->setText(QString::fromStdWString(VID));
-   // ui->labelDevDescrString->setText(QString::fromStdWString(Manufactor));
-   // ui->labelInterfaceDescrString->setText(QString::fromStdWString(Product));
-    if(!hidWorkspace->isHIDOpen() )
-    {
-        ui->pushButtonOpenDevice->setEnabled(true);
-    }
+    QMessageBox messageBox;
+    messageBox.critical(0,"Error",errorString);
+    messageBox.setFixedSize(500,200);
+    messageBox.setModal(true);
+    messageBox.show();
 }
 
-
-void MainWindow::on_pushButtonOpenDevice_clicked()
-{
-
-    uint selVID;
-    uint selPID;
-   // uint selRow = ui->listViewDeviceList->selectionModel()->currentIndex().row();
-    /*.
-    hidWorkspace->getDInterfaceVidPid(selRow, selVID, selPID);
-    if( hidWorkspace->openInterface(selVID, selPID))
-    {
-        ui->pushButtonOpenDevice->setDisabled(true);
-        ui->pushButtonCloseDevice->setEnabled(true);
-    }
-
-    if( hidWorkspace->openInterface(selRow))
-    {
-        ui->pushButtonOpenDevice->setDisabled(true);
-        ui->pushButtonCloseDevice->setEnabled(true);
-    }
-    qDebug()<<"SelectedIndex = "<<selRow<<"\n VID = "<<selVID<<"\n PID = "<<selPID ;*/
-}
-
-
-uint8_t writeBuff[32 + 1] = {0,21,31,41,51,61};
-uint8_t readBuff[32 + 1];
-uint32_t numRead = 0;
-
-
-void MainWindow::on_pushButtonSend_clicked()
-{
-     hidWorkspace->writeHIDInterface(writeBuff, 60 + 1);
-}
-
-
-void MainWindow::on_pushButtonReceive_clicked()
-{
-    numRead = hidWorkspace->readHIDInterface(writeBuff, 61);
-    qDebug()<<"Reaz Read "<< numRead<<"\n";
-    qDebug()<<"data: "<< writeBuff[0]<<" "<< writeBuff[1]<<" "<< writeBuff[2]<<" "<< writeBuff[3]<<" "<<"\n";
-}
 
 
 void MainWindow::on_pushButtonCloseDevice_clicked()
 {
-    hidWorkspace->closeInterface();
+    userHID->closeInterface();
     ui->pushButtonOpenDevice->setEnabled(true);
     ui->pushButtonCloseDevice->setDisabled(true);
 }
@@ -126,6 +71,11 @@ void MainWindow::initUserUIAdjustments(void)
     QRect size = this->geometry();
     this->setFixedWidth(size.width());
     this->setFixedHeight(size.height());
+
+    this->setWindowTitle(WIN_NAME);
+
+    // button activity
+    setDeviseCloseUIState();
 
     // Set state
     QStringList stateList = {LIST_OF_STATE};
@@ -166,10 +116,10 @@ void MainWindow::initUserUIAdjustments(void)
 
     /*****************************LCD ADJUSTMENT PARAMITERS*********************/
     QString baseLCDName = "Индикатор №";
-    for(uint8_t cnt = 0; cnt < NumberOdLCD; cnt++)
+    for(uint8_t cnt = 0; cnt < QUANTITY_LCD_STR; cnt++)
     {
         lcdStrVector.push_back(new lcdStr());
-        ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 1,lcdStrVector[cnt]);
+        ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 2,lcdStrVector[cnt]);
         lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
     }
     /*****************************CLOCK  PARAMITERS*********************/
@@ -196,7 +146,25 @@ void MainWindow::initUserUIAdjustments(void)
 }
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButtonOpenDevice_clicked()
+{
+    userHID->initUSB();
+    if( !userHID->openInterface(VID_INFORM_P, PID_INFORM_P))
+    {
+        setDeviseCloseUIState();
+        messageErrorWindowShow(ERROR_OPEN_DEVICE_NOT_FOUND);
+        return;
+    }
+    setDeviseOpenUIState();
+}
+
+
+void MainWindow::on_pushButtonRead_clicked()
+{
+
+}
+
+void MainWindow::on_pushButtonWrite_clicked()
 {
 
 }

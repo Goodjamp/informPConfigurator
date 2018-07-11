@@ -1,8 +1,20 @@
 #ifndef CONTROLELEMENTDESCRIPTION_H
 #define CONTROLELEMENTDESCRIPTION_H
 
+
+#define  PID_INFORM_P       0X1245
+#define  VID_INFORM_P       0X1245
+
+/*************LIST OF ERROR MRSAGES***/
+#define WIN_NAME                           (QString)"- informP -"
+#define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"informP не найден "
+
+
 #define LIST_OF_STATE "ВКЛ",\
                       "ВЫКЛ"
+
+#define LIST_OF_SIGN "+",\
+                     "-"
 
 /***********MODBUS UI DESCRIPTION************************/
 #define LIST_OF_RS485_SPEED "1200",\
@@ -22,8 +34,7 @@
 
 /***********FREQUENCY METERING UI DESCRIPTION*************/
 
-#define LIST_OF_SIGN "+",\
-                     "-"
+
 /***********CLOCK UI DESCRIPTION**************************/
 
 #define LIST_SYNC_SOURCE " CЕРВЕР ",\
@@ -31,5 +42,9 @@
 
 #define LIST_MINUTES_CORRECTION "0",\
                                 "30"
+
+/***********LCD DESCRIPTION**************************/
+#define QUANTITY_LCD_STR       4
+
 
 #endif // CONTROLELEMENTDESCRIPTION_H

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>828</width>
+    <width>1346</width>
     <height>31</height>
    </rect>
   </property>
@@ -62,22 +62,35 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="labelLCDName">
        <property name="minimumSize">
         <size>
-         <width>150</width>
-         <height>10</height>
+         <width>131</width>
+         <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>150</width>
+         <width>131</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
         <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_5">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -98,18 +111,25 @@
       <widget class="QCheckBox" name="checkBoxPar1">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -130,18 +150,25 @@
       <widget class="QCheckBox" name="checkBoxPar2">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -162,18 +189,25 @@
       <widget class="QCheckBox" name="checkBoxPar3">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -194,18 +228,25 @@
       <widget class="QCheckBox" name="checkBoxPar4">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_6">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -226,18 +267,25 @@
       <widget class="QCheckBox" name="checkBoxPar5">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_7">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -258,18 +306,25 @@
       <widget class="QCheckBox" name="checkBoxPar6">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_8">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -290,18 +345,25 @@
       <widget class="QCheckBox" name="checkBoxPar7">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_9">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -322,18 +384,25 @@
       <widget class="QCheckBox" name="checkBoxPar8">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_10">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -354,33 +423,20 @@
       <widget class="QCheckBox" name="checkBoxPar9">
        <property name="minimumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>120</width>
+         <width>70</width>
          <height>20</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string notr="true"/>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_10">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>

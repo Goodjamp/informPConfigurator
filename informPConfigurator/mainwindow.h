@@ -5,7 +5,7 @@
 #include <QStringListModel>
 #include <QVector>
 #include <lcdstr.h>
-#include "userhidinterfaces.h"
+#include "hidInterface.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,37 +20,29 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButtonGetDevice_clicked();
-
-    void on_listViewDeviceList_clicked(const QModelIndex &index);
 
     void on_pushButtonOpenDevice_clicked();
 
     void on_pushButtonCloseDevice_clicked();
 
-    void on_pushButtonReceive_clicked();
+    void on_pushButtonRead_clicked();
 
-    void on_pushButtonSend_clicked();
-
-    void on_pushButton_clicked();
+    void on_pushButtonWrite_clicked();
 
 private:
     Ui::MainWindow *ui;
 
     void initUserUIAdjustments(void);
+    void setDeviseCloseUIState(void);
+    void setDeviseOpenUIState(void);
+    void messageErrorWindowShow(QString errorString);
 
 private:
     QStringListModel *deviceList;
-    userHIDInterfaces *hidWorkspace;
+    hidInterface     *userHID;
 
-    bool isDeviceSelected;
-    uint selVID;
-    uint selPID;
-    uint index;
     /*widjets*/
     QVector<lcdStr*> lcdStrVector;
-
-    const uint8_t NumberOdLCD = 4;
 };
 
 #endif // MAINWINDOW_H

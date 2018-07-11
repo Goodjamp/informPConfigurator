@@ -1,27 +1,30 @@
-#include "userhidinterfaces.h"
-#include "stdio.h"
+#include "stdint.h"
 #include "stdbool.h"
 #include "string.h"
 #include <locale>
 #include <QDebug>
 
-#include "Windows.h"
-#include "WinDef.h"
+#include <windows.h>
+
+#include "hidinterface.h"
+
 extern "C"
 {
 #include "Hidsdi.h"
 }
 #include "Setupapi.h"
 
-userHIDInterfaces::userHIDInterfaces()
+
+hidInterface::hidInterface()
 {
-    hidInterface = NULL;
+    currentHID = NULL;
 }
 
 
-void userHIDInterfaces::initUSB(void)
+void hidInterface::initUSB(void)
 {
         GUID hidGUID;
+        hidWPathList.clear();
         //Get the HID GUID value - used as mask to get list of devices
         HidD_GetHidGuid(&hidGUID);
         //Get a list of devices matching the criteria (hid interface, present)
@@ -40,8 +43,6 @@ void userHIDInterfaces::initUSB(void)
             PSP_INTERFACE_DEVICE_DETAIL_DATA deviceDetail = (PSP_INTERFACE_DEVICE_DETAIL_DATA)(new uint8_t[reqSize]);
             deviceDetail->cbSize = sizeof(SP_INTERFACE_DEVICE_DETAIL_DATA);
 
-            //HidD_GetManufacturerString();
-
             //Fill the buffer with the device details
             if (SetupDiGetDeviceInterfaceDetail(hwDevInf, &deviceInterfaceData, deviceDetail, reqSize, &reqSize, NULL)) {
                   hidWPathList.push_back(deviceDetail->DevicePath);
@@ -53,7 +54,8 @@ void userHIDInterfaces::initUSB(void)
 }
 
 
-bool userHIDInterfaces::getDInterfaceVidPid(uint index, uint &VID, uint &PID)
+
+bool hidInterface::getInterfaceVidPid(uint index ,uint &VID, uint &PID)
 {
     HIDD_ATTRIBUTES tempHidAtributes;
     if(index > hidWPathList.size())
@@ -75,14 +77,17 @@ bool userHIDInterfaces::getDInterfaceVidPid(uint index, uint &VID, uint &PID)
     // Get a VID and PID information
     tempHidAtributes.Size = sizeof(tempHidAtributes);
     HidD_GetAttributes( deviceFile,&tempHidAtributes);
-    CloseHandle(deviceFile);
     VID = tempHidAtributes.VendorID;
     PID = tempHidAtributes.ProductID;
-    return false;
+
+    CloseHandle(deviceFile);
+
+    return true;
 }
 
 
-bool userHIDInterfaces::getDInterfaceInfo(uint index ,std::wstring &VID, std::wstring&PID , std::wstring &Manufacturer, std::wstring &Product )
+
+bool hidInterface::getDInterfaceInfo(uint index ,std::wstring &VID, std::wstring&PID , std::wstring &Manufacturer, std::wstring &Product )
 {
     HIDD_ATTRIBUTES tempHidAtributes;
     if(index > hidWPathList.size())
@@ -132,57 +137,26 @@ bool userHIDInterfaces::getDInterfaceInfo(uint index ,std::wstring &VID, std::ws
 }
 
 
-bool userHIDInterfaces::getInterfaceVidPid(uint index ,uint &VID, uint &PID)
-{
-    HIDD_ATTRIBUTES tempHidAtributes;
-    if(index > hidWPathList.size())
-    {
-        return false;
-    }
-    std::wstring pathString = hidWPathList[index];
-    HANDLE deviceFile = CreateFile(pathString.c_str(),
-                                   GENERIC_READ|GENERIC_WRITE,
-                                   FILE_SHARE_READ|FILE_SHARE_WRITE,
-                                   (LPSECURITY_ATTRIBUTES)NULL,
-                                   OPEN_EXISTING,
-                                   0,
-                                   NULL);
-    if(deviceFile == NULL)
-    {
-        return false;
-    }
-    // Get a VID and PID information
-    tempHidAtributes.Size = sizeof(tempHidAtributes);
-    HidD_GetAttributes( deviceFile,&tempHidAtributes);
-    VID = tempHidAtributes.VendorID;
-    PID = tempHidAtributes.ProductID;
-
-    CloseHandle(deviceFile);
-
-    return true;
-}
-
-
-bool userHIDInterfaces::openInterface(uint index)
+bool hidInterface::openInterface(uint index)
 {
     //HIDD_ATTRIBUTES tempHidAtributes;
     if(index > hidWPathList.size())
     {
         return false;
     }
-    if(hidInterface != 0 ) //class interface should be free
+    if(currentHID != 0 ) //class interface should be free
     {
         return false;
     }
     std::wstring pathString = hidWPathList[index];
-    hidInterface = CreateFile(pathString.c_str(),
+    currentHID = CreateFile(pathString.c_str(),
                                    GENERIC_READ|GENERIC_WRITE,
                                    FILE_SHARE_READ|FILE_SHARE_WRITE,
                                    (LPSECURITY_ATTRIBUTES)NULL,
                                    OPEN_EXISTING,
                                    0,
                                    NULL);
-    if(hidInterface == NULL)
+    if(currentHID == NULL)
     {
         return false;
     }
@@ -190,32 +164,39 @@ bool userHIDInterfaces::openInterface(uint index)
 }
 
 
-bool userHIDInterfaces::openInterface(uint &VID, uint &PID)
+bool hidInterface::openInterface(uint VID, uint PID)
 {
     HIDD_ATTRIBUTES tempHidAtributes;
     uint16_t k;
     std::wstring pathString;
-    if(hidInterface != 0 ) //class interface should be free
+    hEventObject = CreateEvent((LPSECURITY_ATTRIBUTES)NULL, FALSE, TRUE, L"");
+    HIDOverlapped.hEvent = hEventObject;
+    HIDOverlapped.Offset = 0;
+    HIDOverlapped.OffsetHigh = 0;
+
+    if(currentHID != NULL ) //class interface should be free
     {
         return false;
     }
+
     for(k = 0; k < hidWPathList.size(); k++)
     {
         pathString = hidWPathList[k];
-        hidInterface = CreateFile(pathString.c_str(),
-                                       GENERIC_READ|GENERIC_WRITE,
-                                       FILE_SHARE_READ|FILE_SHARE_WRITE,
-                                       (LPSECURITY_ATTRIBUTES)NULL,
-                                       OPEN_EXISTING,
-                                       0,
-                                       NULL);
-        if(hidInterface == NULL)
+        currentHID = CreateFile(pathString.c_str(),
+                                GENERIC_READ|GENERIC_WRITE,
+                                FILE_SHARE_READ|FILE_SHARE_WRITE,
+                                (LPSECURITY_ATTRIBUTES)NULL,
+                                OPEN_EXISTING,
+                                FILE_FLAG_OVERLAPPED,
+                                NULL);
+
+        if(currentHID == NULL)
         {
             return false;
         }
         // Get a VID and PID information
         tempHidAtributes.Size = sizeof(tempHidAtributes);
-        HidD_GetAttributes( hidInterface,&tempHidAtributes);
+        HidD_GetAttributes( currentHID,&tempHidAtributes);
         if(        VID == tempHidAtributes.VendorID &&
                    PID == tempHidAtributes.ProductID)          
         {
@@ -223,33 +204,34 @@ bool userHIDInterfaces::openInterface(uint &VID, uint &PID)
             qDebug()<<"Open succsesfuly \n";
             return true;
         }
-        CloseHandle(hidInterface);
+        CloseHandle(currentHID);
     }
+    currentHID = NULL;
     return false;
 }
 
 
-bool userHIDInterfaces::closeInterface(void)
+bool hidInterface::closeInterface(void)
 {
-    if(hidInterface == NULL)
+    if(currentHID == NULL)
     {
         return false;
     }
-    qDebug()<<"HID handler before"<<hidInterface<<"\n";
-    if( 0 == CloseHandle(hidInterface))
+    qDebug()<<"HID handler before"<<currentHID<<"\n";
+    if( 0 == CloseHandle(currentHID))
     {
         return false;
         qDebug()<<"Сant close HID device \n";
     }
-    hidInterface = NULL;
+    currentHID = NULL;
     qDebug()<<"Сlose HID device OK \n";
     return true;
 }
 
 
-bool userHIDInterfaces::isHIDOpen(void)
+bool hidInterface::isHIDOpen(void)
 {
-    if( NULL == hidInterface )
+    if( NULL == currentHID )
     {
         return false;
     }
@@ -257,70 +239,93 @@ bool userHIDInterfaces::isHIDOpen(void)
 }
 
 
-uint32_t userHIDInterfaces::readHIDInterface(uint8_t *buff, uint32_t numToRead)
+uint32_t hidInterface::read(uint8_t *buff, uint32_t numToRead, uint32_t timeout)
 {
-     if(hidInterface == NULL)
-     {
-         return 0;
-     }
+     DWORD             Result;
      long unsigned int numBytesOfRead;
-     if( ReadFile(hidInterface, buff, numToRead, &numBytesOfRead, NULL) > 0)
-     {
-         return numBytesOfRead;
-     }
-     return false;
-}
 
-
-uint32_t userHIDInterfaces::writeHIDInterface(uint8_t *buff, uint32_t numToWrite)
-{
-     if(hidInterface == NULL)
+     if(currentHID == NULL)
      {
          return 0;
      }
-     DWORD numBytesOfWrite;
-     qDebug()<<"numToWrite = "<<numToWrite<<"\n";
-     if( WriteFile(hidInterface, buff, numToWrite, &numBytesOfWrite, NULL) > 0)
+
+     HIDOverlapped.Offset = 0;
+     HIDOverlapped.OffsetHigh = 0;
+
+     uint8_t *buffCommand = (uint8_t*)malloc(numToRead + 1);
+
+     Result = ReadFile (currentHID,
+                        buffCommand,
+                        numToRead + 1,
+                        &numBytesOfRead,
+                        (LPOVERLAPPED) &HIDOverlapped);
+     Result = WaitForSingleObject(hEventObject,   timeout);
+
+     switch (Result)
      {
-         qDebug()<<"numBytesOfWrite"<<numBytesOfWrite<<"\n";
-         return numBytesOfWrite;
+         case WAIT_OBJECT_0:
+         {       // Success;
+             memcpy(buff, buffCommand + 1, numToRead);
+             free(buffCommand);
+             return numToRead;
+         }
+         case WAIT_TIMEOUT:
+         {
+              // Timeout error;
+             break;
+         }
+         default:
+         {
+              // Undefined error;
+              break;
+         }
      }
-     DWORD lastError = GetLastError();
 
-     qDebug()<<"write error "<<lastError<<"\n";
-     return false;
+     free(buffCommand);
+     CancelIo(currentHID);
+     return 0;
 }
 
 
-/*
-HidDevice::HidDevice(std::string path)
+uint32_t hidInterface::write(uint8_t *buff, uint32_t numToWrite, uint32_t timeout)
 {
- this->path = path;
- isValid = false;
- handle = CreateFile(path.c_str(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+    DWORD numBytesOfWrite;
+    DWORD Result;
 
- if (handle == INVALID_HANDLE_VALUE) {
-  std::cout << "Error: Can't open device." << std::endl;
-  return;
- }
+    if(currentHID == NULL)
+    {
+        return 0;
+    }
 
- if (HidD_GetAttributes(handle, &this->attributes) == FALSE) {
-  std::cout << "Error: Can't read hid device attributes." << std::endl;
-  return;
- }
+    HIDOverlapped.Offset = 0;
+    HIDOverlapped.OffsetHigh = 0;
 
- PHIDP_PREPARSED_DATA preparsedData = NULL;
+    uint8_t *buffCommand = (uint8_t*)malloc(numToWrite + 1);
+    buffCommand[0] = 0;
+    memcpy( &buffCommand[1], buff, numToWrite);
 
- if (HidD_GetPreparsedData(handle, &preparsedData) == FALSE) {
-  std::cout << "Error: Can't get top-level collection's preparsed data." << std::endl;
-  return;
- }
+    WriteFile(currentHID, buffCommand, numToWrite + 1, &numBytesOfWrite, (LPOVERLAPPED) &HIDOverlapped);
+    Result = WaitForSingleObject(hEventObject,   timeout);
 
- if (HidP_GetCaps(preparsedData, &this->capabilities) != HIDP_STATUS_SUCCESS) {
-  std::cout << "Error: Can't get hid device capabilities." << std::endl;
-  return;
- }
+    switch (Result) {
+        case WAIT_OBJECT_0:
+        {       // Success;
+            free(buffCommand);
+            return numToWrite;
+        }
+        case WAIT_TIMEOUT:
+        {
+             // Timeout error;
+             break;
+        }
+        default:
+        {
+             // Undefined error;
+             break;
+        }
+    }
 
- isValid = true;
+    free(buffCommand);
+    CancelIo(currentHID);
+    return 0;
 }
-*/

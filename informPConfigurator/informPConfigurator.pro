@@ -14,17 +14,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
            mainwindow.cpp \
-           userhidinterfaces.cpp \
-           lcdstr.cpp
+           lcdstr.cpp \
+    hidInterface.cpp
 
 HEADERS += mainwindow.h \
-           userhidinterfaces.h \
     lcdstr.h \
-    controlelementdescription.h
+    controlelementdescription.h \
+    hidInterface.h
 
 FORMS   += mainwindow.ui \
-           lcdstr.ui \
-    lcdstr.ui
+           lcdstr.ui
 
 LIBS    += -lhid\
            -lsetupapi
