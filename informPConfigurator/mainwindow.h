@@ -29,6 +29,10 @@ private slots:
 
     void on_pushButtonWrite_clicked();
 
+    void on_pushButtonReset_clicked();
+
+    void on_tabWidgetCurrentMode_currentChanged(int index);
+
 private:
     Ui::MainWindow *ui;
 

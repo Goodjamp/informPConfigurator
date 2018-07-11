@@ -4,6 +4,7 @@
 #include "QSpacerItem"
 #include "QString"
 #include "QMessageBox"
+#include "QCheckBox"
 
 
 #include "controlelementdescription.h"
@@ -53,15 +54,6 @@ void MainWindow::messageErrorWindowShow(QString errorString)
     messageBox.setFixedSize(500,200);
     messageBox.setModal(true);
     messageBox.show();
-}
-
-
-
-void MainWindow::on_pushButtonCloseDevice_clicked()
-{
-    userHID->closeInterface();
-    ui->pushButtonOpenDevice->setEnabled(true);
-    ui->pushButtonCloseDevice->setDisabled(true);
 }
 
 
@@ -146,6 +138,14 @@ void MainWindow::initUserUIAdjustments(void)
 }
 
 
+void MainWindow::on_pushButtonCloseDevice_clicked()
+{
+    userHID->closeInterface();
+    ui->pushButtonOpenDevice->setEnabled(true);
+    ui->pushButtonCloseDevice->setDisabled(true);
+}
+
+
 void MainWindow::on_pushButtonOpenDevice_clicked()
 {
     userHID->initUSB();
@@ -165,6 +165,17 @@ void MainWindow::on_pushButtonRead_clicked()
 }
 
 void MainWindow::on_pushButtonWrite_clicked()
+{
+
+}
+
+void MainWindow::on_pushButtonReset_clicked()
+{
+
+}
+
+
+void MainWindow::on_tabWidgetCurrentMode_currentChanged(int index)
 {
 
 }

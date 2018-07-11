@@ -2,6 +2,8 @@
 #define LCDSTR_H
 
 #include <QWidget>
+#include <QCheckBox>
+#include <QVector>
 
 namespace Ui {
 class lcdStr;
@@ -16,7 +18,7 @@ public:
     ~lcdStr();
 
     void setNameLCD(QString newName);
-
+    QVector<QCheckBox*> listOfCheckbox;
 private:
     Ui::lcdStr *ui;
 };

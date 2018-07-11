@@ -44,7 +44,7 @@ public:
     QPushButton *pushButtonCloseDevice;
     QSpacerItem *horizontalSpacer;
     QFrame *line_2;
-    QTabWidget *tabWidget_2;
+    QTabWidget *tabWidgetCurrentMode;
     QWidget *tab;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -149,10 +149,9 @@ public:
     QFrame *line_18;
     QLabel *label_5;
     QHBoxLayout *horizontalLayout_10;
-    QSpacerItem *horizontalSpacer_6;
     QPushButton *pushButtonRead;
-    QSpacerItem *horizontalSpacer_7;
     QPushButton *pushButtonWrite;
+    QPushButton *pushButtonReset;
     QSpacerItem *horizontalSpacer_8;
     QWidget *widget;
     QHBoxLayout *horizontalLayout;
@@ -272,9 +271,9 @@ public:
 
         verticalLayout_7->addLayout(verticalLayout_4);
 
-        tabWidget_2 = new QTabWidget(centralWidget);
-        tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
-        tabWidget_2->setFont(font);
+        tabWidgetCurrentMode = new QTabWidget(centralWidget);
+        tabWidgetCurrentMode->setObjectName(QStringLiteral("tabWidgetCurrentMode"));
+        tabWidgetCurrentMode->setFont(font);
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         verticalLayout = new QVBoxLayout(tab);
@@ -970,10 +969,6 @@ public:
         horizontalLayout_10->setSpacing(6);
         horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
         horizontalLayout_10->setContentsMargins(-1, 0, -1, 0);
-        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_10->addItem(horizontalSpacer_6);
-
         pushButtonRead = new QPushButton(tab);
         pushButtonRead->setObjectName(QStringLiteral("pushButtonRead"));
         pushButtonRead->setMinimumSize(QSize(150, 30));
@@ -981,10 +976,6 @@ public:
         pushButtonRead->setFont(font1);
 
         horizontalLayout_10->addWidget(pushButtonRead);
-
-        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_10->addItem(horizontalSpacer_7);
 
         pushButtonWrite = new QPushButton(tab);
         pushButtonWrite->setObjectName(QStringLiteral("pushButtonWrite"));
@@ -994,6 +985,13 @@ public:
 
         horizontalLayout_10->addWidget(pushButtonWrite);
 
+        pushButtonReset = new QPushButton(tab);
+        pushButtonReset->setObjectName(QStringLiteral("pushButtonReset"));
+        pushButtonReset->setMinimumSize(QSize(150, 30));
+        pushButtonReset->setMaximumSize(QSize(150, 30));
+
+        horizontalLayout_10->addWidget(pushButtonReset);
+
         horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_10->addItem(horizontalSpacer_8);
@@ -1001,7 +999,7 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_10);
 
-        tabWidget_2->addTab(tab, QString());
+        tabWidgetCurrentMode->addTab(tab, QString());
         widget = new QWidget();
         widget->setObjectName(QStringLiteral("widget"));
         horizontalLayout = new QHBoxLayout(widget);
@@ -1424,9 +1422,9 @@ public:
 
         horizontalLayout->addLayout(verticalLayout_30);
 
-        tabWidget_2->addTab(widget, QString());
+        tabWidgetCurrentMode->addTab(widget, QString());
 
-        verticalLayout_7->addWidget(tabWidget_2);
+        verticalLayout_7->addWidget(tabWidgetCurrentMode);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -1442,7 +1440,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget_2->setCurrentIndex(0);
+        tabWidgetCurrentMode->setCurrentIndex(1);
         tabWidget->setCurrentIndex(4);
 
 
@@ -1491,7 +1489,8 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_LCD), QApplication::translate("MainWindow", "\320\226\320\232\320\230", nullptr));
         pushButtonRead->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\270\321\202\320\260\321\202\321\214", nullptr));
         pushButtonWrite->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214", nullptr));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab), QApplication::translate("MainWindow", "\320\232\320\236\320\235\320\244\320\230\320\223\320\243\320\240\320\220\320\246\320\230\320\257", nullptr));
+        pushButtonReset->setText(QApplication::translate("MainWindow", "\320\237\320\265\321\200\320\265\320\263\321\200\321\203\320\267\320\270\321\202\321\214", nullptr));
+        tabWidgetCurrentMode->setTabText(tabWidgetCurrentMode->indexOf(tab), QApplication::translate("MainWindow", "\320\232\320\236\320\235\320\244\320\230\320\223\320\243\320\240\320\220\320\246\320\230\320\257", nullptr));
         label_77->setText(QApplication::translate("MainWindow", "\320\241\321\202\320\260\321\202\321\203\321\201 \321\203\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
         label_78->setText(QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\202\320\276\321\202\320\276\320\274\320\265\321\200", nullptr));
         label_79->setText(QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\202\320\276\321\202\320\260, \320\223\321\206", nullptr));
@@ -1509,7 +1508,7 @@ public:
         label_91->setText(QApplication::translate("MainWindow", "\320\224\320\260\320\262\320\273\320\265\320\275\320\270\320\265, \320\263\320\237\320\260", nullptr));
         label_92->setText(QApplication::translate("MainWindow", "\320\242\320\265\320\274\320\277\320\265\321\200\320\260\321\202\321\203\321\200\320\260, \320\241", nullptr));
         label_93->setText(QApplication::translate("MainWindow", "\320\241\321\202\320\260\321\202\321\203\321\201", nullptr));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(widget), QApplication::translate("MainWindow", "\320\234\320\236\320\235\320\230\320\242\320\236\320\240", nullptr));
+        tabWidgetCurrentMode->setTabText(tabWidgetCurrentMode->indexOf(widget), QApplication::translate("MainWindow", "\320\234\320\236\320\235\320\230\320\242\320\236\320\240", nullptr));
     } // retranslateUi
 
 };
