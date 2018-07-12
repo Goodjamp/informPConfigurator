@@ -20,7 +20,8 @@ SOURCES += main.cpp\
 HEADERS += mainwindow.h \
     lcdstr.h \
     controlelementdescription.h \
-    hidInterface.h
+    hidInterface.h \
+    informpmemmap.h
 
 FORMS   += mainwindow.ui \
            lcdstr.ui

@@ -98,7 +98,7 @@ public:
     QVBoxLayout *verticalLayout_19;
     QHBoxLayout *horizontalLayout_29;
     QLabel *labelClockStatus_3;
-    QComboBox *comboBoxClockMeteoState;
+    QComboBox *comboBoxMeteoState;
     QSpacerItem *horizontalSpacer_42;
     QFrame *line_16;
     QHBoxLayout *horizontalLayout_30;
@@ -124,6 +124,10 @@ public:
     QSpacerItem *verticalSpacer;
     QWidget *tab_LCD;
     QVBoxLayout *verticalLayout_6;
+    QHBoxLayout *horizontalLayout_19;
+    QLabel *labelLCDNumLCD;
+    QComboBox *comboBoxLCDNumLSD;
+    QSpacerItem *horizontalSpacer_14;
     QFrame *line_8;
     QFrame *frameHeadOfLCD;
     QHBoxLayout *horizontalLayout_17;
@@ -139,15 +143,22 @@ public:
     QFrame *line_13;
     QLabel *label_13;
     QFrame *line_14;
-    QLabel *label_10;
+    QVBoxLayout *verticalLayout_11;
+    QLabel *label_15;
+    QLabel *label_16;
     QFrame *line_15;
-    QLabel *label_12;
+    QVBoxLayout *verticalLayout_9;
+    QLabel *label_4;
+    QLabel *label_6;
     QFrame *line_17;
     QVBoxLayout *verticalLayout_8;
     QLabel *label;
     QLabel *label_2;
     QFrame *line_18;
-    QLabel *label_5;
+    QVBoxLayout *verticalLayout_10;
+    QLabel *label_12;
+    QLabel *label_14;
+    QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_10;
     QPushButton *pushButtonRead;
     QPushButton *pushButtonWrite;
@@ -221,13 +232,14 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1343, 413);
+        MainWindow->resize(1135, 410);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout_7 = new QVBoxLayout(centralWidget);
         verticalLayout_7->setSpacing(6);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
         verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        verticalLayout_7->setContentsMargins(4, 6, 4, 0);
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setSpacing(0);
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
@@ -617,13 +629,13 @@ public:
 
         horizontalLayout_29->addWidget(labelClockStatus_3);
 
-        comboBoxClockMeteoState = new QComboBox(tab_Meteo);
-        comboBoxClockMeteoState->setObjectName(QStringLiteral("comboBoxClockMeteoState"));
-        comboBoxClockMeteoState->setMinimumSize(QSize(100, 25));
-        comboBoxClockMeteoState->setMaximumSize(QSize(100, 2025));
-        comboBoxClockMeteoState->setFont(font2);
+        comboBoxMeteoState = new QComboBox(tab_Meteo);
+        comboBoxMeteoState->setObjectName(QStringLiteral("comboBoxMeteoState"));
+        comboBoxMeteoState->setMinimumSize(QSize(100, 25));
+        comboBoxMeteoState->setMaximumSize(QSize(100, 2025));
+        comboBoxMeteoState->setFont(font2);
 
-        horizontalLayout_29->addWidget(comboBoxClockMeteoState);
+        horizontalLayout_29->addWidget(comboBoxMeteoState);
 
         horizontalSpacer_42 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -776,6 +788,32 @@ public:
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        horizontalLayout_19 = new QHBoxLayout();
+        horizontalLayout_19->setSpacing(6);
+        horizontalLayout_19->setObjectName(QStringLiteral("horizontalLayout_19"));
+        labelLCDNumLCD = new QLabel(tab_LCD);
+        labelLCDNumLCD->setObjectName(QStringLiteral("labelLCDNumLCD"));
+        labelLCDNumLCD->setMinimumSize(QSize(180, 25));
+        labelLCDNumLCD->setMaximumSize(QSize(180, 25));
+        labelLCDNumLCD->setFont(font2);
+
+        horizontalLayout_19->addWidget(labelLCDNumLCD);
+
+        comboBoxLCDNumLSD = new QComboBox(tab_LCD);
+        comboBoxLCDNumLSD->setObjectName(QStringLiteral("comboBoxLCDNumLSD"));
+        comboBoxLCDNumLSD->setMinimumSize(QSize(35, 25));
+        comboBoxLCDNumLSD->setMaximumSize(QSize(35, 25));
+        comboBoxLCDNumLSD->setFont(font2);
+
+        horizontalLayout_19->addWidget(comboBoxLCDNumLSD);
+
+        horizontalSpacer_14 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_19->addItem(horizontalSpacer_14);
+
+
+        verticalLayout_6->addLayout(horizontalLayout_19);
+
         line_8 = new QFrame(tab_LCD);
         line_8->setObjectName(QStringLiteral("line_8"));
         line_8->setFrameShape(QFrame::HLine);
@@ -808,8 +846,8 @@ public:
 
         label_7 = new QLabel(frameHeadOfLCD);
         label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setMinimumSize(QSize(120, 0));
-        label_7->setMaximumSize(QSize(200, 16777215));
+        label_7->setMinimumSize(QSize(100, 0));
+        label_7->setMaximumSize(QSize(100, 16777215));
         label_7->setFont(font2);
         label_7->setAlignment(Qt::AlignCenter);
 
@@ -824,8 +862,8 @@ public:
 
         label_9 = new QLabel(frameHeadOfLCD);
         label_9->setObjectName(QStringLiteral("label_9"));
-        label_9->setMinimumSize(QSize(120, 0));
-        label_9->setMaximumSize(QSize(200, 16777215));
+        label_9->setMinimumSize(QSize(100, 0));
+        label_9->setMaximumSize(QSize(100, 16777215));
         label_9->setFont(font2);
         label_9->setAlignment(Qt::AlignCenter);
 
@@ -840,8 +878,8 @@ public:
 
         label_11 = new QLabel(frameHeadOfLCD);
         label_11->setObjectName(QStringLiteral("label_11"));
-        label_11->setMinimumSize(QSize(120, 0));
-        label_11->setMaximumSize(QSize(200, 16777215));
+        label_11->setMinimumSize(QSize(100, 0));
+        label_11->setMaximumSize(QSize(100, 16777215));
         label_11->setFont(font2);
         label_11->setAlignment(Qt::AlignCenter);
 
@@ -856,8 +894,8 @@ public:
 
         label_8 = new QLabel(frameHeadOfLCD);
         label_8->setObjectName(QStringLiteral("label_8"));
-        label_8->setMinimumSize(QSize(120, 0));
-        label_8->setMaximumSize(QSize(200, 16777215));
+        label_8->setMinimumSize(QSize(100, 0));
+        label_8->setMaximumSize(QSize(100, 16777215));
         label_8->setFont(font2);
         label_8->setAlignment(Qt::AlignCenter);
 
@@ -872,8 +910,8 @@ public:
 
         label_13 = new QLabel(frameHeadOfLCD);
         label_13->setObjectName(QStringLiteral("label_13"));
-        label_13->setMinimumSize(QSize(120, 0));
-        label_13->setMaximumSize(QSize(200, 16777215));
+        label_13->setMinimumSize(QSize(100, 0));
+        label_13->setMaximumSize(QSize(100, 16777215));
         label_13->setFont(font2);
         label_13->setAlignment(Qt::AlignCenter);
 
@@ -886,14 +924,29 @@ public:
 
         horizontalLayout_17->addWidget(line_14);
 
-        label_10 = new QLabel(frameHeadOfLCD);
-        label_10->setObjectName(QStringLiteral("label_10"));
-        label_10->setMinimumSize(QSize(120, 0));
-        label_10->setMaximumSize(QSize(200, 16777215));
-        label_10->setFont(font2);
-        label_10->setAlignment(Qt::AlignCenter);
+        verticalLayout_11 = new QVBoxLayout();
+        verticalLayout_11->setSpacing(0);
+        verticalLayout_11->setObjectName(QStringLiteral("verticalLayout_11"));
+        label_15 = new QLabel(frameHeadOfLCD);
+        label_15->setObjectName(QStringLiteral("label_15"));
+        label_15->setMinimumSize(QSize(100, 0));
+        label_15->setMaximumSize(QSize(100, 16777215));
+        label_15->setFont(font2);
+        label_15->setAlignment(Qt::AlignCenter);
 
-        horizontalLayout_17->addWidget(label_10);
+        verticalLayout_11->addWidget(label_15);
+
+        label_16 = new QLabel(frameHeadOfLCD);
+        label_16->setObjectName(QStringLiteral("label_16"));
+        label_16->setMinimumSize(QSize(100, 0));
+        label_16->setMaximumSize(QSize(100, 16777215));
+        label_16->setFont(font2);
+        label_16->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_11->addWidget(label_16);
+
+
+        horizontalLayout_17->addLayout(verticalLayout_11);
 
         line_15 = new QFrame(frameHeadOfLCD);
         line_15->setObjectName(QStringLiteral("line_15"));
@@ -902,14 +955,29 @@ public:
 
         horizontalLayout_17->addWidget(line_15);
 
-        label_12 = new QLabel(frameHeadOfLCD);
-        label_12->setObjectName(QStringLiteral("label_12"));
-        label_12->setMinimumSize(QSize(120, 0));
-        label_12->setMaximumSize(QSize(200, 16777215));
-        label_12->setFont(font2);
-        label_12->setAlignment(Qt::AlignCenter);
+        verticalLayout_9 = new QVBoxLayout();
+        verticalLayout_9->setSpacing(0);
+        verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
+        label_4 = new QLabel(frameHeadOfLCD);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setMinimumSize(QSize(100, 0));
+        label_4->setMaximumSize(QSize(100, 16777215));
+        label_4->setFont(font2);
+        label_4->setAlignment(Qt::AlignCenter);
 
-        horizontalLayout_17->addWidget(label_12);
+        verticalLayout_9->addWidget(label_4);
+
+        label_6 = new QLabel(frameHeadOfLCD);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        label_6->setMinimumSize(QSize(100, 0));
+        label_6->setMaximumSize(QSize(100, 16777215));
+        label_6->setFont(font2);
+        label_6->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_9->addWidget(label_6);
+
+
+        horizontalLayout_17->addLayout(verticalLayout_9);
 
         line_17 = new QFrame(frameHeadOfLCD);
         line_17->setObjectName(QStringLiteral("line_17"));
@@ -923,8 +991,8 @@ public:
         verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
         label = new QLabel(frameHeadOfLCD);
         label->setObjectName(QStringLiteral("label"));
-        label->setMinimumSize(QSize(120, 0));
-        label->setMaximumSize(QSize(200, 16777215));
+        label->setMinimumSize(QSize(100, 0));
+        label->setMaximumSize(QSize(100, 16777215));
         label->setFont(font2);
         label->setAlignment(Qt::AlignCenter);
 
@@ -932,8 +1000,8 @@ public:
 
         label_2 = new QLabel(frameHeadOfLCD);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setMinimumSize(QSize(120, 0));
-        label_2->setMaximumSize(QSize(200, 16777215));
+        label_2->setMinimumSize(QSize(100, 0));
+        label_2->setMaximumSize(QSize(100, 16777215));
         label_2->setFont(font2);
         label_2->setAlignment(Qt::AlignCenter);
 
@@ -949,17 +1017,36 @@ public:
 
         horizontalLayout_17->addWidget(line_18);
 
-        label_5 = new QLabel(frameHeadOfLCD);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setMinimumSize(QSize(120, 0));
-        label_5->setMaximumSize(QSize(200, 16777215));
-        label_5->setFont(font2);
-        label_5->setAlignment(Qt::AlignCenter);
+        verticalLayout_10 = new QVBoxLayout();
+        verticalLayout_10->setSpacing(0);
+        verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
+        label_12 = new QLabel(frameHeadOfLCD);
+        label_12->setObjectName(QStringLiteral("label_12"));
+        label_12->setMinimumSize(QSize(100, 0));
+        label_12->setMaximumSize(QSize(100, 16777215));
+        label_12->setFont(font2);
+        label_12->setAlignment(Qt::AlignCenter);
 
-        horizontalLayout_17->addWidget(label_5);
+        verticalLayout_10->addWidget(label_12);
+
+        label_14 = new QLabel(frameHeadOfLCD);
+        label_14->setObjectName(QStringLiteral("label_14"));
+        label_14->setMinimumSize(QSize(100, 0));
+        label_14->setMaximumSize(QSize(100, 16777215));
+        label_14->setFont(font2);
+        label_14->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_10->addWidget(label_14);
+
+
+        horizontalLayout_17->addLayout(verticalLayout_10);
 
 
         verticalLayout_6->addWidget(frameHeadOfLCD);
+
+        verticalSpacer_4 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_6->addItem(verticalSpacer_4);
 
         tabWidget->addTab(tab_LCD, QString());
 
@@ -1429,7 +1516,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1343, 21));
+        menuBar->setGeometry(QRect(0, 0, 1135, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -1440,7 +1527,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidgetCurrentMode->setCurrentIndex(1);
+        tabWidgetCurrentMode->setCurrentIndex(0);
         tabWidget->setCurrentIndex(4);
 
 
@@ -1469,23 +1556,27 @@ public:
         labelClockCorrection_3->setText(QApplication::translate("MainWindow", "\320\230\321\201\321\202\320\276\321\207\320\275\320\270\320\272 \321\201\320\270\320\263\320\275\320\260\320\273\320\260 \321\201\320\270\320\275\321\205\321\200\320\276\320\275\320\270\320\267\320\260\321\206\320\270\320\270", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_Clock), QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\213 ", nullptr));
         labelClockStatus_3->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));
-        labelModbusBoadrate_3->setText(QApplication::translate("MainWindow", "\320\241\320\272\320\276\321\200\320\276\321\201\321\202\321\214", nullptr));
+        labelModbusBoadrate_3->setText(QApplication::translate("MainWindow", "\320\230\321\201\321\202\320\276\321\207\320\275\320\270\320\272", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_Meteo), QApplication::translate("MainWindow", "\320\234\320\265\321\202\320\265\320\276\320\277\320\276\321\201\321\202", nullptr));
         labelModbusBoadrate->setText(QApplication::translate("MainWindow", "\320\241\320\272\320\276\321\200\320\276\321\201\321\202\321\214", nullptr));
         labelModbusParity->setText(QApplication::translate("MainWindow", "\320\237\320\260\321\200\320\270\321\202\320\265\321\202", nullptr));
         labelModbusAddress->setText(QApplication::translate("MainWindow", "\320\220\320\264\321\200\320\265\321\201", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_Modbus), QApplication::translate("MainWindow", "Modbus", nullptr));
+        labelLCDNumLCD->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\270\320\275\320\264\320\270\320\272\320\260\321\202\320\276\321\200\320\276\320\262", nullptr));
         label_3->setText(QString());
         label_7->setText(QApplication::translate("MainWindow", "\320\234\320\270\320\275\321\203\321\202\321\213", nullptr));
         label_9->setText(QApplication::translate("MainWindow", "\320\241\320\265\320\272\321\203\320\275\320\264\321\213", nullptr));
         label_11->setText(QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\213", nullptr));
         label_8->setText(QApplication::translate("MainWindow", "\320\223\320\276\320\264", nullptr));
         label_13->setText(QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\202\320\276\321\202\320\260, \320\223\321\206", nullptr));
-        label_10->setText(QApplication::translate("MainWindow", "\320\242\320\265\320\274\320\277\320\265\321\200\320\260\321\202\321\203\321\200\320\260, \320\241", nullptr));
-        label_12->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\275. \320\222\320\273\320\260\320\266\320\275\320\276\321\201\321\202\321\214", nullptr));
+        label_15->setText(QApplication::translate("MainWindow", "\320\242\320\265\320\274\320\277\320\265\321\200\320\260\321\202\321\203\321\200\320\260,", nullptr));
+        label_16->setText(QApplication::translate("MainWindow", "\320\241", nullptr));
+        label_4->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\275.", nullptr));
+        label_6->setText(QApplication::translate("MainWindow", "\320\262\320\273\320\260\320\266\320\275\320\276\321\201\321\202\321\214", nullptr));
         label->setText(QApplication::translate("MainWindow", "\320\220\321\202\320\274. \320\264\320\260\320\262\320\273.,", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "\320\274\320\274. \321\200\321\202. \321\201\321\202", nullptr));
-        label_5->setText(QApplication::translate("MainWindow", "\320\220\321\202\320\274. \320\264\320\260\320\262\320\273., \320\263\320\237\320\260", nullptr));
+        label_12->setText(QApplication::translate("MainWindow", "\320\220\321\202\320\274. \320\264\320\260\320\262\320\273.,", nullptr));
+        label_14->setText(QApplication::translate("MainWindow", "\320\263\320\237\320\260", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_LCD), QApplication::translate("MainWindow", "\320\226\320\232\320\230", nullptr));
         pushButtonRead->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\270\321\202\320\260\321\202\321\214", nullptr));
         pushButtonWrite->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214", nullptr));

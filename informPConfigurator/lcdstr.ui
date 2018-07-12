@@ -111,13 +111,13 @@
       <widget class="QCheckBox" name="checkBoxPar1">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -150,13 +150,13 @@
       <widget class="QCheckBox" name="checkBoxPar2">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -189,13 +189,13 @@
       <widget class="QCheckBox" name="checkBoxPar3">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -228,13 +228,13 @@
       <widget class="QCheckBox" name="checkBoxPar4">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -267,13 +267,13 @@
       <widget class="QCheckBox" name="checkBoxPar5">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -306,13 +306,13 @@
       <widget class="QCheckBox" name="checkBoxPar6">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -345,13 +345,13 @@
       <widget class="QCheckBox" name="checkBoxPar7">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -384,13 +384,13 @@
       <widget class="QCheckBox" name="checkBoxPar8">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
@@ -423,13 +423,13 @@
       <widget class="QCheckBox" name="checkBoxPar9">
        <property name="minimumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>70</width>
+         <width>50</width>
          <height>20</height>
         </size>
        </property>

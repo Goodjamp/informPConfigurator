@@ -33,6 +33,8 @@ private slots:
 
     void on_tabWidgetCurrentMode_currentChanged(int index);
 
+    void on_comboBoxLCDNumLSD_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
 
@@ -40,6 +42,7 @@ private:
     void setDeviseCloseUIState(void);
     void setDeviseOpenUIState(void);
     void messageErrorWindowShow(QString errorString);
+    void updateNumLCDString(uint8_t numString);
 
 private:
     QStringListModel *deviceList;

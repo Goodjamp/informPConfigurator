@@ -46,5 +46,13 @@
 /***********LCD DESCRIPTION**************************/
 #define QUANTITY_LCD_STR       4
 
+/***********LCD DESCRIPTION**************************/
+#define METEO_SOURCE_LIST       "Локальный",\
+                                "Удаленный"
+
+/**********DEVICE STATUS LIST********/
+#define LIST_DEVICE_STATUS "РАБОТА",\
+                           "ПРЕДУПРЕДИТЕЛЬНАЯ",\
+                           "АВАРИЙНАЯ"
 
 #endif // CONTROLELEMENTDESCRIPTION_H

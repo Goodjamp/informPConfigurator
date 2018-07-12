@@ -1,10 +1,15 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "stdint.h"
+
 #include "QDebug"
 #include "QSpacerItem"
 #include "QString"
 #include "QMessageBox"
 #include "QCheckBox"
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include "informpmemmap.h"
 
 
 #include "controlelementdescription.h"
@@ -21,6 +26,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->listViewDeviceList->setModel(deviceList);
 
     userHID = new hidInterface();
+    qDebug()<<"sizeof configDescriptionT"<<sizeof(configDescriptionT);
+    qDebug()<<"sizeof S_dev_staff"<<sizeof(S_dev_staff)<<"\n";
+    qDebug()<<"sizeof BF_date_config"<<sizeof(BF_date_config)<<"\n";
+    qDebug()<<"sizeof S_connectmodbus"<<sizeof(S_connectmodbus)<<"\n";
+    qDebug()<<"sizeof S_FRQmetter_user_config"<<sizeof(S_FRQmetter_user_config)<<"\n";
+    qDebug()<<"sizeof S_TIME_user_config"<<sizeof(S_TIME_user_config)<<"\n";
+    qDebug()<<"sizeof S_sensor_user_config"<<sizeof(S_sensor_user_config)<<"\n";
+    qDebug()<<"sizeof S_display_user_config"<<sizeof(S_display_user_config)<<"\n";
 }
 
 MainWindow::~MainWindow()
@@ -107,15 +120,17 @@ void MainWindow::initUserUIAdjustments(void)
     }
 
     /*****************************LCD ADJUSTMENT PARAMITERS*********************/
-    QString baseLCDName = "Индикатор №";
-    for(uint8_t cnt = 0; cnt < QUANTITY_LCD_STR; cnt++)
+    QStringList numIndicatorsList;// = {LIST_MINUTES_CORRECTION};
+    for(uint8_t cnt = 1; cnt <= NUMBER_OF_LCD_STRING; cnt++)
     {
-        lcdStrVector.push_back(new lcdStr());
-        ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 2,lcdStrVector[cnt]);
-        lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
+        numIndicatorsList.push_back(QString::number(cnt, 10));
     }
-    /*****************************CLOCK  PARAMITERS*********************/
+    ui->comboBoxLCDNumLSD->addItems(numIndicatorsList);
+    ui->comboBoxLCDNumLSD->setCurrentIndex(0);
 
+    updateNumLCDString(0);
+
+    /*****************************CLOCK  PARAMITERS*********************/
     ui->comboBoxClockState->addItems(stateList);
     ui->comboBoxClockState->setCurrentIndex(0);
 
@@ -133,10 +148,33 @@ void MainWindow::initUserUIAdjustments(void)
 
     QStringList syncSourceList = {LIST_SYNC_SOURCE};
     ui->comboBoxClockSyncSource->addItems(syncSourceList);
-    ui->comboBoxClockSyncSource->setCurrentIndex(0);
+    ui->comboBoxClockSyncSource->setCurrentIndex(1);
 
+    /*****************************METEO  PARAMITERS*********************/
+    ui->comboBoxMeteoState->addItems(stateList);
+    ui->comboBoxMeteoState->setCurrentIndex(0);
+
+    QStringList meteoSourceList = {METEO_SOURCE_LIST};
+    ui->comboBoxMeteoSourse->addItems(meteoSourceList);
+    ui->comboBoxMeteoSourse->setCurrentIndex(0);
 }
 
+
+void MainWindow::updateNumLCDString(uint8_t numString)
+{
+    QString baseLCDName = "Индикатор №";
+    for(uint8_t cnt = 0; cnt < lcdStrVector.size(); cnt++)
+    {
+        delete(lcdStrVector[cnt]);
+    }
+    lcdStrVector.clear();
+    for(uint8_t cnt = 0; cnt < numString; cnt++)
+    {
+        lcdStrVector.push_back(new lcdStr());
+        ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 3,lcdStrVector[cnt]);
+        lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
+    }
+}
 
 void MainWindow::on_pushButtonCloseDevice_clicked()
 {
@@ -178,4 +216,9 @@ void MainWindow::on_pushButtonReset_clicked()
 void MainWindow::on_tabWidgetCurrentMode_currentChanged(int index)
 {
 
+}
+
+void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
+{
+    updateNumLCDString(index + 1);
 }
