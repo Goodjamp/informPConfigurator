@@ -47,7 +47,7 @@ void MainWindow::setDeviseCloseUIState(void)
     ui->pushButtonCloseDevice->setDisabled(true);
     ui->pushButtonOpenDevice->setDisabled(false);
     ui->pushButtonRead->setDisabled(true);
-    ui->pushButtonWrite->setDisabled(true);
+    //ui->pushButtonWrite->setDisabled(true);
 }
 
 
@@ -204,7 +204,62 @@ void MainWindow::on_pushButtonRead_clicked()
 
 void MainWindow::on_pushButtonWrite_clicked()
 {
+    transactionBufferT config;
+    //read all configuration fields
 
+    /*********************read FRQ configuration*****************************/
+    config.configDescription.configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config.configDescription.configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
+    config.configDescription.configFrqMetering.frqCorrection *= 10;
+    config.configDescription.configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
+    config.configDescription.configFrqMetering.frqCorrection *= 10;
+    config.configDescription.configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum001->currentIndex();
+    if( ui->comboBoxFrqMeteringSign->currentIndex() == 1 )
+    {
+        config.configDescription.configFrqMetering.frqCorrection *= -1;
+    }
+
+    /*********************read CLOCK configuration*****************************/
+    config.configDescription.configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config.configDescription.configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
+    if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
+    {
+        config.configDescription.configClock.timeCorection += 30;
+    }
+    config.configDescription.configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
+    config.configDescription.configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+
+    /*********************read METEO configuration*****************************/
+    config.configDescription.confifgMeteo.state  = (ui->comboBoxMeteoState == 0) ? (1) : (0);
+    config.configDescription.confifgMeteo.source = (ui->comboBoxMeteoSourse == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+
+    /*********************read MODBUS configuration*****************************/
+     config.configDescription.configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
+     config.configDescription.configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
+     config.configDescription.configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
+     config.configDescription.configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
+     config.configDescription.configModbus.state                    = 1;
+     config.configDescription.configModbus.s_port_config.stopbits   = 0;
+     config.configDescription.configModbus.s_port_config.amountbyte = 0;
+     qDebug()<<"Boudrate = "<<config.configDescription.configModbus.s_port_config.baudrate;
+
+    /*********************read LCD configuration*****************************/
+    config.configDescription.configLCD.state  = 1;
+    config.configDescription.configLCD.numScreen = lcdStrVector.size();
+    for(uint8_t k = 0; k < lcdStrVector.size(); k++)
+    {
+        uint16_t flag = 0b1;
+        config.configDescription.configLCD.screenConfig[k].numParamiterPerScreen = 0;
+        config.configDescription.configLCD.screenConfig[k].bitsOfParamiters      = 0;
+        for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
+        {
+            if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
+            {
+                config.configDescription.configLCD.screenConfig[k].bitsOfParamiters |= flag;
+            }
+            flag <<= 1;
+        }
+    }
 }
 
 void MainWindow::on_pushButtonReset_clicked()

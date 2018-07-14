@@ -159,18 +159,32 @@ typedef struct{
 #pragma pack(pop)
 
 /*************CLOCK MODULE DESCRIPTION****************/
+typedef enum
+{
+    SYNC_SOURCE_GPS    = 0,
+    SYNC_SOURCE_SERVER = 1,
+}SYNC_SOURCE;
+
 #pragma pack(push,1)
 typedef struct{
     uint16_t  state;          // state of module ENABLE/DISABLE
     uint16_t  timeCorection;  // time correction in hours
+    uint16_t  isDaylightSaving:1;
+    uint16_t  synchronizationSource:15;  // time correction in hours
 }S_TIME_user_config;
 #pragma pack(pop)
 
 /*************METEO MODULE DESCRIPTION****************/
+typedef enum
+{
+    METEO_SOURCE_LOCAL,
+    METEO_SOURCE_REMOTE
+}METEO_SOURCE;
+
 #pragma pack(push,1)
 typedef struct{
     uint16_t state;         // state of module ENABLE/DISABLE
-    uint16_t pressureSens;  // pressure sensitivity
+    uint16_t source;  // pressure sensitivity
 }S_sensor_user_config;
 #pragma pack(pop)
 
@@ -183,8 +197,8 @@ typedef struct{
     uint16_t state;                           // state of module: ENABLE/DISABLE
     uint16_t numScreen;                       // number of screen connected to device
     struct{                                   // configuration parameters of every screen
-        uint16_t numParamiterPerScreen;
-        uint8_t  listOfParamiters[NUMBER_OF_VALUE];
+       uint16_t numParamiterPerScreen: 3;
+       uint16_t bitsOfParamiters:      16 - 3;
     }screenConfig[NUMBER_OF_LCD_STRING];
 }S_display_user_config;
 #pragma pack(pop)
@@ -201,6 +215,13 @@ typedef struct
     S_sensor_user_config     confifgMeteo;
     S_display_user_config    configLCD;
 }configDescriptionT;
+#pragma pack(pop)
+
+#pragma pack(push,1)
+typedef union{
+    configDescriptionT configDescription;
+    uint8_t memBuff[sizeof(configDescriptionT)];
+}transactionBufferT;
 #pragma pack(pop)
 
 #endif // INFORMPMEMMAP_H

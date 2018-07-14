@@ -15,13 +15,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
            mainwindow.cpp \
            lcdstr.cpp \
-    hidInterface.cpp
+    hidInterface.cpp \
+    protocol.cpp
 
 HEADERS += mainwindow.h \
     lcdstr.h \
     controlelementdescription.h \
     hidInterface.h \
-    informpmemmap.h
+    informpmemmap.h \
+    protocol.h
 
 FORMS   += mainwindow.ui \
            lcdstr.ui

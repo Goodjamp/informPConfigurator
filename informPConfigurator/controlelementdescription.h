@@ -1,17 +1,16 @@
 #ifndef CONTROLELEMENTDESCRIPTION_H
 #define CONTROLELEMENTDESCRIPTION_H
 
-
-#define  PID_INFORM_P       0X1245
-#define  VID_INFORM_P       0X1245
+#define  VID_INFORM_P       0x0483
+#define  PID_INFORM_P       0x5711
 
 /*************LIST OF ERROR MRSAGES***/
 #define WIN_NAME                           (QString)"- informP -"
 #define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"informP не найден "
 
 
-#define LIST_OF_STATE "ВКЛ",\
-                      "ВЫКЛ"
+#define LIST_OF_STATE "ВЫКЛ",\
+                      "ВКЛ"
 
 #define LIST_OF_SIGN "+",\
                      "-"
@@ -29,16 +28,16 @@
                             "57600"
 
 #define LIST_OF_PARITY  { "None",\
-                          "Even",\
-                          "Odd"}
+                          "Odd",\
+                          "Even"}
 
 /***********FREQUENCY METERING UI DESCRIPTION*************/
 
 
 /***********CLOCK UI DESCRIPTION**************************/
 
-#define LIST_SYNC_SOURCE " CЕРВЕР ",\
-                         " GPS "
+#define LIST_SYNC_SOURCE " GPS ",\
+                         " CЕРВЕР "
 
 #define LIST_MINUTES_CORRECTION "0",\
                                 "30"
