@@ -15,18 +15,23 @@ TEMPLATE = app
 SOURCES += main.cpp\
            mainwindow.cpp \
            lcdstr.cpp \
-    hidInterface.cpp \
-    protocol.cpp
+           hidInterface.cpp \
+           waitform.cpp \
+           communicationclass.cpp \
+           informptransportclass.cpp
 
 HEADERS += mainwindow.h \
-    lcdstr.h \
-    controlelementdescription.h \
-    hidInterface.h \
-    informpmemmap.h \
-    protocol.h
+           lcdstr.h \
+           controlelementdescription.h \
+           hidInterface.h \
+           informpmemmap.h \
+           waitform.h \
+           communicationclass.h \
+           informptransportclass.h
 
 FORMS   += mainwindow.ui \
-           lcdstr.ui
+           lcdstr.ui \
+           waitform.ui
 
 LIBS    += -lhid\
            -lsetupapi

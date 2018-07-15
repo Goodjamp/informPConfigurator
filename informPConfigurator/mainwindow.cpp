@@ -10,30 +10,20 @@
 #include "ui_mainwindow.h"
 
 #include "informpmemmap.h"
-
-
 #include "controlelementdescription.h"
+#include "communicationclass.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
-{   
+{
     ui->setupUi(this);
 
     initUserUIAdjustments();
 
-    deviceList = new QStringListModel(this);
-    //ui->listViewDeviceList->setModel(deviceList);
-
-    userHID = new hidInterface();
-    qDebug()<<"sizeof configDescriptionT"<<sizeof(configDescriptionT);
-    qDebug()<<"sizeof S_dev_staff"<<sizeof(S_dev_staff)<<"\n";
-    qDebug()<<"sizeof BF_date_config"<<sizeof(BF_date_config)<<"\n";
-    qDebug()<<"sizeof S_connectmodbus"<<sizeof(S_connectmodbus)<<"\n";
-    qDebug()<<"sizeof S_FRQmetter_user_config"<<sizeof(S_FRQmetter_user_config)<<"\n";
-    qDebug()<<"sizeof S_TIME_user_config"<<sizeof(S_TIME_user_config)<<"\n";
-    qDebug()<<"sizeof S_sensor_user_config"<<sizeof(S_sensor_user_config)<<"\n";
-    qDebug()<<"sizeof S_display_user_config"<<sizeof(S_display_user_config)<<"\n";
+    deviceList        = new QStringListModel(this);
+    userHID           = new hidInterface();
+    communicatioStack = new communicationClass(userHID);
 }
 
 MainWindow::~MainWindow()
@@ -194,6 +184,7 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
         return;
     }
     setDeviseOpenUIState();
+    communicatioStack->start();
 }
 
 
@@ -202,9 +193,19 @@ void MainWindow::on_pushButtonRead_clicked()
 
 }
 
+#include "waitform.h"
+
 void MainWindow::on_pushButtonWrite_clicked()
 {
     transactionBufferT config;
+
+    waitForm* waitDialog = new waitForm(this);
+
+    //waitDialog->setWindowFlags(Qt::FramelessWindowHint);
+    waitDialog->setWindowModality(Qt::WindowModal);
+
+    waitDialog->show();
+
     //read all configuration fields
 
     /*********************read FRQ configuration*****************************/
@@ -264,7 +265,7 @@ void MainWindow::on_pushButtonWrite_clicked()
 
 void MainWindow::on_pushButtonReset_clicked()
 {
-
+   communicatioStack->resetReq();
 }
 
 

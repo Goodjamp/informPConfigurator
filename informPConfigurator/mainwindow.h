@@ -6,6 +6,7 @@
 #include <QVector>
 #include <lcdstr.h>
 #include "hidInterface.h"
+#include "communicationclass.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    ~MainWindow();  
 
 private slots:
 
@@ -35,6 +36,8 @@ private slots:
 
     void on_comboBoxLCDNumLSD_currentIndexChanged(int index);
 
+
+
 private:
     Ui::MainWindow *ui;
 
@@ -45,8 +48,9 @@ private:
     void updateNumLCDString(uint8_t numString);
 
 private:
-    QStringListModel *deviceList;
-    hidInterface     *userHID;
+    QStringListModel   *deviceList;
+    hidInterface       *userHID;
+    communicationClass *communicatioStack;
 
     /*widjets*/
     QVector<lcdStr*> lcdStrVector;
