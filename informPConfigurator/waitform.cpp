@@ -1,23 +1,21 @@
 #include "waitform.h"
 #include "ui_waitform.h"
+#include "ui_waitform.h"
 
 waitForm::waitForm(QWidget *parent) :
-    QMainWindow(parent),
+    QDialog(parent),
     ui(new Ui::waitForm)
 {
-    //ui->setupUi(this);
-    //this->statusBar()->hide();//setSizeGripEnabled(false);// QStatusBar::setSizeGripEnabled(bool)
-    QSize waitSize;
-    waitSize.setHeight(100);
-    waitSize.setWidth(200);
-    this->setFixedSize(waitSize);
-    //setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+    ui->setupUi(this);  
+    // Disable title bar
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    ui->setupUi(this);
 
+    ui->progressBar->setMaximum(0);
+    ui->progressBar->setMinimum(0);
 }
 
 waitForm::~waitForm()
 {
     delete ui;
 }
+

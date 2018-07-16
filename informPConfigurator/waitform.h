@@ -1,13 +1,14 @@
 #ifndef WAITFORM_H
 #define WAITFORM_H
 
-#include <QMainWindow>
+#include <QDialog>
+#include <QTimer>
 
 namespace Ui {
 class waitForm;
 }
 
-class waitForm : public QMainWindow
+class waitForm : public QDialog
 {
     Q_OBJECT
 

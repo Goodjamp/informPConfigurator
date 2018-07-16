@@ -187,7 +187,7 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     setDeviseOpenUIState();
     communicatioStack->start();
     //Read all configuration registers
-    communicatioStack->getRegReq();
+   // communicatioStack->getRegReq();
 }
 
 
@@ -252,7 +252,7 @@ void MainWindow::on_pushButtonWrite_clicked()
     config.configDescription.configLCD.numScreen = lcdStrVector.size();
     for(uint8_t k = 0; k < lcdStrVector.size(); k++)
     {
-        uint16_t flag = 0b1;
+        uint16_t flag = 0x1;
         config.configDescription.configLCD.screenConfig[k].numParamiterPerScreen = 0;
         config.configDescription.configLCD.screenConfig[k].bitsOfParamiters      = 0;
         for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
