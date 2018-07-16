@@ -8,6 +8,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "waitform.h"
 
 #include "informpmemmap.h"
 #include "controlelementdescription.h"
@@ -185,6 +186,8 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     }
     setDeviseOpenUIState();
     communicatioStack->start();
+    //Read all configuration registers
+    communicatioStack->getRegReq();
 }
 
 
@@ -193,7 +196,7 @@ void MainWindow::on_pushButtonRead_clicked()
 
 }
 
-#include "waitform.h"
+
 
 void MainWindow::on_pushButtonWrite_clicked()
 {
