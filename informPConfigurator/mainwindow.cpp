@@ -25,6 +25,14 @@ MainWindow::MainWindow(QWidget *parent) :
     deviceList        = new QStringListModel(this);
     userHID           = new hidInterface();
     communicatioStack = new communicationClass(userHID);
+    communicatioTimer = new QTimer();
+    communicatioWaitWindow = new waitForm(this);
+
+    connect(communicatioTimer, &QTimer::timeout, this, &MainWindow::communicatioTimeout, Qt::QueuedConnection);
+    /*rx response connectin*/
+    connect(communicatioStack, &communicationClass::signalGetRegResp, this, &MainWindow::slotGetRegResp);
+    connect(communicatioStack, &communicationClass::signalSetRegResp, this, &MainWindow::slotSetRegResp);
+    connect(communicatioStack, &communicationClass::signalResetResp,  this, &MainWindow::slotResetResp );
 }
 
 MainWindow::~MainWindow()
@@ -95,8 +103,6 @@ void MainWindow::initUserUIAdjustments(void)
     }
 
     /*****************************FREQUENCY METERING  PARAMITERS*********************/
-
-
     ui->comboBoxFrqMeteringState->addItems(stateList);
     ui->comboBoxFrqMeteringState->setCurrentIndex(0);
 
@@ -167,6 +173,29 @@ void MainWindow::updateNumLCDString(uint8_t numString)
     }
 }
 
+void MainWindow::communicatioIndicationStart()
+{
+    communicationInProcess = true;
+    communicatioWaitWindow->show();
+    communicatioTimer->start(COMMUNICATION_TIMEOUT);
+}
+
+
+void MainWindow::communicationComplited()
+{
+    communicatioTimer->stop();
+    communicatioWaitWindow->close();
+    communicationInProcess = false;
+}
+
+
+void MainWindow::communicatioTimeout()
+{
+    communicationComplited();
+    messageErrorWindowShow(ERROR_COMMUNICATION);
+}
+
+
 void MainWindow::on_pushButtonCloseDevice_clicked()
 {
     userHID->closeInterface();
@@ -193,7 +222,7 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
 
 void MainWindow::on_pushButtonRead_clicked()
 {
-
+    communicatioIndicationStart();
 }
 
 
@@ -201,13 +230,6 @@ void MainWindow::on_pushButtonRead_clicked()
 void MainWindow::on_pushButtonWrite_clicked()
 {
     transactionBufferT config;
-
-    waitForm* waitDialog = new waitForm(this);
-
-    //waitDialog->setWindowFlags(Qt::FramelessWindowHint);
-    waitDialog->setWindowModality(Qt::WindowModal);
-
-    waitDialog->show();
 
     //read all configuration fields
 
@@ -264,10 +286,14 @@ void MainWindow::on_pushButtonWrite_clicked()
             flag <<= 1;
         }
     }
+    // start transaction
+    communicatioStack->setRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG, config.memBuff);
+    communicatioIndicationStart();
 }
 
 void MainWindow::on_pushButtonReset_clicked()
 {
+   communicatioIndicationStart();
    communicatioStack->resetReq();
 }
 
@@ -280,4 +306,21 @@ void MainWindow::on_tabWidgetCurrentMode_currentChanged(int index)
 void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 {
     updateNumLCDString(index + 1);
+}
+
+
+void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, uint8_t buff[])
+{
+
+}
+
+
+void MainWindow::slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus)
+{
+
+}
+
+void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus)
+{
+
 }

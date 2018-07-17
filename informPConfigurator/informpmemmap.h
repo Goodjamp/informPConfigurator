@@ -4,7 +4,7 @@
 #include "stdint.h"
 
 //address of first statys register
-#define USER_ADDRESS_CONFIG_DATA  1000
+#define USER_ADDRESS_STATUS_DATA  500
 
 //address of first configuration register
 #define USER_ADDRESS_CONFIG_DATA  1000
@@ -223,5 +223,7 @@ typedef union{
     uint8_t memBuff[sizeof(configDescriptionT)];
 }transactionBufferT;
 #pragma pack(pop)
+
+#define CONFIGURATION_NUM_REG (uint16_t)(sizeof(configDescriptionT)/2)
 
 #endif // INFORMPMEMMAP_H

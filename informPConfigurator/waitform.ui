@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>waitForm</class>
- <widget class="QDialog" name="waitForm">
+ <widget class="QWidget" name="waitForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>253</width>
-    <height>84</height>
+    <height>89</height>
    </rect>
   </property>
   <property name="windowTitle">

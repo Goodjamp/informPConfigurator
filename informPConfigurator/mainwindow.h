@@ -1,9 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include "stdbool.h"
+#include "stdint.h"
 
 #include <QMainWindow>
 #include <QStringListModel>
 #include <QVector>
+#include <QTimer>
+
+#include "waitform.h"
 #include <lcdstr.h>
 #include "hidInterface.h"
 #include "communicationclass.h"
@@ -36,7 +41,14 @@ private slots:
 
     void on_comboBoxLCDNumLSD_currentIndexChanged(int index);
 
+    /***********USER SLOTS*****************/
 
+    void communicatioTimeout();
+
+    /************RX COMMAND SLOTS**********/
+    void slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus);
+    void slotResetResp (informPTransportClass::RESP_STATUS responseStatus);
+    void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, uint8_t buff[]);
 
 private:
     Ui::MainWindow *ui;
@@ -46,14 +58,20 @@ private:
     void setDeviseOpenUIState(void);
     void messageErrorWindowShow(QString errorString);
     void updateNumLCDString(uint8_t numString);
+    void communicatioIndicationStart();
+    void communicationComplited();
 
 private:
     QStringListModel   *deviceList;
     hidInterface       *userHID;
     communicationClass *communicatioStack;
+    QTimer             *communicatioTimer;
+    waitForm           *communicatioWaitWindow;
 
     /*widjets*/
     QVector<lcdStr*> lcdStrVector;
+    /*connunication in process flag*/
+    bool communicationInProcess;
 };
 
 #endif // MAINWINDOW_H

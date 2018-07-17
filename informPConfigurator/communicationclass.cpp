@@ -13,11 +13,11 @@ void communicationClass::run()
 {
     informPTransport = new informPTransportClass(userInterface);
 
-    //tx request signal
+    // tx request signal
     connect(this, &communicationClass::signalGetRegReq, informPTransport, &informPTransportClass::slotGetRegReq );
     connect(this, &communicationClass::signalSetRegReq, informPTransport, &informPTransportClass::slotSetRegReq );
     connect(this, &communicationClass::signalResetReq,  informPTransport, &informPTransportClass::slotResetReq  );
-    //rx response signal
+    // retransmit response signal
     connect(informPTransport, &informPTransportClass::signalGetRegResp, this, &communicationClass::signalGetRegResp );
     connect(informPTransport, &informPTransportClass::signalSetRegResp, this, &communicationClass::signalSetRegResp );
     connect(informPTransport, &informPTransportClass::signalResetResp,  this, &communicationClass::signalResetResp  );
@@ -32,7 +32,7 @@ void communicationClass::getRegReq(uint16_t addressReg, uint16_t numReg)
 }
 
 
-void communicationClass::setRegReq(uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
+void communicationClass::setRegReq(uint16_t addressReg, uint16_t numReg, uint8_t buff[])
 {
     emit signalSetRegReq(addressReg, numReg, buff);
 }

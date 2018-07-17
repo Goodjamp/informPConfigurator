@@ -1,12 +1,15 @@
 #ifndef CONTROLELEMENTDESCRIPTION_H
 #define CONTROLELEMENTDESCRIPTION_H
 
-#define  VID_INFORM_P       0x0483
-#define  PID_INFORM_P       0x5711
+#define  VID_INFORM_P          0x0483
+#define  PID_INFORM_P          0x5711
+
+#define  COMMUNICATION_TIMEOUT 1000
 
 /*************LIST OF ERROR MRSAGES***/
 #define WIN_NAME                           (QString)"- informP -"
-#define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"informP не найден "
+#define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"Устройство не найдено"
+#define ERROR_COMMUNICATION                (QString)"Устройство не отвечает"
 
 
 #define LIST_OF_STATE "ВЫКЛ",\
