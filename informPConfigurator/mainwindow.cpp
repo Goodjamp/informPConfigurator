@@ -62,7 +62,7 @@ void MainWindow::setDeviseOpenUIState(void)
 void MainWindow::messageErrorWindowShow(QString errorString)
 {
     QMessageBox messageBox;
-    messageBox.critical(0,"Error",errorString);
+    messageBox.critical(0,"Ошибка",errorString);
     messageBox.setFixedSize(500,200);
     messageBox.setModal(true);
     messageBox.show();
@@ -216,85 +216,86 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     setDeviseOpenUIState();
     communicatioStack->start();
     //Read all configuration registers
-   // communicatioStack->getRegReq();
+    communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
+    communicatioIndicationStart();
 }
 
 
 void MainWindow::on_pushButtonRead_clicked()
 {
+    communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
     communicatioIndicationStart();
 }
 
 
-
 void MainWindow::on_pushButtonWrite_clicked()
 {
-    transactionBufferT config;
+    QVector<uint8_t>    buff(sizeof(configDescriptionT));
+    configDescriptionT *config = (configDescriptionT*)buff.begin();
 
     //read all configuration fields
 
     /*********************read FRQ configuration*****************************/
-    config.configDescription.configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
-    config.configDescription.configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
-    config.configDescription.configFrqMetering.frqCorrection *= 10;
-    config.configDescription.configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
-    config.configDescription.configFrqMetering.frqCorrection *= 10;
-    config.configDescription.configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum001->currentIndex();
+    config->configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
+    config->configFrqMetering.frqCorrection *= 10;
+    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
+    config->configFrqMetering.frqCorrection *= 10;
+    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum001->currentIndex();
     if( ui->comboBoxFrqMeteringSign->currentIndex() == 1 )
     {
-        config.configDescription.configFrqMetering.frqCorrection *= -1;
+        config->configFrqMetering.frqCorrection *= -1;
     }
 
     /*********************read CLOCK configuration*****************************/
-    config.configDescription.configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
-    config.configDescription.configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
+    config->configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
     if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
     {
-        config.configDescription.configClock.timeCorection += 30;
+        config->configClock.timeCorection += 30;
     }
-    config.configDescription.configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
-    config.configDescription.configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+    config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
+    config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
     /*********************read METEO configuration*****************************/
-    config.configDescription.confifgMeteo.state  = (ui->comboBoxMeteoState == 0) ? (1) : (0);
-    config.configDescription.confifgMeteo.source = (ui->comboBoxMeteoSourse == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+    config->confifgMeteo.state  = (ui->comboBoxMeteoState == 0) ? (1) : (0);
+    config->confifgMeteo.source = (ui->comboBoxMeteoSourse == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
     /*********************read MODBUS configuration*****************************/
-     config.configDescription.configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
-     config.configDescription.configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
-     config.configDescription.configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
-     config.configDescription.configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
-     config.configDescription.configModbus.state                    = 1;
-     config.configDescription.configModbus.s_port_config.stopbits   = 0;
-     config.configDescription.configModbus.s_port_config.amountbyte = 0;
-     qDebug()<<"Boudrate = "<<config.configDescription.configModbus.s_port_config.baudrate;
+     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
+     config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
+     config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
+     config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
+     config->configModbus.state                    = 1;
+     config->configModbus.s_port_config.stopbits   = 0;
+     config->configModbus.s_port_config.amountbyte = 0;
 
     /*********************read LCD configuration*****************************/
-    config.configDescription.configLCD.state  = 1;
-    config.configDescription.configLCD.numScreen = lcdStrVector.size();
+    config->configLCD.state  = 1;
+    config->configLCD.numScreen = lcdStrVector.size();
     for(uint8_t k = 0; k < lcdStrVector.size(); k++)
     {
         uint16_t flag = 0x1;
-        config.configDescription.configLCD.screenConfig[k].numParamiterPerScreen = 0;
-        config.configDescription.configLCD.screenConfig[k].bitsOfParamiters      = 0;
+        config->configLCD.screenConfig[k].numParamiterPerScreen = 0;
+        config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
         for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
         {
             if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
             {
-                config.configDescription.configLCD.screenConfig[k].bitsOfParamiters |= flag;
+                config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
             }
             flag <<= 1;
         }
     }
     // start transaction
-    communicatioStack->setRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG, config.memBuff);
+    communicatioStack->setRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG, buff);
     communicatioIndicationStart();
 }
 
 void MainWindow::on_pushButtonReset_clicked()
 {
-   communicatioIndicationStart();
    communicatioStack->resetReq();
+   communicatioIndicationStart();
 }
 
 
@@ -309,18 +310,18 @@ void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 }
 
 
-void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, uint8_t buff[])
+void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
-
+    communicationComplited();
 }
 
 
-void MainWindow::slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus)
+void MainWindow::slotSetRegResp(bool responseStatus)
 {
-
+    communicationComplited();
 }
 
-void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus)
+void MainWindow::slotResetResp(bool responseStatus)
 {
-
+    communicationComplited();
 }

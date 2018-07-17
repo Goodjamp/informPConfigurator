@@ -4,10 +4,10 @@
 #include "stdint.h"
 
 //address of first statys register
-#define USER_ADDRESS_STATUS_DATA  500
+#define USER_ADDRESS_STATUS_DATA  (uint16_t)500
 
 //address of first configuration register
-#define USER_ADDRESS_CONFIG_DATA  1000
+#define USER_ADDRESS_CONFIG_DATA  (uint16_t)1000
 
 
 /*******************************************************************/

@@ -46,9 +46,9 @@ private slots:
     void communicatioTimeout();
 
     /************RX COMMAND SLOTS**********/
-    void slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus);
-    void slotResetResp (informPTransportClass::RESP_STATUS responseStatus);
-    void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, uint8_t buff[]);
+    void slotSetRegResp(bool responseStatus);
+    void slotResetResp (bool responseStatus);
+    void slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
 
 private:
     Ui::MainWindow *ui;

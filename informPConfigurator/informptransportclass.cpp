@@ -13,17 +13,18 @@ informPTransportClass::informPTransportClass(hidInterface *comInterfaceIn)
 
 void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
 {
-
+    QVector<uint8_t> rez(1);
+    emit signalGetRegResp(true, addressReg, numReg, rez);
 }
 
 
-void informPTransportClass::slotSetRegReq(uint16_t addressReg, uint16_t numReg, uint8_t buff[])
+void informPTransportClass::slotSetRegReq(uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
-    emit signalResetResp(RESP_STATUS_OK);
+    emit signalSetRegResp(true);
 }
 
 
 void informPTransportClass::slotResetReq()
 {
-    emit signalResetResp(RESP_STATUS_OK);
+    emit signalResetResp(true);
 }

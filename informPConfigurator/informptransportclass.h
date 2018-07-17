@@ -21,13 +21,13 @@ public:
     }RESP_STATUS;
 
 signals:
-    void signalGetRegResp(RESP_STATUS respStatus, uint16_t addressReg, uint16_t numReg, uint8_t buff[]);
-    void signalSetRegResp(RESP_STATUS respStatus);
-    void signalResetResp(RESP_STATUS respStatus);
+    void signalGetRegResp(bool respStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
+    void signalSetRegResp(bool respStatus);
+    void signalResetResp(bool respStatus);
 
 public slots:
     void slotGetRegReq(uint16_t addressReg, uint16_t numReg);
-    void slotSetRegReq(uint16_t addressReg, uint16_t numReg, uint8_t buff[]);
+    void slotSetRegReq(uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
     void slotResetReq();
 
 private:
