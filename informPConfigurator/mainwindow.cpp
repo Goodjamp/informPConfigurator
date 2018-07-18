@@ -14,6 +14,11 @@
 #include "controlelementdescription.h"
 #include "communicationclass.h"
 
+
+/*
+Receive new data  -> Read all controls -> copy new data -> write controls :
+Read all controls -> Send :
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -33,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(communicatioStack, &communicationClass::signalGetRegResp, this, &MainWindow::slotGetRegResp);
     connect(communicatioStack, &communicationClass::signalSetRegResp, this, &MainWindow::slotSetRegResp);
     connect(communicatioStack, &communicationClass::signalResetResp,  this, &MainWindow::slotResetResp );
+    communicatioStack->start();
 }
 
 MainWindow::~MainWindow()
@@ -214,7 +220,6 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
         return;
     }
     setDeviseOpenUIState();
-    communicatioStack->start();
     //Read all configuration registers
     communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
     communicatioIndicationStart();
