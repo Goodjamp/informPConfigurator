@@ -60,6 +60,8 @@ private:
     void updateNumLCDString(uint8_t numString);
     void communicatioIndicationStart();
     void communicationComplited();
+    void getConfigurationFromUI(QVector<uint8_t> &configBuff);
+    bool  setConfigurationToUI(QVector<uint8_t> &config);
 
 private:
     QStringListModel   *deviceList;

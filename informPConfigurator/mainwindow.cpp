@@ -195,6 +195,154 @@ void MainWindow::communicationComplited()
 }
 
 
+void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
+{
+    configBuff.resize(sizeof(configDescriptionT));
+    configDescriptionT *config = (configDescriptionT*)configBuff.begin();
+
+    //read all configuration fields
+    /*********************read FRQ configuration*****************************/
+    config->configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
+    config->configFrqMetering.frqCorrection *= 10;
+    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
+    config->configFrqMetering.frqCorrection *= 10;
+    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum001->currentIndex();
+    if( ui->comboBoxFrqMeteringSign->currentIndex() == 1 )
+    {
+        config->configFrqMetering.frqCorrection *= -1;
+    }
+
+    /*********************read CLOCK configuration*****************************/
+    config->configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
+    if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
+    {
+        config->configClock.timeCorection += 30;
+    }
+    config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
+    config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+
+    /*********************read METEO configuration*****************************/
+    config->configMeteo.state  = (ui->comboBoxMeteoState == 0) ? (1) : (0);
+    config->configMeteo.source = (ui->comboBoxMeteoSourse == 0) ? (METEO_SOURCE_LOCAL) : (METEO_SOURCE_REMOTE);
+
+    /*********************read MODBUS configuration*****************************/
+     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
+     config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
+     config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
+     config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
+     config->configModbus.state                    = 1;
+     config->configModbus.s_port_config.stopbits   = 0;
+     config->configModbus.s_port_config.amountbyte = 0;
+
+    /*********************read LCD configuration*****************************/
+    config->configLCD.state  = 1;
+    config->configLCD.numScreen = lcdStrVector.size();
+    for(uint8_t k = 0; k < lcdStrVector.size(); k++)
+    {
+        uint16_t flag = 0x1;
+        config->configLCD.screenConfig[k].numParamiterPerScreen = 0;
+        config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
+        for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
+        {
+            if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
+            {
+                config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
+            }
+            flag <<= 1;
+        }
+    }
+}
+
+
+bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
+{
+    configDescriptionT *config = (configDescriptionT*)configBuff.begin();
+
+    /*check all configuration fields*/
+
+    /*********************check FRQ configuration*****************************/
+    if( (config->configFrqMetering.state >=  ui->comboBoxFrqMeteringState->count()) ||
+        (config->configFrqMetering.frqCorrection > 999)  )
+    {
+        return false;
+    }
+
+    /*********************check CLOCK configuration*****************************/
+    if((config->configClock.state >=  ui->comboBoxClockState->count())                                ||
+       (config->configClock.timeCorection % 30 != 0) || (config->configClock.timeCorection > 12 * 60) ||
+       (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count()))
+    {
+        return false;
+    }
+
+    /*********************check METEO configuration*****************************/
+    if((config->configMeteo.state >=  ui->comboBoxMeteoState->count())                                ||
+       (config->configMeteo.source >=  ui->comboBoxMeteoSourse->count()))
+     {
+         return false;
+     }
+
+    /*********************check MODBUS configuration*****************************/
+
+
+
+    /*********************read FRQ configuration*****************************/
+    config->configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
+    config->configFrqMetering.frqCorrection *= 10;
+    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
+    config->configFrqMetering.frqCorrection *= 10;
+    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum001->currentIndex();
+    if( ui->comboBoxFrqMeteringSign->currentIndex() == 1 )
+    {
+        config->configFrqMetering.frqCorrection *= -1;
+    }
+
+    /*********************read CLOCK configuration*****************************/
+    config->configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
+    if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
+    {
+        config->configClock.timeCorection += 30;
+    }
+    config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
+    config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource->currentIndex() == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+
+    /*********************read METEO configuration*****************************/
+    config->configMeteo.state  = (ui->comboBoxMeteoState == 0) ? (1) : (0);
+    config->configMeteo.source = (ui->comboBoxMeteoSourse == 0) ? (METEO_SOURCE_LOCAL) : (METEO_SOURCE_REMOTE);
+
+    /*********************read MODBUS configuration*****************************/
+     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
+     config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
+     config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
+     config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
+     config->configModbus.state                    = 1;
+     config->configModbus.s_port_config.stopbits   = 0;
+     config->configModbus.s_port_config.amountbyte = 0;
+
+    /*********************read LCD configuration*****************************/
+    config->configLCD.state  = 1;
+    config->configLCD.numScreen = lcdStrVector.size();
+    for(uint8_t k = 0; k < lcdStrVector.size(); k++)
+    {
+        uint16_t flag = 0x1;
+        config->configLCD.screenConfig[k].numParamiterPerScreen = 0;
+        config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
+        for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
+        {
+            if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
+            {
+                config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
+            }
+            flag <<= 1;
+        }
+    }
+}
+
+
 void MainWindow::communicatioTimeout()
 {
     communicationComplited();
@@ -235,63 +383,10 @@ void MainWindow::on_pushButtonRead_clicked()
 
 void MainWindow::on_pushButtonWrite_clicked()
 {
-    QVector<uint8_t>    buff(sizeof(configDescriptionT));
-    configDescriptionT *config = (configDescriptionT*)buff.begin();
+    QVector<uint8_t> buff(sizeof(configDescriptionT));
 
-    //read all configuration fields
+    getConfigurationFromUI(buff);
 
-    /*********************read FRQ configuration*****************************/
-    config->configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
-    config->configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
-    config->configFrqMetering.frqCorrection *= 10;
-    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
-    config->configFrqMetering.frqCorrection *= 10;
-    config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum001->currentIndex();
-    if( ui->comboBoxFrqMeteringSign->currentIndex() == 1 )
-    {
-        config->configFrqMetering.frqCorrection *= -1;
-    }
-
-    /*********************read CLOCK configuration*****************************/
-    config->configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
-    config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
-    if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
-    {
-        config->configClock.timeCorection += 30;
-    }
-    config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
-    config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
-
-    /*********************read METEO configuration*****************************/
-    config->confifgMeteo.state  = (ui->comboBoxMeteoState == 0) ? (1) : (0);
-    config->confifgMeteo.source = (ui->comboBoxMeteoSourse == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
-
-    /*********************read MODBUS configuration*****************************/
-     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
-     config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
-     config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
-     config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
-     config->configModbus.state                    = 1;
-     config->configModbus.s_port_config.stopbits   = 0;
-     config->configModbus.s_port_config.amountbyte = 0;
-
-    /*********************read LCD configuration*****************************/
-    config->configLCD.state  = 1;
-    config->configLCD.numScreen = lcdStrVector.size();
-    for(uint8_t k = 0; k < lcdStrVector.size(); k++)
-    {
-        uint16_t flag = 0x1;
-        config->configLCD.screenConfig[k].numParamiterPerScreen = 0;
-        config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
-        for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
-        {
-            if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
-            {
-                config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
-            }
-            flag <<= 1;
-        }
-    }
     // start transaction
     communicatioStack->setRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG, buff);
     communicatioIndicationStart();

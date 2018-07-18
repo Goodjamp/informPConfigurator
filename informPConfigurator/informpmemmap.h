@@ -212,7 +212,7 @@ typedef struct
     S_connectmodbus          configModbus;
     S_FRQmetter_user_config  configFrqMetering;
     S_TIME_user_config       configClock;
-    S_sensor_user_config     confifgMeteo;
+    S_sensor_user_config     configMeteo;
     S_display_user_config    configLCD;
 }configDescriptionT;
 #pragma pack(pop)
