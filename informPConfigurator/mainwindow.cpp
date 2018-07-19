@@ -500,7 +500,7 @@ void MainWindow::on_tabWidgetCurrentMode_currentChanged(int index)
 
 void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 {
-    if( ui->comboBoxLCDNumLSD->currentIndex() == lcdStrVector.size() )
+    if( ui->comboBoxLCDNumLSD->currentIndex()+1 == lcdStrVector.size() )
     {
         return;
     }

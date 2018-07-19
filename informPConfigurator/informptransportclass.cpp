@@ -34,7 +34,7 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     config->configLCD.screenConfig[2].numParamiterPerScreen = 7;
     config->configLCD.screenConfig[3].bitsOfParamiters      = 0xAA >> 1;
     config->configLCD.screenConfig[3].numParamiterPerScreen = 7;
-    config->configLCD.numScreen                             = 4;
+    config->configLCD.numScreen                             = 2;
     config->configLCD.state                                 = 0;
 
     config->configMeteo.source = 1;
