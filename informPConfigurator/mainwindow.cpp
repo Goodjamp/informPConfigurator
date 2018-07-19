@@ -51,7 +51,7 @@ void MainWindow::setDeviseCloseUIState(void)
 {
     ui->pushButtonCloseDevice->setDisabled(true);
     ui->pushButtonOpenDevice->setDisabled(false);
-    ui->pushButtonRead->setDisabled(true);
+    //ui->pushButtonRead->setDisabled(true);
     //ui->pushButtonWrite->setDisabled(true);
 }
 
@@ -221,6 +221,10 @@ void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
     {
         config->configClock.timeCorection += 30;
     }
+    if(ui->comboBoxClockCorrectionSign == 0)
+    {
+        config->configClock.timeCorection *= (-1);
+    }
     config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
     config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
@@ -229,7 +233,7 @@ void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
     config->configMeteo.source = (ui->comboBoxMeteoSourse->currentIndex() == 0) ? (METEO_SOURCE_LOCAL) : (METEO_SOURCE_REMOTE);
 
     /*********************read MODBUS configuration*****************************/
-     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex();
+     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex() + 1;
      config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
      config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
      config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
@@ -286,7 +290,8 @@ bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
      }
 
     /*********************check MODBUS configuration*****************************/
-    if(config->configModbus.s_port_config.parity >= ui->comboBoxModbusParity->count())
+    if((config->configModbus.s_port_config.parity >= ui->comboBoxModbusParity->count()) ||
+       (config->configModbus.adress_kp == 0)     )
     {
       return false;
     }
@@ -316,6 +321,7 @@ bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
             return false;
         }
     }
+    return true;
 }
 
 
@@ -327,86 +333,104 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
     }
     configDescriptionT *config = (configDescriptionT*)configBuff.begin();
 
-    /*********************set FRQ configuration*****************************/
     uint8_t tempIndex = 0;
+    /*********************set FRQ configuration*****************************/
+    uint16_t tempN;
+    uint16_t tempP;
+
     ui->comboBoxFrqMeteringState->setCurrentIndex(config->configFrqMetering.state);
     if( config->configFrqMetering.frqCorrection < 0 )
     {
+        tempN = (-1) * config->configFrqMetering.frqCorrection;
         tempIndex = 1;
+    }
+    else
+    {
+       tempN = config->configFrqMetering.frqCorrection;
     }
     ui->comboBoxFrqMeteringSign->setCurrentIndex(tempIndex);
     tempIndex = 0;
 
-    uint16_t tempN = (uint16_t)config->configFrqMetering.frqCorrection;
-    uint16_t tempP = (uint16_t)config->configFrqMetering.frqCorrection;
+    tempP = tempN;
     tempN /= 10;
     tempN *= 10;
     ui->comboBoxFrqMeteringNum001->setCurrentIndex(tempP - tempN);
     tempP = tempN / 10;
     tempN /= 100;
+    tempN *= 10;
     ui->comboBoxFrqMeteringNum01->setCurrentIndex(tempP - tempN);
     tempP = tempN / 10;
     tempN /= 100;
+    tempN *= 10;
     ui->comboBoxFrqMeteringNum1->setCurrentIndex(tempP - tempN);
 
     /********************set CLOCK configuration*****************************/
-    ui->comboBoxFrqMeteringState->setCurrentIndex(config->configClock.state);
+    uint16_t absTimeCorrection;
+    ui->comboBoxClockState->setCurrentIndex(config->configClock.state);
     if(config->configClock.isDaylightSaving)
     {
-         ui->checkBoxClockSetDaylight->setCheckable(true);
+         ui->checkBoxClockSetDaylight->setChecked(true);
     }
     else
     {
-         ui->checkBoxClockSetDaylight->setCheckable(false);
+         ui->checkBoxClockSetDaylight->setChecked(false);
     }
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
-    uint16_t restTimeCorrection = config->configClock.timeCorection % 60;
+    if(config->configClock.timeCorection < 0)
+    {
+        absTimeCorrection = (-1) * config->configClock.timeCorection;
+         ui->comboBoxClockCorrectionSign->setCurrentIndex(1);
+    }
+    else
+    {
+         ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
+    }
+
+    uint16_t restTimeCorrection = absTimeCorrection % 60;
     if(restTimeCorrection)
     {
         tempIndex = 1;
     }
     ui->comboBoxClockCorrectionMinutes->setCurrentIndex(tempIndex);
     tempIndex = 0;
-
-    ui->comboBoxClockCorrectionHours->setCurrentIndex( (config->configClock.timeCorection - restTimeCorrection) / 60 );
+    ui->comboBoxClockCorrectionHours->setCurrentIndex( (absTimeCorrection - restTimeCorrection) / 60 );
 
     /*********************set METEO configuration*****************************/
     ui->comboBoxMeteoState->setCurrentIndex(config->configMeteo.state);
     ui->comboBoxMeteoSourse->setCurrentIndex(config->configMeteo.source);
 
     /*********************set MODBUS configuration*****************************/
-
-     ui->comboBoxModbusAddress->setCurrentIndex(config->configModbus.adress_kp);
-     QString boudrate = QString::number(config->configModbus.s_port_config.baudrate);
-     uint8_t brIndex = 0;
-     for(; brIndex < ui->comboBoxModbusBoadrate->count(); brIndex++ )
-     {
+    ui->comboBoxModbusAddress->setCurrentIndex(config->configModbus.adress_kp - 1);
+    QString boudrate = QString::number(config->configModbus.s_port_config.baudrate);
+    uint8_t brIndex = 0;
+    for(; brIndex < ui->comboBoxModbusBoadrate->count(); brIndex++ )
+    {
         if( boudrate.compare( ui->comboBoxModbusBoadrate->itemText(brIndex)) == 0)
         {
             break;
         }
-     }
-     ui->comboBoxModbusBoadrate->setCurrentIndex(brIndex);
-     ui->comboBoxModbusParity->setCurrentIndex(config->configModbus.s_port_config.parity);
+    }
+    ui->comboBoxModbusBoadrate->setCurrentIndex(brIndex);
+    ui->comboBoxModbusParity->setCurrentIndex(config->configModbus.s_port_config.parity);
 
     /*********************read LCD configuration*****************************/
-
+    updateNumLCDString(config->configLCD.numScreen);
     //foreach(lcdStr *tempLcdStr, lcdStrVector)
-    for(uint8_t cnt = 0; cnt < NUMBER_OF_LCD_STRING; cnt++)
+    for(uint8_t cnt = 0; cnt < lcdStrVector.size(); cnt++)
     {
         uint16_t flag = 0x1;
-        for(uint k = 0; cnt < NUMBER_OF_VALUE; k++)
+        for(uint k = 0; k < NUMBER_OF_VALUE; k++)
         {
             if(flag & config->configLCD.screenConfig[cnt].bitsOfParamiters)
             {
-                lcdStrVector[cnt]->listOfCheckbox[k]->setCheckable(true);
+                lcdStrVector[cnt]->listOfCheckbox[k]->setChecked(true);
             }
             else
             {
-                lcdStrVector[cnt]->listOfCheckbox[k]->setCheckable(false);
+                lcdStrVector[cnt]->listOfCheckbox[k]->setChecked(false);
             }
-        }
-        flag <<= 1;
+           flag <<= 1;
+        }       
     }
     return true;
 }
@@ -482,6 +506,10 @@ void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
     communicationComplited();
+    if( !setConfigurationToUI(buff))
+    {
+        messageErrorWindowShow(ERROR_RX_DATA_FORMAT);
+    }
 }
 
 

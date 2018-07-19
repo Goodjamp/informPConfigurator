@@ -10,6 +10,7 @@
 #define WIN_NAME                           (QString)"- informP -"
 #define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"Устройство не найдено"
 #define ERROR_COMMUNICATION                (QString)"Устройство не отвечает"
+#define ERROR_RX_DATA_FORMAT               (QString)"Приннятые данные имеют неправильный формат"
 
 
 #define LIST_OF_STATE "ВЫКЛ",\
