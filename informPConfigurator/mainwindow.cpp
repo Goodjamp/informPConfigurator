@@ -30,10 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
     deviceList        = new QStringListModel(this);
     userHID           = new hidInterface();
     communicatioStack = new communicationClass(userHID);
-    communicatioTimer = new QTimer();
+    timerCommunicatioControl = new QTimer();
+    timerStatusUpdate  = new QTimer();
     communicatioWaitWindow = new waitForm(this);
 
-    connect(communicatioTimer, &QTimer::timeout, this, &MainWindow::communicatioTimeout, Qt::QueuedConnection);
+    connect(timerCommunicatioControl, &QTimer::timeout, this, &MainWindow::communicatioTimeout,  Qt::QueuedConnection);
+    connect(timerStatusUpdate,  &QTimer::timeout, this, &MainWindow::statusRequestTimeout, Qt::QueuedConnection);
     /*rx response connectin*/
     connect(communicatioStack, &communicationClass::signalGetRegResp, this, &MainWindow::slotGetRegResp);
     connect(communicatioStack, &communicationClass::signalSetRegResp, this, &MainWindow::slotSetRegResp);
@@ -51,8 +53,12 @@ void MainWindow::setDeviseCloseUIState(void)
 {
     ui->pushButtonCloseDevice->setDisabled(true);
     ui->pushButtonOpenDevice->setDisabled(false);
-    //ui->pushButtonRead->setDisabled(true);
-    //ui->pushButtonWrite->setDisabled(true);
+    ui->pushButtonRead->setDisabled(true);
+    ui->pushButtonWrite->setDisabled(true);
+    ui->pushButtonReset->setDisabled(true);
+    ui->tabWidget->setCurrentIndex(0);
+    ui->tabWidgetCurrentMode->setCurrentIndex(0);
+    ui->tabWidgetCurrentMode->setDisabled(true);
 }
 
 
@@ -62,6 +68,8 @@ void MainWindow::setDeviseOpenUIState(void)
     ui->pushButtonOpenDevice->setDisabled(true);
     ui->pushButtonRead->setDisabled(false);
     ui->pushButtonWrite->setDisabled(false);
+    ui->pushButtonReset->setDisabled(false);
+    ui->tabWidgetCurrentMode->setDisabled(false);
 }
 
 
@@ -129,8 +137,6 @@ void MainWindow::initUserUIAdjustments(void)
         numIndicatorsList.push_back(QString::number(cnt, 10));
     }
     ui->comboBoxLCDNumLSD->addItems(numIndicatorsList);
-    //ui->comboBoxLCDNumLSD->setCurrentIndex(1);
-
     updateNumLCDString(1);
 
     /*****************************CLOCK  PARAMITERS*********************/
@@ -151,7 +157,7 @@ void MainWindow::initUserUIAdjustments(void)
 
     QStringList syncSourceList = {LIST_SYNC_SOURCE};
     ui->comboBoxClockSyncSource->addItems(syncSourceList);
-    ui->comboBoxClockSyncSource->setCurrentIndex(1);
+    ui->comboBoxClockSyncSource->setCurrentIndex(0);
 
     /*****************************METEO  PARAMITERS*********************/
     ui->comboBoxMeteoState->addItems(stateList);
@@ -185,13 +191,13 @@ void MainWindow::communicatioIndicationStart()
 {
     communicationInProcess = true;
     communicatioWaitWindow->show();
-    communicatioTimer->start(COMMUNICATION_TIMEOUT);
+    timerCommunicatioControl->start(COMMUNICATION_TIMEOUT);
 }
 
 
 void MainWindow::communicationComplited()
 {
-    communicatioTimer->stop();
+    timerCommunicatioControl->stop();
     communicatioWaitWindow->close();
     communicationInProcess = false;
 }
@@ -445,11 +451,17 @@ void MainWindow::communicatioTimeout()
 }
 
 
+void MainWindow::statusRequestTimeout()
+{
+    communicatioStack->getRegReq(USER_ADDRESS_STATUS_DATA, STATUS_NUM_REG);
+}
+
+
 void MainWindow::on_pushButtonCloseDevice_clicked()
 {
     userHID->closeInterface();
-    ui->pushButtonOpenDevice->setEnabled(true);
-    ui->pushButtonCloseDevice->setDisabled(true);
+    timerStatusUpdate->stop();
+    setDeviseCloseUIState();
 }
 
 
@@ -496,7 +508,14 @@ void MainWindow::on_pushButtonReset_clicked()
 
 void MainWindow::on_tabWidgetCurrentMode_currentChanged(int index)
 {
-
+    if(index == 0)
+    {
+        timerStatusUpdate->stop();
+    }
+    else if(index == 1)
+    {
+        timerStatusUpdate->start(STATUS_REQUEST_TIMEOUT);
+    }
 }
 
 void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
@@ -514,18 +533,26 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
     communicationComplited();
     if(!responseStatus){
         messageErrorWindowShow(ERROR_COMMUNICATION);
+        on_pushButtonCloseDevice_clicked();
     }
     if( (addressReg >= USER_ADDRESS_STATUS_DATA) &&
         (addressReg + numReg <= USER_ADDRESS_STATUS_DATA + STATUS_NUM_REG))
     {
+        qDebug()<<"StatusRequest resp";
         /*TODO correct combine new dara and present data*/
         /*TODO update status part of UI*/
     }
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))
     {
-        /*TODO correct combine new dara and present data*/
-        if( !setConfigurationToUI(buff))
+        qDebug()<<"ConfigRequest resp";
+        QVector<uint8_t> configurationFromUI;
+        getConfigurationFromUI(configurationFromUI);
+        uint8_t cnt = (addressReg - USER_ADDRESS_CONFIG_DATA) * 2;
+        foreach (uint8_t val, buff) {
+            configurationFromUI[cnt++] = val;
+        }
+        if( !setConfigurationToUI(configurationFromUI))
         {
             messageErrorWindowShow(ERROR_RX_DATA_FORMAT);
         }
@@ -542,6 +569,7 @@ void MainWindow::slotSetRegResp(bool responseStatus)
     communicationComplited();
     if(!responseStatus){
         messageErrorWindowShow(ERROR_COMMUNICATION);
+        on_pushButtonCloseDevice_clicked();
     }
 }
 
@@ -550,5 +578,6 @@ void MainWindow::slotResetResp(bool responseStatus)
     communicationComplited();
     if(!responseStatus){
         messageErrorWindowShow(ERROR_COMMUNICATION);
+        on_pushButtonCloseDevice_clicked();
     }
 }

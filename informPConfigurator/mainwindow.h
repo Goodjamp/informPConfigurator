@@ -44,6 +44,7 @@ private slots:
     /***********USER SLOTS*****************/
 
     void communicatioTimeout();
+    void statusRequestTimeout();
 
     /************RX COMMAND SLOTS**********/
     void slotSetRegResp(bool responseStatus);
@@ -68,7 +69,8 @@ private:
     QStringListModel   *deviceList;
     hidInterface       *userHID;
     communicationClass *communicatioStack;
-    QTimer             *communicatioTimer;
+    QTimer             *timerCommunicatioControl;
+    QTimer             *timerStatusUpdate;
     waitForm           *communicatioWaitWindow;
 
     /*widjets*/

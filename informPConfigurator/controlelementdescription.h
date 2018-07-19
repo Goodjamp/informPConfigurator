@@ -4,7 +4,8 @@
 #define  VID_INFORM_P          0x0483
 #define  PID_INFORM_P          0x5711
 
-#define  COMMUNICATION_TIMEOUT 1000
+#define  COMMUNICATION_TIMEOUT  1000
+#define  STATUS_REQUEST_TIMEOUT 2000
 
 /*************LIST OF ERROR MRSAGES***/
 #define WIN_NAME                           (QString)"- informP -"

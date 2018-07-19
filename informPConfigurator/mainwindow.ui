@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>901</width>
-    <height>404</height>
+    <height>381</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -122,7 +122,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tabConfiguration">
        <attribute name="title">
         <string>КОНФИГУРАЦИЯ</string>
        </attribute>
@@ -161,7 +161,7 @@
            </font>
           </property>
           <property name="currentIndex">
-           <number>4</number>
+           <number>0</number>
           </property>
           <property name="iconSize">
            <size>
@@ -305,7 +305,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string> </string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -1968,7 +1968,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="widget">
+      <widget class="QWidget" name="tabStatus">
        <attribute name="title">
         <string>МОНИТОР</string>
        </attribute>
@@ -3065,7 +3065,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
