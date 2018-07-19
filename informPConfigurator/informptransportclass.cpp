@@ -18,12 +18,12 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     QVector<uint8_t> rez(sizeof(configDescriptionT));
     configDescriptionT *config = (configDescriptionT*)rez.begin();
 
-    config->configClock.isDaylightSaving      = 1;
+    config->configClock.isDaylightSaving      = 0;
     config->configClock.state                 = 1;
     config->configClock.synchronizationSource = 1;
-    config->configClock.timeCorection         = (-1)*(5*60 + 30);
+    config->configClock.timeCorection         = (-1)*(2*60 + 0);
 
-    config->configFrqMetering.frqCorrection   =-123;
+    config->configFrqMetering.frqCorrection   = -892;
     config->configFrqMetering.state           = 1;
 
     config->configLCD.screenConfig[0].bitsOfParamiters      = 0xAA >> 1;
@@ -35,7 +35,7 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     config->configLCD.screenConfig[3].bitsOfParamiters      = 0xAA >> 1;
     config->configLCD.screenConfig[3].numParamiterPerScreen = 7;
     config->configLCD.numScreen                             = 4;
-    config->configLCD.state                                 = 1;
+    config->configLCD.state                                 = 0;
 
     config->configMeteo.source = 1;
     config->configMeteo.state  = 1;

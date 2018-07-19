@@ -129,9 +129,9 @@ void MainWindow::initUserUIAdjustments(void)
         numIndicatorsList.push_back(QString::number(cnt, 10));
     }
     ui->comboBoxLCDNumLSD->addItems(numIndicatorsList);
-    ui->comboBoxLCDNumLSD->setCurrentIndex(0);
+    //ui->comboBoxLCDNumLSD->setCurrentIndex(1);
 
-    updateNumLCDString(0);
+    updateNumLCDString(1);
 
     /*****************************CLOCK  PARAMITERS*********************/
     ui->comboBoxClockState->addItems(stateList);
@@ -178,6 +178,7 @@ void MainWindow::updateNumLCDString(uint8_t numString)
         ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 3,lcdStrVector[cnt]);
         lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
     }
+    ui->comboBoxLCDNumLSD->setCurrentIndex(numString - 1);
 }
 
 void MainWindow::communicatioIndicationStart()
@@ -276,14 +277,15 @@ bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
 
     /*********************check CLOCK configuration*****************************/
     if((config->configClock.state >=  ui->comboBoxClockState->count())                                ||
-       (config->configClock.timeCorection % 30 != 0) || (config->configClock.timeCorection > 12 * 60) ||
+       (std::abs(config->configClock.timeCorection) % 30 != 0) || (std::abs(config->configClock.timeCorection ) > 11* 60) ||
        (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count()))
+
     {
         return false;
     }
 
     /*********************check METEO configuration*****************************/
-    if((config->configMeteo.state >=  ui->comboBoxMeteoState->count())                                ||
+    if((config->configMeteo.state >=  ui->comboBoxMeteoState->count()) ||
        (config->configMeteo.source >=  ui->comboBoxMeteoSourse->count()))
      {
          return false;
@@ -365,7 +367,6 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
     ui->comboBoxFrqMeteringNum1->setCurrentIndex(tempP - tempN);
 
     /********************set CLOCK configuration*****************************/
-    uint16_t absTimeCorrection;
     ui->comboBoxClockState->setCurrentIndex(config->configClock.state);
     if(config->configClock.isDaylightSaving)
     {
@@ -378,22 +379,21 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
     if(config->configClock.timeCorection < 0)
     {
-        absTimeCorrection = (-1) * config->configClock.timeCorection;
-         ui->comboBoxClockCorrectionSign->setCurrentIndex(1);
+        ui->comboBoxClockCorrectionSign->setCurrentIndex(1);
     }
     else
     {
-         ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
+        ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
     }
 
-    uint16_t restTimeCorrection = absTimeCorrection % 60;
+    uint16_t restTimeCorrection = std::abs(config->configClock.timeCorection) % 60;
     if(restTimeCorrection)
     {
         tempIndex = 1;
     }
     ui->comboBoxClockCorrectionMinutes->setCurrentIndex(tempIndex);
     tempIndex = 0;
-    ui->comboBoxClockCorrectionHours->setCurrentIndex( (absTimeCorrection - restTimeCorrection) / 60 );
+    ui->comboBoxClockCorrectionHours->setCurrentIndex( (std::abs(config->configClock.timeCorection) - restTimeCorrection) / 60 );
 
     /*********************set METEO configuration*****************************/
     ui->comboBoxMeteoState->setCurrentIndex(config->configMeteo.state);
@@ -415,6 +415,7 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
 
     /*********************read LCD configuration*****************************/
     updateNumLCDString(config->configLCD.numScreen);
+
     //foreach(lcdStr *tempLcdStr, lcdStrVector)
     for(uint8_t cnt = 0; cnt < lcdStrVector.size(); cnt++)
     {
@@ -499,6 +500,10 @@ void MainWindow::on_tabWidgetCurrentMode_currentChanged(int index)
 
 void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 {
+    if( ui->comboBoxLCDNumLSD->currentIndex() == lcdStrVector.size() )
+    {
+        return;
+    }
     updateNumLCDString(index + 1);
 }
 
