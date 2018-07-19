@@ -61,7 +61,8 @@ private:
     void communicatioIndicationStart();
     void communicationComplited();
     void getConfigurationFromUI(QVector<uint8_t> &configBuff);
-    bool  setConfigurationToUI(QVector<uint8_t> &config);
+    bool checkConfiguratin(QVector<uint8_t> &configBuff);
+    bool setConfigurationToUI(QVector<uint8_t> &config);
 
 private:
     QStringListModel   *deviceList;

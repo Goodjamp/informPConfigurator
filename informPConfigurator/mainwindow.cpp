@@ -166,10 +166,11 @@ void MainWindow::initUserUIAdjustments(void)
 void MainWindow::updateNumLCDString(uint8_t numString)
 {
     QString baseLCDName = "Индикатор №";
-    for(uint8_t cnt = 0; cnt < lcdStrVector.size(); cnt++)
+    foreach(lcdStr *tempStr, lcdStrVector)
     {
-        delete(lcdStrVector[cnt]);
+        delete(tempStr);
     }
+
     lcdStrVector.clear();
     for(uint8_t cnt = 0; cnt < numString; cnt++)
     {
@@ -256,7 +257,7 @@ void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
 }
 
 
-bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
+bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
 {
     configDescriptionT *config = (configDescriptionT*)configBuff.begin();
 
@@ -290,9 +291,8 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
       return false;
     }
     QString boudrate = QString::number(config->configModbus.s_port_config.baudrate);
-
-    (uint8_t brIndex;
-    for(brIndex = 0; brIndex < ui->comboBoxModbusBoadrate->count(); brIndex++ )
+    uint8_t brIndex = 0;
+    for(; brIndex < ui->comboBoxModbusBoadrate->count(); brIndex++ )
     {
        if( boudrate.compare( ui->comboBoxModbusBoadrate->itemText(brIndex)) == 0)
        {
@@ -304,9 +304,30 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
         return false;
     }
 
-    /**********set paramiters from configuration buffer****/
+    /*********************check LCD configuration*****************************/
+    if(config->configLCD.numScreen > NUMBER_OF_LCD_STRING)
+    {
+        return false;
+    }
+    for(uint8_t cnt = 0; cnt < config->configLCD.numScreen;)
+    {
+        if(config->configLCD.screenConfig[cnt++].numParamiterPerScreen > NUMBER_OF_VALUE)
+        {
+            return false;
+        }
+    }
+}
 
-    /*********************read FRQ configuration*****************************/
+
+bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
+{
+    if( !checkConfiguratin(configBuff))
+    {
+        return false;
+    }
+    configDescriptionT *config = (configDescriptionT*)configBuff.begin();
+
+    /*********************set FRQ configuration*****************************/
     uint8_t tempIndex = 0;
     ui->comboBoxFrqMeteringState->setCurrentIndex(config->configFrqMetering.state);
     if( config->configFrqMetering.frqCorrection < 0 )
@@ -326,7 +347,7 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
     ui->comboBoxFrqMeteringNum01->setCurrentIndex(tempP - tempN);
     tempP = tempN / 10;
     tempN /= 100;
-    ui->comboBoxFrqMeteringNum1->currentIndex(tempP - tempN);
+    ui->comboBoxFrqMeteringNum1->setCurrentIndex(tempP - tempN);
 
     /********************set CLOCK configuration*****************************/
     ui->comboBoxFrqMeteringState->setCurrentIndex(config->configClock.state);
@@ -339,7 +360,8 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
          ui->checkBoxClockSetDaylight->setCheckable(false);
     }
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
-    if(uint16_t restTimeCorrection = config->configClock.timeCorection % 60 )
+    uint16_t restTimeCorrection = config->configClock.timeCorection % 60;
+    if(restTimeCorrection)
     {
         tempIndex = 1;
     }
@@ -348,35 +370,45 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
 
     ui->comboBoxClockCorrectionHours->setCurrentIndex( (config->configClock.timeCorection - restTimeCorrection) / 60 );
 
-    /*********************read METEO configuration*****************************/
+    /*********************set METEO configuration*****************************/
     ui->comboBoxMeteoState->setCurrentIndex(config->configMeteo.state);
     ui->comboBoxMeteoSourse->setCurrentIndex(config->configMeteo.source);
 
-    /*********************read MODBUS configuration*****************************/
+    /*********************set MODBUS configuration*****************************/
 
      ui->comboBoxModbusAddress->setCurrentIndex(config->configModbus.adress_kp);
-     ui->comboBoxModbusBoadrate->currentText(brIndex);
-     ui->comboBoxModbusParity->currentIndex(config->configModbus.s_port_config.parity);
+     QString boudrate = QString::number(config->configModbus.s_port_config.baudrate);
+     uint8_t brIndex = 0;
+     for(; brIndex < ui->comboBoxModbusBoadrate->count(); brIndex++ )
+     {
+        if( boudrate.compare( ui->comboBoxModbusBoadrate->itemText(brIndex)) == 0)
+        {
+            break;
+        }
+     }
+     ui->comboBoxModbusBoadrate->setCurrentIndex(brIndex);
+     ui->comboBoxModbusParity->setCurrentIndex(config->configModbus.s_port_config.parity);
 
     /*********************read LCD configuration*****************************/
-    lcdStrVector.clear();
-    lcdStrVector.
-    config->configLCD.state  = 1;
-    config->configLCD.numScreen = lcdStrVector.size();
-    for(uint8_t k = 0; k < lcdStrVector.size(); k++)
+
+    //foreach(lcdStr *tempLcdStr, lcdStrVector)
+    for(uint8_t cnt = 0; cnt < NUMBER_OF_LCD_STRING; cnt++)
     {
         uint16_t flag = 0x1;
-        config->configLCD.screenConfig[k].numParamiterPerScreen = 0;
-        config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
-        for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
+        for(uint k = 0; cnt < NUMBER_OF_VALUE; k++)
         {
-            if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
+            if(flag & config->configLCD.screenConfig[cnt].bitsOfParamiters)
             {
-                config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
+                lcdStrVector[cnt]->listOfCheckbox[k]->setCheckable(true);
             }
-            flag <<= 1;
+            else
+            {
+                lcdStrVector[cnt]->listOfCheckbox[k]->setCheckable(false);
+            }
         }
+        flag <<= 1;
     }
+    return true;
 }
 
 
