@@ -277,7 +277,7 @@ bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
 
     /*********************check CLOCK configuration*****************************/
     if((config->configClock.state >=  ui->comboBoxClockState->count())                                ||
-       (std::abs(config->configClock.timeCorection) % 30 != 0) || (std::abs(config->configClock.timeCorection ) > 11* 60) ||
+       ((uint16_t)std::abs(config->configClock.timeCorection) % 30 != 0) || ((uint16_t)std::abs(config->configClock.timeCorection ) > 11* 60) ||
        (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count()))
 
     {
@@ -386,7 +386,7 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
         ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
     }
 
-    uint16_t restTimeCorrection = std::abs(config->configClock.timeCorection) % 60;
+    uint16_t restTimeCorrection = (uint16_t)std::abs(config->configClock.timeCorection) % 60;
     if(restTimeCorrection)
     {
         tempIndex = 1;
@@ -411,6 +411,7 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
         }
     }
     ui->comboBoxModbusBoadrate->setCurrentIndex(brIndex);
+
     ui->comboBoxModbusParity->setCurrentIndex(config->configModbus.s_port_config.parity);
 
     /*********************read LCD configuration*****************************/
@@ -511,9 +512,27 @@ void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
     communicationComplited();
-    if( !setConfigurationToUI(buff))
+    if(!responseStatus){
+        messageErrorWindowShow(ERROR_COMMUNICATION);
+    }
+    if( (addressReg >= USER_ADDRESS_STATUS_DATA) &&
+        (addressReg + numReg <= USER_ADDRESS_STATUS_DATA + STATUS_NUM_REG))
     {
-        messageErrorWindowShow(ERROR_RX_DATA_FORMAT);
+        /*TODO correct combine new dara and present data*/
+        /*TODO update status part of UI*/
+    }
+    else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
+             (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))
+    {
+        /*TODO correct combine new dara and present data*/
+        if( !setConfigurationToUI(buff))
+        {
+            messageErrorWindowShow(ERROR_RX_DATA_FORMAT);
+        }
+    }
+    else
+    {
+        messageErrorWindowShow(ERROR_RX_DATA_ADDRESS);
     }
 }
 
@@ -521,9 +540,15 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
 void MainWindow::slotSetRegResp(bool responseStatus)
 {
     communicationComplited();
+    if(!responseStatus){
+        messageErrorWindowShow(ERROR_COMMUNICATION);
+    }
 }
 
 void MainWindow::slotResetResp(bool responseStatus)
 {
     communicationComplited();
+    if(!responseStatus){
+        messageErrorWindowShow(ERROR_COMMUNICATION);
+    }
 }

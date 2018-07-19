@@ -13,9 +13,11 @@ informPTransportClass::informPTransportClass(hidInterface *comInterfaceIn)
     comInterface = comInterfaceIn;
 }
 
+QVector<uint8_t> buffTemp;
+
 void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
 {
-    QVector<uint8_t> rez(sizeof(configDescriptionT));
+/*    QVector<uint8_t> rez(sizeof(configDescriptionT));
     configDescriptionT *config = (configDescriptionT*)rez.begin();
 
     config->configClock.isDaylightSaving      = 0;
@@ -43,13 +45,14 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     config->configModbus.adress_kp = 12;
     config->configModbus.s_port_config.baudrate = 38400;
     config->configModbus.s_port_config.parity   = 2;
-
-    emit signalGetRegResp(true, addressReg, numReg, rez);
+*/
+    emit signalGetRegResp(true, addressReg, numReg, buffTemp);
 }
 
 
 void informPTransportClass::slotSetRegReq(uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
+    buffTemp = buff;
     emit signalSetRegResp(true);
 }
 

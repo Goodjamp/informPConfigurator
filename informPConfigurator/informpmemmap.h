@@ -203,7 +203,7 @@ typedef struct{
 }S_display_user_config;
 #pragma pack(pop)
 
-/********TOTAL MEMORY MAP DESCRIPTION***************/
+/********TOTAL  MEMORY MAP DESCRIPTION***************/
 #pragma pack(push,1)
 typedef struct
 {
@@ -225,5 +225,6 @@ typedef union{
 #pragma pack(pop)
 
 #define CONFIGURATION_NUM_REG (uint16_t)(sizeof(configDescriptionT)/2)
+#define STATUS_NUM_REG        (uint16_t)(sizeof(statusDescriptionT)/2)
 
 #endif // INFORMPMEMMAP_H
