@@ -120,7 +120,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabConfiguration">
        <attribute name="title">
@@ -2256,6 +2256,9 @@
                 <height>25</height>
                </size>
               </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
            </layout>
@@ -2670,6 +2673,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
            </layout>
@@ -3021,6 +3027,9 @@
                 <width>100</width>
                 <height>25</height>
                </size>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

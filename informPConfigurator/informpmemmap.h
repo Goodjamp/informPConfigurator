@@ -24,7 +24,7 @@ typedef enum{
 #pragma pack(push,1)
 typedef struct{
     uint16_t device_rcr;              // device reset_control_register
-    uint16_t device_statys;	         // device status register
+    uint16_t device_statys;	          // device status register
 } S_devise_reset_status;
 #pragma pack(pop)
 
@@ -62,7 +62,7 @@ typedef struct{
 #pragma pack(push,1)
 typedef struct{
     uint16_t  status_sensor;     // ñòàòóñ ðåãèñòðû sensor
-    uint16_t  rezTemperature;    // address in memory map rez measure temperature*10
+    int16_t   rezTemperature;    // address in memory map rez measure temperature*10
     uint16_t  rezHumidity;       // address in memory map rez measure humidity *10
     uint16_t  rezPressure_mmHg;  // measurement result Pressure mmHg
     uint16_t  rezPressure_GPasc; // measurement result Pressure GPasc
@@ -75,7 +75,7 @@ typedef struct
     S_devise_reset_status  statusDevice;
     S_modbus_oper_data     statusModbus;
     S_FRQmetter_oper_data  statusFrqMetering;
-    S_TIME_oper_data       staqtusClock;
+    S_TIME_oper_data       statusClock;
     S_sensor_address       statusMeteo;
 }statusDescriptionT;
 #pragma pack(pop)

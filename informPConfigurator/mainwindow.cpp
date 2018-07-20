@@ -5,6 +5,7 @@
 #include "QString"
 #include "QMessageBox"
 #include "QCheckBox"
+#include "QList"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -25,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    initUserUIAdjustments();
+    QVector<uint8_t> qwe;
+    getStatusState(qwe);
 
     deviceList        = new QStringListModel(this);
     userHID           = new hidInterface();
@@ -41,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(communicatioStack, &communicationClass::signalSetRegResp, this, &MainWindow::slotSetRegResp);
     connect(communicatioStack, &communicationClass::signalResetResp,  this, &MainWindow::slotResetResp );
     communicatioStack->start();
+
+    initUISetings();
 }
 
 MainWindow::~MainWindow()
@@ -83,7 +87,7 @@ void MainWindow::messageErrorWindowShow(QString errorString)
 }
 
 
-void MainWindow::initUserUIAdjustments(void)
+void MainWindow::initUISetings(void)
 {
     // Set main window paramiters
     QRect size = this->geometry();
@@ -166,6 +170,7 @@ void MainWindow::initUserUIAdjustments(void)
     QStringList meteoSourceList = {METEO_SOURCE_LIST};
     ui->comboBoxMeteoSourse->addItems(meteoSourceList);
     ui->comboBoxMeteoSourse->setCurrentIndex(0);
+
 }
 
 
@@ -203,7 +208,7 @@ void MainWindow::communicationComplited()
 }
 
 
-void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
+void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
 {
     configBuff.resize(sizeof(configDescriptionT));
     configDescriptionT *config = (configDescriptionT*)configBuff.begin();
@@ -236,8 +241,8 @@ void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
     config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
     /*********************read METEO configuration*****************************/
-    config->configMeteo.state  = (ui->comboBoxMeteoState->currentIndex() == 0) ? (1) : (0);
-    config->configMeteo.source = (ui->comboBoxMeteoSourse->currentIndex() == 0) ? (METEO_SOURCE_LOCAL) : (METEO_SOURCE_REMOTE);
+    config->configMeteo.state  = ui->comboBoxMeteoState->currentIndex();
+    config->configMeteo.source = ui->comboBoxMeteoSourse->currentIndex();
 
     /*********************read MODBUS configuration*****************************/
      config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex() + 1;
@@ -268,7 +273,7 @@ void MainWindow::getConfigurationFromUI(QVector<uint8_t> &configBuff)
 }
 
 
-bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
+bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
 {
     configDescriptionT *config = (configDescriptionT*)configBuff.begin();
 
@@ -333,9 +338,9 @@ bool MainWindow::checkConfiguratin(QVector<uint8_t> &configBuff)
 }
 
 
-bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
+bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
 {
-    if( !checkConfiguratin(configBuff))
+    if( !checkConfiguratinSettings(configBuff))
     {
         return false;
     }
@@ -444,6 +449,144 @@ bool MainWindow::setConfigurationToUI(QVector<uint8_t> &configBuff)
 }
 
 
+bool MainWindow::getUint16FromStringInt(uint16_t *rezConvertOut, QString inString)
+{
+    uint rezValue;
+    bool rezConver;
+    rezValue = inString.toUInt(&rezConver, 10);
+    if(rezConver)
+    {
+        *rezConvertOut = (uint16_t)(0xFFFF && rezValue);
+        return true;
+    }
+    return false;
+}
+
+
+bool MainWindow::getInt16FromStringInt(int16_t *rezConvertOut, QString inString)
+{
+    uint rezValue;
+    bool rezConver;
+    rezValue = inString.toInt(&rezConver, 10);
+    if(rezConver)
+    {
+        *rezConvertOut = (uint16_t)(0xFFFF && rezValue);
+        return true;
+    }
+    return false;
+}
+
+
+void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
+{
+    configBuff.resize(sizeof(statusDescriptionT));
+    statusDescriptionT *status      = (statusDescriptionT*)configBuff.begin();
+    QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
+    QList<QString> statusModulList  = {LIST_MODULE_STATUS};
+
+    if( statusDeviceList.indexOf(ui->lineEditDevStatus->text()) >=0 )
+    {
+        status->statusDevice.device_statys  = statusDeviceList.indexOf(ui->lineEditDevStatus->text());
+    }
+
+    /*********************read FRQ configuration*****************************/
+    if(statusModulList.indexOf(ui->lineEditFrqMeteringStatus->text()) >= 0)
+    {
+        status->statusFrqMetering.status_FRQmetter = statusModulList.indexOf(ui->lineEditFrqMeteringStatus->text());
+    }  
+    getUint16FromStringInt(&status->statusFrqMetering.rez_FRQmetter, ui->lineEditFrqMeteringFrq->text());
+
+    /*********************read CLOCK configuration*****************************/
+    if(statusModulList.indexOf(ui->lineEditClockStatus->text()) >= 0)
+    {
+        status->statusClock.status_TIME = statusModulList.indexOf(ui->lineEditClockStatus->text());
+    }
+    getUint16FromStringInt(&status->statusClock.date_year,   ui->lineEditClockRezYear->text()   );
+    getUint16FromStringInt(&status->statusClock.date_month,  ui->lineEditClockRezMonth->text()  );
+    getUint16FromStringInt(&status->statusClock.date_day,    ui->lineEditClockRezDay->text()    );
+    getUint16FromStringInt(&status->statusClock.time_honour, ui->lineEditClockRezHour->text()   );
+    getUint16FromStringInt(&status->statusClock.time_minute, ui->lineEditClockRezMinutes->text());
+
+    /*********************read METEO configuration*****************************/
+    if(statusModulList.indexOf(ui->lineEditMeteoStatus->text()) >= 0)
+    {
+        status->statusMeteo.status_sensor = statusModulList.indexOf(ui->lineEditMeteoStatus->text());
+    }
+    getInt16FromStringInt(&status->statusMeteo.rezTemperature,     ui->lineEditMeteoRezTemperature->text());
+    getUint16FromStringInt(&status->statusMeteo.rezHumidity,       ui->lineEditMeteoRezHumidity->text()   );
+    getUint16FromStringInt(&status->statusMeteo.rezPressure_mmHg,  ui->lineEditMeteoRezPressurePb->text() );
+    getUint16FromStringInt(&status->statusMeteo.rezPressure_GPasc, ui->lineEditMeteoRezhPa->text()        );
+}
+
+
+void MainWindow::setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t statusIndex)
+{
+    QList<QString> statusModulList  = {LIST_MODULE_STATUS};
+    if(statusIndex < statusModulList.size())
+    {
+        statuSlineEdit->setText(statusModulList[statusIndex]);
+    }
+
+    switch(statusIndex)
+    {
+    case 0: statuSlineEdit->setStyleSheet("background-color: white");
+            break;
+    case 1: statuSlineEdit->setStyleSheet("background-color: green");
+            break;
+    default: statuSlineEdit->setStyleSheet("background-color: red");
+             break;
+    }
+}
+
+void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t statusIndex)
+{
+    QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
+    if(statusIndex < statusDeviceList.size())
+    {
+        statuSlineEdit->setText(statusDeviceList[statusIndex]);
+    }
+
+    switch(statusIndex)
+    {
+    case 0: statuSlineEdit->setStyleSheet("background-color: white");
+            break;
+    default: statuSlineEdit->setStyleSheet("background-color: red");
+             break;
+    }
+}
+
+
+void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
+{
+    configBuff.resize(sizeof(statusDescriptionT));
+    statusDescriptionT *status      = (statusDescriptionT*)configBuff.begin();
+
+    /*********************set device status*****************************/
+    setDeviceStatusLineEdit(ui->lineEditDevStatus, status->statusDevice.device_statys);
+
+    /*********************set FRQ configuration*****************************/
+    setModuleStatusLineEdit(ui->lineEditFrqMeteringStatus, status->statusFrqMetering.status_FRQmetter);
+    ui->lineEditFrqMeteringFrq->setText(QString::number(status->statusFrqMetering.rez_FRQmetter));
+
+    /*********************set CLOCK configuration*****************************/
+    setModuleStatusLineEdit(ui->lineEditClockStatus, status->statusClock.status_TIME);
+
+    ui->lineEditClockRezYear->setText(QString::number(status->statusClock.date_year));
+    ui->lineEditClockRezMonth->setText(QString::number(status->statusClock.date_month));
+    ui->lineEditClockRezDay->setText(QString::number(status->statusClock.date_day));
+    ui->lineEditClockRezHour->setText(QString::number(status->statusClock.time_honour));
+    ui->lineEditClockRezMinutes->setText(QString::number(status->statusClock.time_minute));
+
+    /*********************set METEO configuration*****************************/
+    setModuleStatusLineEdit(ui->lineEditMeteoStatus, status->statusMeteo.status_sensor);
+
+    ui->lineEditMeteoRezTemperature->setText(QString::number(status->statusMeteo.rezTemperature));
+    ui->lineEditMeteoRezHumidity->setText(QString::number(status->statusMeteo.rezHumidity));
+    ui->lineEditMeteoRezPressurePb->setText(QString::number(status->statusMeteo.rezPressure_mmHg));
+    ui->lineEditMeteoRezhPa->setText(QString::number(status->statusMeteo.rezPressure_GPasc));
+}
+
+
 void MainWindow::communicatioTimeout()
 {
     communicationComplited();
@@ -492,7 +635,7 @@ void MainWindow::on_pushButtonWrite_clicked()
 {
     QVector<uint8_t> buff(sizeof(configDescriptionT));
 
-    getConfigurationFromUI(buff);
+    getConfigurationSettings(buff);
 
     // start transaction
     communicatioStack->setRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG, buff);
@@ -547,12 +690,12 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
     {
         qDebug()<<"ConfigRequest resp";
         QVector<uint8_t> configurationFromUI;
-        getConfigurationFromUI(configurationFromUI);
+        getConfigurationSettings(configurationFromUI);
         uint8_t cnt = (addressReg - USER_ADDRESS_CONFIG_DATA) * 2;
         foreach (uint8_t val, buff) {
             configurationFromUI[cnt++] = val;
         }
-        if( !setConfigurationToUI(configurationFromUI))
+        if( !setConfigurationSettings(configurationFromUI))
         {
             messageErrorWindowShow(ERROR_RX_DATA_FORMAT);
         }

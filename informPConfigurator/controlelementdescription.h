@@ -57,6 +57,10 @@
 
 /**********DEVICE STATUS LIST********/
 #define LIST_DEVICE_STATUS "РАБОТА",\
+                           "АВАРИЙНАЯ"
+
+/**********MODULE SATTUS DESCRIPTION********/
+#define LIST_MODULE_STATUS "РАБОТА",\
                            "ПРЕДУПРЕДИТЕЛЬНАЯ",\
                            "АВАРИЙНАЯ"
 
