@@ -457,7 +457,7 @@ bool MainWindow::getUint16FromStringInt(uint16_t *rezConvertOut, QString inStrin
     rezValue = inString.toUInt(&rezConver, 10);
     if(rezConver)
     {
-        *rezConvertOut = (uint16_t)(0xFFFF && rezValue);
+        *rezConvertOut = (uint16_t)(0xFFFF & rezValue);
         return true;
     }
     return false;
@@ -471,7 +471,7 @@ bool MainWindow::getInt16FromStringInt(int16_t *rezConvertOut, QString inString)
     rezValue = inString.toInt(&rezConver, 10);
     if(rezConver)
     {
-        *rezConvertOut = (uint16_t)(0xFFFF && rezValue);
+        *rezConvertOut = (uint16_t)(0xFFFF & rezValue);
         return true;
     }
     return false;
@@ -495,7 +495,17 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
     {
         status->statusFrqMetering.status_FRQmetter = statusModulList.indexOf(ui->lineEditFrqMeteringStatus->text());
     }  
-    getUint16FromStringInt(&status->statusFrqMetering.rez_FRQmetter, ui->lineEditFrqMeteringFrq->text());
+
+    {
+        double rezValue;
+        bool rezConver;
+        rezValue = ui->lineEditFrqMeteringFrq->text().toDouble(&rezConver);
+        if(rezConver)
+        {
+            status->statusFrqMetering.rez_FRQmetter = (uint16_t)(rezValue * 1000);
+        }
+    }
+
 
     /*********************read CLOCK configuration*****************************/
     if(statusModulList.indexOf(ui->lineEditClockStatus->text()) >= 0)
@@ -540,7 +550,7 @@ void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t stat
     if(statusIndex < statusDeviceList.size())
     {
         statuSlineEdit->setText(statusDeviceList[statusIndex]);
-        statuSlineEdit->setProperty("statusPr",statusIndex);
+        statuSlineEdit->setProperty("statusPr",((statusIndex == 0)?0:2) );
         statuSlineEdit->style()->unpolish(statuSlineEdit);
         statuSlineEdit->style()->polish(statuSlineEdit);
     }
@@ -558,7 +568,7 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
 
     /*********************set FRQ configuration*****************************/
     setModuleStatusLineEdit(ui->lineEditFrqMeteringStatus, status->statusFrqMetering.status_FRQmetter);
-    ui->lineEditFrqMeteringFrq->setText(QString::number(status->statusFrqMetering.rez_FRQmetter));
+    ui->lineEditFrqMeteringFrq->setText(QString::number(double(status->statusFrqMetering.rez_FRQmetter)/1000));
 
     /*********************set CLOCK configuration*****************************/
     setModuleStatusLineEdit(ui->lineEditClockStatus, status->statusClock.status_TIME);
@@ -674,8 +684,13 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
         (addressReg + numReg <= USER_ADDRESS_STATUS_DATA + STATUS_NUM_REG))
     {
         qDebug()<<"StatusRequest resp";
-        /*TODO correct combine new dara and present data*/
-        setStatusState(buff);
+        QVector<uint8_t> statusFromUI(sizeof(statusDescriptionT));
+        getStatusState(statusFromUI);
+        uint8_t cnt = (addressReg - USER_ADDRESS_STATUS_DATA) * 2;
+        foreach (uint8_t val, buff) {
+            statusFromUI[cnt++] = val;
+        }
+        setStatusState(statusFromUI);
     }
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))

@@ -57,6 +57,17 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     status->statusMeteo.rezPressure_mmHg = 768;
     status->statusMeteo.rezPressure_GPasc = 1235;
 
+    status->statusClock.date_year  = 1;
+    status->statusClock.date_month = 2;
+    status->statusClock.date_day   = 3;
+    status->statusClock.time_honour= 4;
+    status->statusClock.time_minute= 5;
+    status->statusClock.status_TIME=cnt;
+
+    status->statusFrqMetering.rez_FRQmetter = 49950;
+    status->statusFrqMetering.status_FRQmetter = cnt;
+
+
     if(cnt == 2 )
     {
         cnt = 0;

@@ -161,7 +161,7 @@
            </font>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>4</number>
           </property>
           <property name="iconSize">
            <size>
@@ -440,6 +440,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -593,6 +595,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -617,6 +621,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                </widget>
@@ -674,6 +680,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -695,6 +703,12 @@
                   <height>25</height>
                  </size>
                 </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
                </widget>
               </item>
               <item>
@@ -714,6 +728,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                </widget>
@@ -735,6 +751,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -759,6 +777,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                </widget>
@@ -780,6 +800,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -821,6 +843,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -886,6 +910,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -910,6 +936,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                </widget>
@@ -968,6 +996,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -992,6 +1022,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                </widget>
@@ -1372,6 +1404,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -1396,6 +1430,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                </widget>
@@ -1489,6 +1525,8 @@
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -1523,6 +1561,8 @@
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -1557,6 +1597,8 @@
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -1596,6 +1638,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1623,6 +1667,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1664,6 +1710,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1691,6 +1739,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1732,6 +1782,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1759,6 +1811,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1800,6 +1854,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -1827,6 +1883,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -2216,6 +2274,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string>49.051</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2241,6 +2302,8 @@
               <property name="font">
                <font>
                 <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -2384,6 +2447,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string>3</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2439,6 +2505,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string>4</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2468,6 +2537,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string>5</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2496,6 +2568,9 @@
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>6</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2603,6 +2678,9 @@
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>2</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2794,6 +2872,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string>10</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2822,6 +2903,9 @@
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>9</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2904,6 +2988,9 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string>8</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2984,6 +3071,9 @@
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>7</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
