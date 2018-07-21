@@ -6,6 +6,7 @@
 #include "QMessageBox"
 #include "QCheckBox"
 #include "QList"
+#include "QLineEdit"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -525,17 +526,12 @@ void MainWindow::setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t stat
     if(statusIndex < statusModulList.size())
     {
         statuSlineEdit->setText(statusModulList[statusIndex]);
+        statuSlineEdit->setProperty("statusPr",statusIndex);
+        statuSlineEdit->style()->unpolish(statuSlineEdit);
+        statuSlineEdit->style()->polish(statuSlineEdit);
     }
 
-    switch(statusIndex)
-    {
-    case 0: statuSlineEdit->setStyleSheet("background-color: white");
-            break;
-    case 1: statuSlineEdit->setStyleSheet("background-color: green");
-            break;
-    default: statuSlineEdit->setStyleSheet("background-color: red");
-             break;
-    }
+
 }
 
 void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t statusIndex)
@@ -544,15 +540,11 @@ void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t stat
     if(statusIndex < statusDeviceList.size())
     {
         statuSlineEdit->setText(statusDeviceList[statusIndex]);
+        statuSlineEdit->setProperty("statusPr",statusIndex);
+        statuSlineEdit->style()->unpolish(statuSlineEdit);
+        statuSlineEdit->style()->polish(statuSlineEdit);
     }
 
-    switch(statusIndex)
-    {
-    case 0: statuSlineEdit->setStyleSheet("background-color: white");
-            break;
-    default: statuSlineEdit->setStyleSheet("background-color: red");
-             break;
-    }
 }
 
 
@@ -683,7 +675,7 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
     {
         qDebug()<<"StatusRequest resp";
         /*TODO correct combine new dara and present data*/
-        /*TODO update status part of UI*/
+        setStatusState(buff);
     }
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))

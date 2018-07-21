@@ -46,7 +46,27 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     config->configModbus.s_port_config.baudrate = 38400;
     config->configModbus.s_port_config.parity   = 2;
 */
-    emit signalGetRegResp(true, addressReg, numReg, buffTemp);
+    QVector<uint8_t> rez(sizeof(statusDescriptionT));
+    statusDescriptionT *status = (statusDescriptionT*)rez.begin();
+    static uint8_t cnt = 0;
+    status->statusDevice.device_statys = cnt;
+
+    status->statusMeteo.status_sensor  = cnt;
+    status->statusMeteo.rezTemperature = -12;
+    status->statusMeteo.rezHumidity    = 68;
+    status->statusMeteo.rezPressure_mmHg = 768;
+    status->statusMeteo.rezPressure_GPasc = 1235;
+
+    if(cnt == 2 )
+    {
+        cnt = 0;
+    }
+    else
+    {
+        cnt++;
+    }
+
+    emit signalGetRegResp(true, addressReg, numReg, rez);
 }
 
 

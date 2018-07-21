@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>901</width>
+    <width>919</width>
     <height>381</height>
    </rect>
   </property>
@@ -2068,8 +2068,14 @@
                 <height>25</height>
                </size>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
               <property name="readOnly">
                <bool>true</bool>
+              </property>
+              <property name="statusPr" stdset="0">
+               <UInt>0</UInt>
               </property>
              </widget>
             </item>
@@ -2170,7 +2176,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -2183,7 +2189,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -2246,18 +2252,24 @@
              <widget class="QLineEdit" name="lineEditFrqMeteringStatus">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>130</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>130</width>
                 <height>25</height>
                </size>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
               <property name="readOnly">
                <bool>true</bool>
+              </property>
+              <property name="statusPr" stdset="0">
+               <UInt>0</UInt>
               </property>
              </widget>
             </item>
@@ -2332,7 +2344,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -2345,7 +2357,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -2656,13 +2668,13 @@
              <widget class="QLineEdit" name="lineEditClockStatus">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>130</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>130</width>
                 <height>25</height>
                </size>
               </property>
@@ -2673,8 +2685,14 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
               <property name="readOnly">
                <bool>true</bool>
+              </property>
+              <property name="statusPr" stdset="0">
+               <UInt>0</UInt>
               </property>
              </widget>
             </item>
@@ -2749,7 +2767,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -2982,7 +3000,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -3018,18 +3036,24 @@
              <widget class="QLineEdit" name="lineEditMeteoStatus">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>130</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
+                <width>130</width>
                 <height>25</height>
                </size>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
               <property name="readOnly">
                <bool>true</bool>
+              </property>
+              <property name="statusPr" stdset="0">
+               <UInt>0</UInt>
               </property>
              </widget>
             </item>
@@ -3061,7 +3085,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>901</width>
+     <width>919</width>
      <height>21</height>
     </rect>
    </property>

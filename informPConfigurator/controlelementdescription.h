@@ -5,7 +5,7 @@
 #define  PID_INFORM_P          0x5711
 
 #define  COMMUNICATION_TIMEOUT  1000
-#define  STATUS_REQUEST_TIMEOUT 2000
+#define  STATUS_REQUEST_TIMEOUT 1000
 
 /*************LIST OF ERROR MRSAGES***/
 #define WIN_NAME                           (QString)"- informP -"
@@ -63,5 +63,10 @@
 #define LIST_MODULE_STATUS "РАБОТА",\
                            "ПРЕДУПРЕДИТЕЛЬНАЯ",\
                            "АВАРИЙНАЯ"
+
+
+/***************************STYLE DESCRIPTIONS**************/
+#define STYLE_STATUS_TEXT              "font: bold 16px;"
+
 
 #endif // CONTROLELEMENTDESCRIPTION_H
