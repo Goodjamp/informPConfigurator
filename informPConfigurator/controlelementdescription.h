@@ -4,7 +4,7 @@
 #define  VID_INFORM_P          0x0483
 #define  PID_INFORM_P          0x5711
 
-#define  COMMUNICATION_TIMEOUT  1000
+#define  COMMUNICATION_TIMEOUT  2000
 #define  STATUS_REQUEST_TIMEOUT 1000
 
 /*************LIST OF ERROR MRSAGES***/
@@ -12,7 +12,7 @@
 #define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"Устройство не найдено"
 #define ERROR_COMMUNICATION                (QString)"Устройство не отвечает"
 #define ERROR_RX_DATA_FORMAT               (QString)"Приннятые данные имеют неправильный формат"
-#define ERROR_RX_DATA_ADDRESS                   (QString)"Приннятые данные имеют неправильный адрес"
+#define ERROR_RX_DATA_ADDRESS              (QString)"Приннятые данные имеют неправильный адрес"
 
 
 #define LIST_OF_STATE "ВЫКЛ",\
@@ -56,13 +56,17 @@
                                 "Удаленный"
 
 /**********DEVICE STATUS LIST********/
-#define LIST_DEVICE_STATUS "РАБОТА",\
-                           "АВАРИЙНАЯ"
+#define DEVICE_STATUS_FREQUENCY_METERING_MASK   (uint16_t)(1<<1)
+#define DEVICE_STATUS_CLOCK_MASK                (uint16_t)(1<<2)
+#define DEVICE_STATUS_METEO_DATA_MASK           (uint16_t)(1<<3)
 
-/**********MODULE SATTUS DESCRIPTION********/
+#define LIST_DEVICE_STATUS "РАБОТА",\
+                           "АВАРИЯ"
+
+/**********MODULE SATTUS DESCRIPTION*********/
 #define LIST_MODULE_STATUS "РАБОТА",\
-                           "ПРЕДУПРЕДИТЕЛЬНАЯ",\
-                           "АВАРИЙНАЯ"
+                           "ПРЕДУПРЕЖДЕНИЕ",\
+                           "АВАРИЯ"
 
 
 /***************************STYLE DESCRIPTIONS**************/

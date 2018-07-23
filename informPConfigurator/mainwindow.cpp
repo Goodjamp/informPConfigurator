@@ -216,7 +216,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
 
     //read all configuration fields
     /*********************read FRQ configuration*****************************/
-    config->configFrqMetering.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configFrqMetering.state = (ui->comboBoxFrqMeteringState->currentIndex() == 0) ? 0 : (1);
     config->configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
     config->configFrqMetering.frqCorrection *= 10;
     config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
@@ -228,7 +228,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     }
 
     /*********************read CLOCK configuration*****************************/
-    config->configClock.state = ui->comboBoxFrqMeteringState->currentIndex();
+    config->configClock.state = (ui->comboBoxFrqMeteringState->currentIndex() == 0) ? 0 : (1);
     config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
     if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
     {
@@ -242,7 +242,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
     /*********************read METEO configuration*****************************/
-    config->configMeteo.state  = ui->comboBoxMeteoState->currentIndex();
+    config->configMeteo.state  = (ui->comboBoxMeteoState->currentIndex() == 0) ? 0 : (1);
     config->configMeteo.source = ui->comboBoxMeteoSourse->currentIndex();
 
     /*********************read MODBUS configuration*****************************/
@@ -250,12 +250,12 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
      config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
      config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
      config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
-     config->configModbus.state                    = 1;
+     config->configModbus.state                    = (1);
      config->configModbus.s_port_config.stopbits   = 0;
      config->configModbus.s_port_config.amountbyte = 0;
 
     /*********************read LCD configuration*****************************/
-    config->configLCD.state  = 1;
+    config->configLCD.state  = (1);
     config->configLCD.numScreen = lcdStrVector.size();
     for(uint8_t k = 0; k < lcdStrVector.size(); k++)
     {
@@ -277,18 +277,19 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
 bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
 {
     configDescriptionT *config = (configDescriptionT*)configBuff.begin();
+    uint16_t rez = (1);
 
     /*check all configuration fields*/
 
     /*********************check FRQ configuration*****************************/
-    if( (config->configFrqMetering.state >=  ui->comboBoxFrqMeteringState->count()) ||
+    if( (config->configFrqMetering.state != 0 && config->configFrqMetering.state != (1)) ||
         (config->configFrqMetering.frqCorrection > 999)  )
     {
         return false;
     }
 
     /*********************check CLOCK configuration*****************************/
-    if((config->configClock.state >=  ui->comboBoxClockState->count())                                ||
+    if((config->configClock.state != 0 && config->configClock.state != (1))                                                                   ||
        ((uint16_t)std::abs(config->configClock.timeCorection) % 30 != 0) || ((uint16_t)std::abs(config->configClock.timeCorection ) > 11* 60) ||
        (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count()))
 
@@ -297,7 +298,7 @@ bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
     }
 
     /*********************check METEO configuration*****************************/
-    if((config->configMeteo.state >=  ui->comboBoxMeteoState->count()) ||
+    if((config->configMeteo.state != 0 && config->configMeteo.state != (1)) ||
        (config->configMeteo.source >=  ui->comboBoxMeteoSourse->count()))
      {
          return false;
@@ -352,7 +353,7 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     uint16_t tempN;
     uint16_t tempP;
 
-    ui->comboBoxFrqMeteringState->setCurrentIndex(config->configFrqMetering.state);
+    ui->comboBoxFrqMeteringState->setCurrentIndex((config->configFrqMetering.state == 0) ? 0 : 1);
     if( config->configFrqMetering.frqCorrection < 0 )
     {
         tempN = (-1) * config->configFrqMetering.frqCorrection;
@@ -379,7 +380,7 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     ui->comboBoxFrqMeteringNum1->setCurrentIndex(tempP - tempN);
 
     /********************set CLOCK configuration*****************************/
-    ui->comboBoxClockState->setCurrentIndex(config->configClock.state);
+    ui->comboBoxClockState->setCurrentIndex((config->configClock.state == 0) ? 0 : 1);
     if(config->configClock.isDaylightSaving)
     {
          ui->checkBoxClockSetDaylight->setChecked(true);
@@ -408,7 +409,7 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     ui->comboBoxClockCorrectionHours->setCurrentIndex( (std::abs(config->configClock.timeCorection) - restTimeCorrection) / 60 );
 
     /*********************set METEO configuration*****************************/
-    ui->comboBoxMeteoState->setCurrentIndex(config->configMeteo.state);
+    ui->comboBoxMeteoState->setCurrentIndex((config->configMeteo.state == 0) ? 0 : 1);
     ui->comboBoxMeteoSourse->setCurrentIndex(config->configMeteo.source);
 
     /*********************set MODBUS configuration*****************************/
@@ -530,30 +531,48 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
 }
 
 
-void MainWindow::setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t statusIndex)
+void MainWindow::setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex)
 {
     QList<QString> statusModulList  = {LIST_MODULE_STATUS};
-    if(statusIndex < statusModulList.size())
+    if(statusIndex >= statusModulList.size())
     {
-        statuSlineEdit->setText(statusModulList[statusIndex]);
-        statuSlineEdit->setProperty("statusPr",statusIndex);
-        statuSlineEdit->style()->unpolish(statuSlineEdit);
-        statuSlineEdit->style()->polish(statuSlineEdit);
+        return;
     }
-
+    statuSlineEdit->setText(statusModulList[statusIndex]);
+    statuSlineEdit->setProperty("statusPr",statusIndex);
+    statuSlineEdit->style()->unpolish(statuSlineEdit);
+    statuSlineEdit->style()->polish(statuSlineEdit);
 
 }
 
-void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint8_t statusIndex)
+void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex)
 {
     QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
-    if(statusIndex < statusDeviceList.size())
-    {
-        statuSlineEdit->setText(statusDeviceList[statusIndex]);
-        statuSlineEdit->setProperty("statusPr",((statusIndex == 0)?0:2) );
-        statuSlineEdit->style()->unpolish(statuSlineEdit);
-        statuSlineEdit->style()->polish(statuSlineEdit);
-    }
+    //statusDeviceList.size()
+    uint8_t statusTextIndex = (statusIndex > 0) ? 1 : 0;
+    //Set global device status
+    ui->lineEditDevStatus->setText(statusDeviceList[statusTextIndex]);
+    ui->lineEditDevStatus->setProperty("statusPr",((statusTextIndex == 0)?0:2) );
+    ui->lineEditDevStatus->style()->unpolish(ui->lineEditDevStatus);
+    ui->lineEditDevStatus->style()->polish(ui->lineEditDevStatus);
+
+    //Analyse module status for frequency metering module
+    ui->lineEditDevStatusFrqMetering->setText((statusIndex & DEVICE_STATUS_FREQUENCY_METERING_MASK) ? statusDeviceList[1] : statusDeviceList[0]);
+    ui->lineEditDevStatusFrqMetering->setProperty("statusPr",(((statusIndex & DEVICE_STATUS_FREQUENCY_METERING_MASK)) ? 2 : 0));
+    ui->lineEditDevStatusFrqMetering->style()->unpolish(ui->lineEditDevStatusFrqMetering);
+    ui->lineEditDevStatusFrqMetering->style()->polish(ui->lineEditDevStatusFrqMetering);
+
+    //Analyse module status for Clock module
+    ui->lineEditDevStatusClock->setText((statusIndex & DEVICE_STATUS_CLOCK_MASK) ? statusDeviceList[1] : statusDeviceList[0]);
+    ui->lineEditDevStatusClock->setProperty("statusPr",(((statusIndex & DEVICE_STATUS_CLOCK_MASK)) ? 2 : 0));
+    ui->lineEditDevStatusClock->style()->unpolish(ui->lineEditDevStatusClock);
+    ui->lineEditDevStatusClock->style()->polish(ui->lineEditDevStatusClock);
+
+    //Analyse module status for meteo module
+    ui->lineEditDevStatusMeteo->setText((statusIndex & DEVICE_STATUS_METEO_DATA_MASK) ? statusDeviceList[1] : statusDeviceList[0]);
+    ui->lineEditDevStatusMeteo->setProperty("statusPr",(((statusIndex & DEVICE_STATUS_METEO_DATA_MASK)) ? 2 : 0));
+    ui->lineEditDevStatusMeteo->style()->unpolish(ui->lineEditDevStatusMeteo);
+    ui->lineEditDevStatusMeteo->style()->polish(ui->lineEditDevStatusMeteo);
 
 }
 
@@ -621,8 +640,8 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     }
     setDeviseOpenUIState();
     //Read all configuration registers
-    communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
-    communicatioIndicationStart();
+    //communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
+    //communicatioIndicationStart();
 }
 
 
@@ -676,17 +695,19 @@ void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
     communicationComplited();
-    if(!responseStatus){
-        messageErrorWindowShow(ERROR_COMMUNICATION);
-        on_pushButtonCloseDevice_clicked();
-    }
+
     if( (addressReg >= USER_ADDRESS_STATUS_DATA) &&
         (addressReg + numReg <= USER_ADDRESS_STATUS_DATA + STATUS_NUM_REG))
     {
+        if(!responseStatus){
+            /*ADD INDICATION OF COMMUNICATION ERROR, BUT DON'T CLOSE COMMUNICATION !!!! (MAYBE LED NEAR THE BUTTON ??)*/
+            return;
+        }
         qDebug()<<"StatusRequest resp";
         QVector<uint8_t> statusFromUI(sizeof(statusDescriptionT));
         getStatusState(statusFromUI);
         uint8_t cnt = (addressReg - USER_ADDRESS_STATUS_DATA) * 2;
+        // copy new status data to current status buffer
         foreach (uint8_t val, buff) {
             statusFromUI[cnt++] = val;
         }
@@ -695,6 +716,11 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))
     {
+        if(!responseStatus){
+            messageErrorWindowShow(ERROR_COMMUNICATION);
+            on_pushButtonCloseDevice_clicked();
+            return;
+        }
         qDebug()<<"ConfigRequest resp";
         QVector<uint8_t> configurationFromUI;
         getConfigurationSettings(configurationFromUI);

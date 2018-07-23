@@ -107,11 +107,11 @@ typedef struct{
 
 typedef struct{
     BF_dev_staff    bf_dev_staff;        // list of moduls
-    uint16_t             num_use_uart;        // quantity of UARTS for MODBUS
-    uint16_t             num_reg_data;        // not use
-    uint16_t             modbus_req_user;     // not use
-    uint16_t             program_version;     // FW version
-    uint16_t             CRC_dev;             // total CRC
+    uint16_t        num_use_uart;        // quantity of UARTS for MODBUS
+    uint16_t        num_reg_data;        // not use
+    uint16_t        modbus_req_user;     // not use
+    uint16_t        program_version;     // FW version
+    uint16_t        CRC_dev;             // total CRC
 }S_dev_staff;
 
 typedef struct{
@@ -126,8 +126,8 @@ typedef struct{
 
 /*************MODBUS MODULE DESCRIPTION****************/
 typedef enum {
-    PROTOCOL_MODBUS_MASTER,
-    PROTOCOL_MODBUS_SLAVE,
+    PROTOCOL_MODBUS_MASTER = (uint8_t)0,
+    PROTOCOL_MODBUS_SLAVE  = (uint8_t)1,
 } PORT_PROTOCOL;
 
 #pragma pack(push,1)
@@ -142,7 +142,7 @@ typedef struct {
 typedef struct {
     uint16_t state;
     S_port_config s_port_config;   //
-    PORT_PROTOCOL type;
+    uint8_t type;
     uint16_t waitresp;
     uint8_t number_of_pribor;
     uint8_t number_no_answer;
@@ -198,7 +198,7 @@ typedef struct{
     uint16_t numScreen;                       // number of screen connected to device
     struct{                                   // configuration parameters of every screen
        uint16_t numParamiterPerScreen: 3;
-       uint16_t bitsOfParamiters:      16 - 3;
+       uint16_t bitsOfParamiters:     (16 - 3);
     }screenConfig[NUMBER_OF_LCD_STRING];
 }S_display_user_config;
 #pragma pack(pop)

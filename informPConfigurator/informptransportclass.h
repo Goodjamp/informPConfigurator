@@ -15,6 +15,7 @@ class informPTransportClass: public QObject
 public:
     informPTransportClass(hidInterface *comInterfaceIn);
 
+
     typedef enum{
         RESP_STATUS_OK,
         RESP_STATUS_ERROR
@@ -31,11 +32,66 @@ public slots:
     void slotResetReq();
 
 private:
-    enum{
-        REQ_TYPE_GET_REG,
-        REQ_TYPE_SET_REG,
-        REQ_TYPE_RESET,
-    }REQ_TYPE;
+
+    const uint8_t messageSize = 64;
+    typedef enum
+    {
+        COMUNICATION_GET_REG = (uint8_t)0x0,
+        COMUNICATION_SET_REG = (uint8_t)0x1,
+        COMUNICATION_RESET   = (uint8_t)0x2,
+    }REQ_COMMAND;
+
+    typedef enum
+    {
+        STATUS_RESP_OK    = (uint8_t)0x0,
+        STATUS_RESP_ERROR = (uint8_t)0x1,
+    }REQ_STATUS;
+
+    #pragma pack(push,1)
+    /****OUTPUT MESSAGE DESCRIPTION*******/
+    typedef struct
+    {
+        uint16_t reAddress;
+        uint8_t  numberOfReg;
+    }getRegReq_t;
+
+    typedef struct
+    {
+        uint16_t reAddress;
+        uint8_t  numberOfReg;
+        uint8_t  payload[];
+    }setRegReq_t;
+
+    typedef struct
+    {
+        uint8_t reqType;
+        union
+        {
+            getRegReq_t getRegReq;
+            setRegReq_t setRegReq;
+        }payload;
+    }headOfReq_t;
+
+    /****INPUT MESSAGE DESCRIPTION*******/
+    typedef struct
+    {
+        uint16_t reAddress;
+        uint8_t  numberOfReg;
+        uint8_t  payload[];
+    }getRegResp_t;
+
+
+    typedef struct
+    {
+        uint8_t reqType;
+        uint8_t respStatus;
+        union
+        {
+            getRegResp_t getRegResp;
+        }payload;
+    }headOfRes_t;
+    #pragma pack(pop)
+
     hidInterface *comInterface;
 };
 
