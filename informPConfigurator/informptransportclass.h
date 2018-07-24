@@ -15,16 +15,16 @@ class informPTransportClass: public QObject
 public:
     informPTransportClass(hidInterface *comInterfaceIn);
 
-
     typedef enum{
         RESP_STATUS_OK,
-        RESP_STATUS_ERROR
+        RESP_STATUS_PROTOCOL_ERROR,
+        RESP_STATUS_COMMINICATION_ERROR
     }RESP_STATUS;
 
 signals:
-    void signalGetRegResp(bool respStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
-    void signalSetRegResp(bool respStatus);
-    void signalResetResp(bool respStatus);
+    void signalGetRegResp(informPTransportClass::RESP_STATUS respStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
+    void signalSetRegResp(informPTransportClass::RESP_STATUS respStatus);
+    void signalResetResp(informPTransportClass::RESP_STATUS respStatus);
 
 public slots:
     void slotGetRegReq(uint16_t addressReg, uint16_t numReg);
@@ -94,5 +94,7 @@ private:
 
     hidInterface *comInterface;
 };
+
+Q_DECLARE_METATYPE( informPTransportClass::RESP_STATUS );
 
 #endif // MCSTRANSPORTCLASS_H

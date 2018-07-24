@@ -2,8 +2,9 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QFile>
+#include <informptransportclass.h>
 
-
+//Q_DECLARE_METATYPE( informPTransportClass::RESP_STATUS );
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+
     qRegisterMetaType< QVector<uint8_t> >();
     return a.exec();
 }

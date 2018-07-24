@@ -36,12 +36,16 @@ MainWindow::MainWindow(QWidget *parent) :
     timerCommunicatioControl = new QTimer();
     timerStatusUpdate  = new QTimer();
     communicatioWaitWindow = new waitForm(this);
+    listOfConnectinStatus    = new QList<QString>(COMMUNICATION_STATUIS_LIST);
+
+    //listOfConnectinStatus-> (COMMUNICATION_STATUIS_LIST
+
 
     connect(timerCommunicatioControl, &QTimer::timeout, this, &MainWindow::communicatioTimeout,  Qt::QueuedConnection);
     connect(timerStatusUpdate,  &QTimer::timeout, this, &MainWindow::statusRequestTimeout, Qt::QueuedConnection);
     /*rx response connectin*/
-    connect(communicatioStack, &communicationClass::signalGetRegResp, this, &MainWindow::slotGetRegResp);
-    connect(communicatioStack, &communicationClass::signalSetRegResp, this, &MainWindow::slotSetRegResp);
+    connect(communicatioStack, &communicationClass::signalGetRegResp, this, &MainWindow::slotGetRegResp,  Qt::QueuedConnection);
+    connect(communicatioStack, &communicationClass::signalSetRegResp, this, &MainWindow::slotSetRegResp,  Qt::QueuedConnection);
     connect(communicatioStack, &communicationClass::signalResetResp,  this, &MainWindow::slotResetResp );
     communicatioStack->start();
 
@@ -78,13 +82,29 @@ void MainWindow::setDeviseOpenUIState(void)
 }
 
 
-void MainWindow::messageErrorWindowShow(QString errorString)
+void MainWindow::swUpdateConnectionStatus(SW_CONNECTION_STATUS inStatus)
 {
-    QMessageBox messageBox;
-    messageBox.critical(0,"Ошибка",errorString);
-    messageBox.setFixedSize(500,200);
-    messageBox.setModal(true);
-    messageBox.show();
+    ui->lineEditConnectionStatus->setText(listOfConnectinStatus->at(inStatus));
+    switch(inStatus)
+    {
+    case SW_CONNECTION_STATUS_OK:
+        ui->lineEditConnectionStatus->setProperty("statusConnection",1);
+        break;
+    case SW_CONNECTION_STATUS_DISCONNECTED:
+        ui->lineEditConnectionStatus->setProperty("statusConnection",0);
+        break;
+    case SW_CONNECTION_STATUS_ERROR_OPEN:
+    case SW_CONNECTION_STATUS_ERROR_SW:
+    case SW_CONNECTION_STATUS_ERROR_FW:
+    case SW_CONNECTION_STATUS_ERROR_RESP:
+        ui->lineEditConnectionStatus->setProperty("statusConnection",2);
+        break;    
+    case SW_CONNECTION_STATUS_ERROR_DATA:
+        ui->lineEditConnectionStatus->setProperty("statusConnection",3);
+        break;
+    }
+    ui->lineEditConnectionStatus->style()->unpolish(ui->lineEditConnectionStatus);
+    ui->lineEditConnectionStatus->style()->polish(ui->lineEditConnectionStatus);
 }
 
 
@@ -103,6 +123,9 @@ void MainWindow::initUISetings(void)
     // Set state
     QStringList stateList = {LIST_OF_STATE};
     QStringList listOfSign = {LIST_OF_SIGN};
+
+    /******************CONNECTION STATUS ADJUSTMENT PARAMITERS*********************/
+    swUpdateConnectionStatus(SW_CONNECTION_STATUS_DISCONNECTED);
 
     /*****************************MODBUS ADJUSTMENT PARAMITERS*********************/
     // Set baud rate list items
@@ -611,7 +634,7 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
 void MainWindow::communicatioTimeout()
 {
     communicationComplited();
-    messageErrorWindowShow(ERROR_COMMUNICATION);
+    swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_SW);
 }
 
 
@@ -626,6 +649,7 @@ void MainWindow::on_pushButtonCloseDevice_clicked()
     userHID->closeInterface();
     timerStatusUpdate->stop();
     setDeviseCloseUIState();
+    swUpdateConnectionStatus(SW_CONNECTION_STATUS_DISCONNECTED);
 }
 
 
@@ -635,13 +659,13 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     if( !userHID->openInterface(VID_INFORM_P, PID_INFORM_P))
     {
         setDeviseCloseUIState();
-        messageErrorWindowShow(ERROR_OPEN_DEVICE_NOT_FOUND);
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_OPEN);
         return;
     }
     setDeviseOpenUIState();
     //Read all configuration registers
-    //communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
-    //communicatioIndicationStart();
+    communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
+    swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
 }
 
 
@@ -692,17 +716,24 @@ void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
 }
 
 
-void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
+void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff)
 {
     communicationComplited();
+
+    //in case of error response
+    switch(responseStatus)
+    {
+    case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
+        return;
+    case informPTransportClass::RESP_STATUS_PROTOCOL_ERROR:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
+        return;
+    }
 
     if( (addressReg >= USER_ADDRESS_STATUS_DATA) &&
         (addressReg + numReg <= USER_ADDRESS_STATUS_DATA + STATUS_NUM_REG))
     {
-        if(!responseStatus){
-            /*ADD INDICATION OF COMMUNICATION ERROR, BUT DON'T CLOSE COMMUNICATION !!!! (MAYBE LED NEAR THE BUTTON ??)*/
-            return;
-        }
         qDebug()<<"StatusRequest resp";
         QVector<uint8_t> statusFromUI(sizeof(statusDescriptionT));
         getStatusState(statusFromUI);
@@ -716,11 +747,6 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))
     {
-        if(!responseStatus){
-            messageErrorWindowShow(ERROR_COMMUNICATION);
-            on_pushButtonCloseDevice_clicked();
-            return;
-        }
         qDebug()<<"ConfigRequest resp";
         QVector<uint8_t> configurationFromUI;
         getConfigurationSettings(configurationFromUI);
@@ -728,32 +754,48 @@ void MainWindow::slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16
         foreach (uint8_t val, buff) {
             configurationFromUI[cnt++] = val;
         }
+        // if erro Rx response formar - show in error window AND status
         if( !setConfigurationSettings(configurationFromUI))
         {
-            messageErrorWindowShow(ERROR_RX_DATA_FORMAT);
+            swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_DATA);
+            return;
         }
+
     }
     else
     {
-        messageErrorWindowShow(ERROR_RX_DATA_ADDRESS);
+        //swUpdateConnectionStatus(ERROR_RX_DATA_ADDRESS);
     }
+    swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
 }
 
 
-void MainWindow::slotSetRegResp(bool responseStatus)
+void MainWindow::slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus)
 {
-    communicationComplited();
-    if(!responseStatus){
-        messageErrorWindowShow(ERROR_COMMUNICATION);
-        on_pushButtonCloseDevice_clicked();
+    communicationComplited();    
+    //in case of error response
+    switch(responseStatus)
+    {
+    case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
+        return;
+    case informPTransportClass::RESP_STATUS_PROTOCOL_ERROR:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
+        return;
     }
 }
 
-void MainWindow::slotResetResp(bool responseStatus)
+void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus)
 {
     communicationComplited();
-    if(!responseStatus){
-        messageErrorWindowShow(ERROR_COMMUNICATION);
-        on_pushButtonCloseDevice_clicked();
+    //in case of error response
+    switch(responseStatus)
+    {
+    case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
+        return;
+    case informPTransportClass::RESP_STATUS_PROTOCOL_ERROR:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
+        return;
     }
 }

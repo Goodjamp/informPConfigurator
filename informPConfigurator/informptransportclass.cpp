@@ -32,7 +32,7 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     //send Request
     if( comInterface->write(request.requestBuff, messageSize,500) != messageSize)
     {
-        emit signalGetRegResp(false, addressReg, numReg, respArray);
+        emit signalGetRegResp(RESP_STATUS_COMMINICATION_ERROR, addressReg, numReg, respArray);
         free(communicationBuff);
         return;
     }
@@ -46,13 +46,13 @@ void informPTransportClass::slotGetRegReq(uint16_t addressReg, uint16_t numReg)
     };
     if(comInterface->read(respons.respBuff, messageSize, 500) != messageSize)
     {
-        emit signalGetRegResp(false, addressReg, numReg, respArray);
+        emit signalGetRegResp(RESP_STATUS_COMMINICATION_ERROR, addressReg, numReg, respArray);
         free(communicationBuff);
         return;
     }
     // copy payload of response
     memcpy(respArray.begin(), respons.respData->payload.getRegResp.payload, numReg*2);
-    emit signalGetRegResp((respons.respData->respStatus == STATUS_RESP_OK) ? true : false, addressReg, numReg, respArray);
+    emit signalGetRegResp((respons.respData->respStatus == STATUS_RESP_OK) ? RESP_STATUS_OK : RESP_STATUS_PROTOCOL_ERROR, addressReg, numReg, respArray);
     free(communicationBuff);
 }
 
@@ -75,7 +75,7 @@ void informPTransportClass::slotSetRegReq(uint16_t addressReg, uint16_t numReg, 
     //send Request
     if( comInterface->write(request.requestBuff, messageSize,500) != messageSize)
     {
-        emit signalSetRegResp(false);
+        emit signalSetRegResp(RESP_STATUS_COMMINICATION_ERROR);
         free(communicationBuff);
         return;
     }
@@ -89,16 +89,16 @@ void informPTransportClass::slotSetRegReq(uint16_t addressReg, uint16_t numReg, 
     };
     if(comInterface->read(respons.respBuff, messageSize, 500) != messageSize)
     {
-        emit signalSetRegResp(false);
+        emit signalSetRegResp(RESP_STATUS_COMMINICATION_ERROR);
         free(communicationBuff);
         return;
     }
-    emit signalSetRegResp((respons.respData->respStatus == STATUS_RESP_OK) ? true : false);
+    emit signalSetRegResp((respons.respData->respStatus == STATUS_RESP_OK) ? RESP_STATUS_OK : RESP_STATUS_PROTOCOL_ERROR);
     free(communicationBuff);
 }
 
 
 void informPTransportClass::slotResetReq()
 {
-    emit signalResetResp(true);
+    emit signalResetResp(RESP_STATUS_OK);
 }

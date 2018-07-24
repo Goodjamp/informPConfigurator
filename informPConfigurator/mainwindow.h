@@ -8,11 +8,13 @@
 #include <QVector>
 #include <QTimer>
 #include <QLineEdit>
+#include <QList>
 
 #include "waitform.h"
 #include <lcdstr.h>
 #include "hidInterface.h"
 #include "communicationclass.h"
+#include "informptransportclass.h"
 
 namespace Ui {
 class MainWindow;
@@ -48,9 +50,34 @@ private slots:
     void statusRequestTimeout();
 
     /************RX COMMAND SLOTS**********/
-    void slotSetRegResp(bool responseStatus);
-    void slotResetResp (bool responseStatus);
-    void slotGetRegResp(bool responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
+    void slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus);
+    void slotResetResp (informPTransportClass::RESP_STATUS responseStatus);
+    void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
+
+private:
+    typedef enum
+    {
+        SW_CONNECTION_STATUS_OK           = (uint8_t)0,
+        SW_CONNECTION_STATUS_DISCONNECTED = (uint8_t)1,
+        SW_CONNECTION_STATUS_ERROR_OPEN   = (uint8_t)2,
+        SW_CONNECTION_STATUS_ERROR_SW     = (uint8_t)3,
+        SW_CONNECTION_STATUS_ERROR_FW     = (uint8_t)4,
+        SW_CONNECTION_STATUS_ERROR_RESP   = (uint8_t)5,
+        SW_CONNECTION_STATUS_ERROR_DATA   = (uint8_t)6,
+    }SW_CONNECTION_STATUS;
+
+    QStringListModel   *deviceList;
+    hidInterface       *userHID;
+    communicationClass *communicatioStack;
+    QTimer             *timerCommunicatioControl;
+    QTimer             *timerStatusUpdate;
+    QList<QString>     *listOfConnectinStatus;
+    waitForm           *communicatioWaitWindow;
+
+    /*widjets*/
+    QVector<lcdStr*> lcdStrVector;
+    /*connunication in process flag*/
+    bool communicationInProcess;
 
 private:
     Ui::MainWindow *ui;
@@ -58,7 +85,7 @@ private:
     void initUISetings(void);
     void setDeviseCloseUIState(void);
     void setDeviseOpenUIState(void);
-    void messageErrorWindowShow(QString errorString);
+    void swUpdateConnectionStatus(SW_CONNECTION_STATUS inStatus);
     void updateNumLCDString(uint8_t numString);
     void communicatioIndicationStart();
     void communicationComplited();
@@ -72,18 +99,7 @@ private:
     void setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex);
     void setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex);
 
-private:
-    QStringListModel   *deviceList;
-    hidInterface       *userHID;
-    communicationClass *communicatioStack;
-    QTimer             *timerCommunicatioControl;
-    QTimer             *timerStatusUpdate;
-    waitForm           *communicatioWaitWindow;
 
-    /*widjets*/
-    QVector<lcdStr*> lcdStrVector;
-    /*connunication in process flag*/
-    bool communicationInProcess;
 };
 
 #endif // MAINWINDOW_H

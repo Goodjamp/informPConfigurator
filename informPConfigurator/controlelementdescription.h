@@ -7,12 +7,22 @@
 #define  COMMUNICATION_TIMEOUT  2000
 #define  STATUS_REQUEST_TIMEOUT 1000
 
+
+#define WIN_NAME                              (QString)"- informP -"
+
+
+
 /*************LIST OF ERROR MRSAGES***/
-#define WIN_NAME                           (QString)"- informP -"
-#define ERROR_OPEN_DEVICE_NOT_FOUND        (QString)"Устройство не найдено"
-#define ERROR_COMMUNICATION                (QString)"Устройство не отвечает"
-#define ERROR_RX_DATA_FORMAT               (QString)"Приннятые данные имеют неправильный формат"
-#define ERROR_RX_DATA_ADDRESS              (QString)"Приннятые данные имеют неправильный адрес"
+#define COMMUNICATION_STATUIS_LIST    {\
+                                      "Соединение установленно",\
+                                      "Активное соединение отсутствует",                                           /*in case of MANUALLY go to disconnected state*/\
+                                      "Устройство не найдено",                                                     /*in case of after press connect device was not found*/\
+                                      "Ошибка програмы. Перезапустите программу",                                  /*in case of timeout transaction*/\
+                                      "Ошибка обменна данными с устройством. Закройте затем откройте соединение",  /*in case of timeout HID read HID write*/\
+                                      "Ошибка устройства. Перегрузите устройство",                                 /*in case of RECEIVE response with error status */\
+                                      "Ошибка данных. При частом возникновении перегрузите устройство "            /*in case of receive unexpected data*/\
+                                      }
+
 
 
 #define LIST_OF_STATE "ВЫКЛ",\
