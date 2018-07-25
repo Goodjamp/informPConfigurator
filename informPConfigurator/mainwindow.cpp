@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     communicatioStack->start();
 
     initUISetings();
+    qDebug()<<"sizeof(configDescriptionT) = "<<sizeof(configDescriptionT);
 }
 
 MainWindow::~MainWindow()
@@ -280,6 +281,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     /*********************read LCD configuration*****************************/
     config->configLCD.state  = (1);
     config->configLCD.numScreen = lcdStrVector.size();
+    uint8_t parPerScreen;
     for(uint8_t k = 0; k < lcdStrVector.size(); k++)
     {
         uint16_t flag = 0x1;
@@ -290,10 +292,19 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
             if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
             {
                 config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
+                config->configLCD.screenConfig[k].numParamiterPerScreen++;
             }
             flag <<= 1;
         }
     }
+
+    /**************read date and time****************************/
+    bool rezConvert;
+    config->configDate.year   = ui->labelConfigurationYear->text().toUInt(&rezConvert, 10);
+    config->configDate.mounth = ui->labelConfigurationMounth->text().toUInt(&rezConvert, 10);
+    config->configDate.day    = ui->labelConfigurationDay->text().toUInt(&rezConvert, 10);
+    config->configDate.hour   = ui->labelConfigurationHour->text().toUInt(&rezConvert, 10);
+    config->configDate.minute = ui->labelConfigurationMinutes->text().toUInt(&rezConvert, 10);
 }
 
 
@@ -470,6 +481,13 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
            flag <<= 1;
         }       
     }
+
+    /***************SET DATE AND TIME OF LAST CONFIGURATION********/
+    ui->labelConfigurationYear->setText(QString::number(config->configDate.year,   10));
+    ui->labelConfigurationMounth->setText(QString::number(config->configDate.mounth, 10));
+    ui->labelConfigurationDay->setText(QString::number(config->configDate.day,    10));
+    ui->labelConfigurationHour->setText(QString::number(config->configDate.hour,   10));
+    ui->labelConfigurationMinutes->setText(QString::number(config->configDate.minute, 10));
     return true;
 }
 
@@ -679,6 +697,7 @@ void MainWindow::on_pushButtonRead_clicked()
 void MainWindow::on_pushButtonWrite_clicked()
 {
     QVector<uint8_t> buff(sizeof(configDescriptionT));
+    configDescriptionT *confiData = (configDescriptionT *)buff.data();
 
     getConfigurationSettings(buff);
 
@@ -751,10 +770,11 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
         QVector<uint8_t> configurationFromUI;
         getConfigurationSettings(configurationFromUI);
         uint8_t cnt = (addressReg - USER_ADDRESS_CONFIG_DATA) * 2;
+        //copy received configuration data into present configuration
         foreach (uint8_t val, buff) {
             configurationFromUI[cnt++] = val;
         }
-        // if erro Rx response formar - show in error window AND status
+        // if error Rx response format - show in error status
         if( !setConfigurationSettings(configurationFromUI))
         {
             swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_DATA);

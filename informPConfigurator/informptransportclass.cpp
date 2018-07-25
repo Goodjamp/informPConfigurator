@@ -100,5 +100,22 @@ void informPTransportClass::slotSetRegReq(uint16_t addressReg, uint16_t numReg, 
 
 void informPTransportClass::slotResetReq()
 {
+    uint8_t *communicationBuff =  (uint8_t*)malloc(messageSize);
+    union{
+        uint8_t     *requestBuff;
+        headOfReq_t *requestData;
+    }request =
+    {
+        .requestBuff = communicationBuff
+    };
+    request.requestData->reqType                       = COMUNICATION_RESET;
+    //send Request
+    if( comInterface->write(request.requestBuff, messageSize,500) != messageSize)
+    {
+        emit signalResetResp(RESP_STATUS_COMMINICATION_ERROR);
+        free(communicationBuff);
+        return;
+    }
     emit signalResetResp(RESP_STATUS_OK);
+    free(communicationBuff);
 }
