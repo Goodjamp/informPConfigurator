@@ -270,13 +270,15 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     config->configMeteo.source = ui->comboBoxMeteoSourse->currentIndex();
 
     /*********************read MODBUS configuration*****************************/
-     config->configModbus.adress_kp                = ui->comboBoxModbusAddress->currentIndex() + 1;
-     config->configModbus.s_port_config.baudrate   = ui->comboBoxModbusBoadrate->currentText().toUInt();
-     config->configModbus.s_port_config.parity     = ui->comboBoxModbusParity->currentIndex();
-     config->configModbus.type                     = PROTOCOL_MODBUS_SLAVE;
-     config->configModbus.state                    = (1);
-     config->configModbus.s_port_config.stopbits   = 0;
-     config->configModbus.s_port_config.amountbyte = 0;
+     config->configModbus.state                      = 1;
+
+     config->configModbus.s_port_config.baudrate     = ui->comboBoxModbusBoadrate->currentText().toUInt();
+     config->configModbus.s_port_config.stopbits     = 1;
+     config->configModbus.s_port_config.parity       = ui->comboBoxModbusParity->currentIndex();
+     config->configModbus.s_port_config.amountbyte   = 8;
+     config->configModbus.s_port_config.controlpotok = 0;
+     config->configModbus.type                       = PROTOCOL_MODBUS_SLAVE;
+     config->configModbus.adress_kp                  = ui->comboBoxModbusAddress->currentIndex() + 1;
 
     /*********************read LCD configuration*****************************/
     config->configLCD.state  = (1);
@@ -811,6 +813,9 @@ void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus
     //in case of error response
     switch(responseStatus)
     {
+    case informPTransportClass::RESP_STATUS_OK:
+        swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
+        return;
     case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
         swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
         return;

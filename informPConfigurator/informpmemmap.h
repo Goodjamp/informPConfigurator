@@ -111,7 +111,6 @@ typedef struct{
     uint16_t        num_reg_data;        // not use
     uint16_t        modbus_req_user;     // not use
     uint16_t        program_version;     // FW version
-    uint16_t        CRC_dev;             // total CRC
 }S_dev_staff;
 
 typedef struct{
