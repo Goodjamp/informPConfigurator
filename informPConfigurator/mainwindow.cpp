@@ -300,13 +300,14 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
         }
     }
 
-    /**************read date and time****************************/
-    bool rezConvert;
-    config->configDate.year   = ui->labelConfigurationYear->text().toUInt(&rezConvert, 10);
-    config->configDate.mounth = ui->labelConfigurationMounth->text().toUInt(&rezConvert, 10);
-    config->configDate.day    = ui->labelConfigurationDay->text().toUInt(&rezConvert, 10);
-    config->configDate.hour   = ui->labelConfigurationHour->text().toUInt(&rezConvert, 10);
-    config->configDate.minute = ui->labelConfigurationMinutes->text().toUInt(&rezConvert, 10);
+    // Set date and time configuration
+    config->configDate.year   = QDate::currentDate().year() - 2000;
+    config->configDate.mounth = QDate::currentDate().month();
+    config->configDate.day    = QDate::currentDate().day();
+    config->configDate.hour   = QTime::currentTime().hour();
+    config->configDate.minute = QTime::currentTime().minute();
+    config->configDate.second = QTime::currentTime().second();
+
 }
 
 
@@ -698,17 +699,8 @@ void MainWindow::on_pushButtonRead_clicked()
 
 void MainWindow::on_pushButtonWrite_clicked()
 {
-    QDate nowDate;
-    QTime nowTime;
     QVector<uint8_t> buff(sizeof(configDescriptionT));
     configDescriptionT *confiData = (configDescriptionT *)buff.data();
-    // Set date and time configuration
-    confiData->configDate.day    = nowDate.year();
-    confiData->configDate.mounth = nowDate.month();
-    confiData->configDate.day    = nowDate.day();
-    confiData->configDate.hour   = nowTime.hour();
-    confiData->configDate.minute = nowTime.minute();
-    confiData->configDate.second = nowTime.second();
 
     getConfigurationSettings(buff);
 
