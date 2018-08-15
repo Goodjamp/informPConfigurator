@@ -3465,7 +3465,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Дата и время последней кнфигурации:</string>
+         <string>Дата и время последней конфигурации:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

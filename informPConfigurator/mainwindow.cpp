@@ -7,6 +7,7 @@
 #include "QCheckBox"
 #include "QList"
 #include "QLineEdit"
+#include "QDate"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -50,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
     communicatioStack->start();
 
     initUISetings();
-    qDebug()<<"sizeof(configDescriptionT) = "<<sizeof(configDescriptionT);
 }
 
 MainWindow::~MainWindow()
@@ -252,7 +252,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     }
 
     /*********************read CLOCK configuration*****************************/
-    config->configClock.state = (ui->comboBoxFrqMeteringState->currentIndex() == 0) ? 0 : (1);
+    config->configClock.state = (ui->comboBoxClockState->currentIndex() == 0) ? 0 : (1);
     config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
     if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
     {
@@ -698,8 +698,17 @@ void MainWindow::on_pushButtonRead_clicked()
 
 void MainWindow::on_pushButtonWrite_clicked()
 {
+    QDate nowDate;
+    QTime nowTime;
     QVector<uint8_t> buff(sizeof(configDescriptionT));
     configDescriptionT *confiData = (configDescriptionT *)buff.data();
+    // Set date and time configuration
+    confiData->configDate.day    = nowDate.year();
+    confiData->configDate.mounth = nowDate.month();
+    confiData->configDate.day    = nowDate.day();
+    confiData->configDate.hour   = nowTime.hour();
+    confiData->configDate.minute = nowTime.minute();
+    confiData->configDate.second = nowTime.second();
 
     getConfigurationSettings(buff);
 
