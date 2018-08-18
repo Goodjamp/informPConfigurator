@@ -118,7 +118,7 @@
            </size>
           </property>
           <property name="readOnly">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="statusConnection" stdset="0">
            <char>

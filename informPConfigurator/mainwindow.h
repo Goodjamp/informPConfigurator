@@ -97,6 +97,7 @@ private:
     bool getUint16FromStringInt(uint16_t *rezConvertOut, QString inString);
     bool getInt16FromStringInt(int16_t *rezConvertOut, QString inString);
     void setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex);
+    void setMeteoStatusLineEdit(uint16_t meteoStatus);
     void setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex);
 
 

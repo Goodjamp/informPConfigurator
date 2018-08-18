@@ -575,19 +575,58 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
 }
 
 
-void MainWindow::setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex)
+void MainWindow::setModuleStatusLineEdit(QLineEdit *statusLineEdit, uint16_t statusIndex)
 {
     QList<QString> statusModulList  = {LIST_MODULE_STATUS};
     if(statusIndex >= statusModulList.size())
     {
         return;
     }
-    statuSlineEdit->setText(statusModulList[statusIndex]);
-    statuSlineEdit->setProperty("statusPr",statusIndex);
-    statuSlineEdit->style()->unpolish(statuSlineEdit);
-    statuSlineEdit->style()->polish(statuSlineEdit);
+    statusLineEdit->setText(statusModulList[statusIndex]);
+    statusLineEdit->setProperty("statusPr",statusIndex);
+    statusLineEdit->style()->unpolish(statusLineEdit);
+    statusLineEdit->style()->polish(statusLineEdit);
+}
+
+
+void MainWindow::setMeteoStatusLineEdit(uint16_t meteoStatus)
+{
+    QList<QString> statusModulList  = {LIST_MODULE_STATUS};
+    if( meteoStatus == 0)
+    {
+         ui->lineEditMeteoStatus->setText(statusModulList[0]);
+    }
+    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_LOCAL))
+    {
+         ui->lineEditMeteoStatus->setText(METEO_ERROR_LOCAL_RECEIVER_STR);
+    }
+    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_RECEIVER))
+    {
+         ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_RECEIVER_STR);
+    }
+    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_RX_TIMEOUT))
+    {
+         ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_RX_TIMEOUT_STR);
+    }
+    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_SENSOR))
+    {
+         ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_SENSOR_STR);
+    }
+    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_MES))
+    {
+         ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_MES_STR);
+    }
+    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_BATARY))
+    {
+         ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_BATARY_STR);
+    }
+    ui->lineEditMeteoStatus->setProperty("statusPr",(meteoStatus == 0) ? (0) : (2));
+    ui->lineEditMeteoStatus->style()->unpolish(ui->lineEditMeteoStatus);
+    ui->lineEditMeteoStatus->style()->polish(ui->lineEditMeteoStatus);
 
 }
+
+
 
 void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex)
 {
@@ -643,7 +682,7 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
     ui->lineEditClockRezMinutes->setText(QString::number(status->statusClock.time_minute));
 
     /*********************set METEO configuration*****************************/
-    setModuleStatusLineEdit(ui->lineEditMeteoStatus, status->statusMeteo.status_sensor);
+    setMeteoStatusLineEdit(status->statusMeteo.status_sensor);
 
     ui->lineEditMeteoRezTemperature->setText(QString::number(status->statusMeteo.rezTemperature));
     ui->lineEditMeteoRezHumidity->setText(QString::number(status->statusMeteo.rezHumidity));

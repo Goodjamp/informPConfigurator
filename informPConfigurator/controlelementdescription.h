@@ -8,7 +8,7 @@
 #define  STATUS_REQUEST_TIMEOUT 1000
 
 
-#define WIN_NAME                              (QString)"- informP -"
+#define WIN_NAME            (QString)" informP "
 
 
 
@@ -78,6 +78,23 @@
                            "ПРЕДУПРЕЖДЕНИЕ",\
                            "АВАРИЯ"
 
+/***********REMOTE METEOPOST STATUS DESCRIPTION***********/
+#define METEO_ERROR_LOCAL_RECEIVER_STR  "Авар. датчика"
+#define METEO_ERROR_REM_RECEIVER_STR    "Авар. прм"
+#define METEO_ERROR_REM_RX_TIMEOUT_STR  "Отсутст. сигн метеопоста"
+#define METEO_ERROR_REM_SENSOR_STR      "Авар. удал. датчика"
+#define METEO_ERROR_REM_MES_STR         "Авар. удал. изм."
+#define METEO_ERROR_REM_BATARY_STR      "Низ. заряд акум."
+
+typedef enum{
+    SENSOR_STATUS_ALLARM_LOCAL         = 0,
+    SENSOR_STATUS_ERROR_LOCAL          = 1,
+    SENSOR_STATUS_ERROR_RECEIVER       = 2,
+    SENSOR_STATUS_ERROR_REM_RX_TIMEOUT = 3,
+    SENSOR_STATUS_ERROR_REM_SENSOR     = 4,
+    SENSOR_STATUS_ERROR_REM_MES        = 5,
+    SENSOR_STATUS_ERROR_REM_BATARY     = 6,
+}SENSOR_STATUS;
 
 /***************************STYLE DESCRIPTIONS**************/
 #define STYLE_STATUS_TEXT              "font: bold 16px;"
