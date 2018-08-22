@@ -263,7 +263,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
         config->configClock.timeCorection *= (-1);
     }
     config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
-    config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
+    config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource->currentIndex() == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
     /*********************read METEO configuration*****************************/
     config->configMeteo.state  = (ui->comboBoxMeteoState->currentIndex() == 0) ? 0 : (1);

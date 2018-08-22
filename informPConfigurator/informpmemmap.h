@@ -46,6 +46,16 @@ typedef struct{
 
 
 #pragma pack(push,1)
+typedef struct
+{
+    uint16_t Year;
+    uint16_t Month;
+    uint16_t Day;
+    uint16_t Hour;
+    uint16_t Minutes;
+    uint16_t Seconds;
+}serverSetTime;
+
 typedef struct{
     uint16_t  status_TIME; // status register TIME module
     uint16_t  date_year;    // date: year
@@ -56,6 +66,7 @@ typedef struct{
     uint16_t  time_second;  // time: second
     uint16_t  DATE;
     uint16_t  TIME;
+    serverSetTime serverTime;
 } S_TIME_oper_data;
 #pragma pack(pop)
 
