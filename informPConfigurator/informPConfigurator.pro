@@ -34,6 +34,9 @@ FORMS   += mainwindow.ui \
            waitform.ui
 
 LIBS    += -lhid\
-           -lsetupapi
+           -lsetupapi\
+           -lpthread
 
 CONFIG  += c++11
+
+QMAKE_LFLAGS += -static-libgcc -static-libstdc++

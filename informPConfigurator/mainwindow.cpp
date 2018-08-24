@@ -283,7 +283,6 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     /*********************read LCD configuration*****************************/
     config->configLCD.state  = (1);
     config->configLCD.numScreen = lcdStrVector.size();
-    uint8_t parPerScreen;
     for(uint8_t k = 0; k < lcdStrVector.size(); k++)
     {
         uint16_t flag = 0x1;
@@ -314,10 +313,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
 bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
 {
     configDescriptionT *config = (configDescriptionT*)configBuff.begin();
-    uint16_t rez = (1);
-
     /*check all configuration fields*/
-
     /*********************check FRQ configuration*****************************/
     if( (config->configFrqMetering.state != 0 && config->configFrqMetering.state != (1)) ||
         (config->configFrqMetering.frqCorrection > 999)  )
@@ -628,7 +624,7 @@ void MainWindow::setMeteoStatusLineEdit(uint16_t meteoStatus)
 
 
 
-void MainWindow::setDeviceStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex)
+void MainWindow::setDeviceStatusLineEdit(uint16_t statusIndex)
 {
     QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
     //statusDeviceList.size()
@@ -666,7 +662,7 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
     statusDescriptionT *status      = (statusDescriptionT*)configBuff.begin();
 
     /*********************set device status*****************************/
-    setDeviceStatusLineEdit(ui->lineEditDevStatus, status->statusDevice.device_statys);
+    setDeviceStatusLineEdit(status->statusDevice.device_statys);
 
     /*********************set FRQ configuration*****************************/
     setModuleStatusLineEdit(ui->lineEditFrqMeteringStatus, status->statusFrqMetering.status_FRQmetter);
@@ -724,27 +720,27 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     }
     setDeviseOpenUIState();
     //Read all configuration registers
-    communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
+    communicatioStack->getRegReq(USER_CONDFIG_ADDRESS, USER_CONFIG_NUM_REG);
     swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
 }
 
 
 void MainWindow::on_pushButtonRead_clicked()
 {
-    communicatioStack->getRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG);
+    communicatioStack->getRegReq(USER_CONDFIG_ADDRESS, USER_CONFIG_NUM_REG);
     communicatioIndicationStart();
 }
 
 
 void MainWindow::on_pushButtonWrite_clicked()
 {
-    QVector<uint8_t> buff(sizeof(configDescriptionT));
-    configDescriptionT *confiData = (configDescriptionT *)buff.data();
-
+    QVector<uint8_t>   buff(sizeof(configDescriptionT));
+    //configDescriptionT *confiData = (configDescriptionT *)buff.data();
     getConfigurationSettings(buff);
-
     // start transaction
-    communicatioStack->setRegReq(USER_ADDRESS_CONFIG_DATA, CONFIGURATION_NUM_REG, buff);
+    communicatioStack->setRegReq(USER_CONDFIG_ADDRESS,
+                                 USER_CONFIG_NUM_REG,
+                                 buff);
     communicatioIndicationStart();
 }
 
@@ -781,7 +777,6 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
 {
     communicationComplited();
 
-    //in case of error response
     switch(responseStatus)
     {
     case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
@@ -806,18 +801,18 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
         setStatusState(statusFromUI);
     }
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
-             (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + CONFIGURATION_NUM_REG))
+             (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + ALL_CONFIG_NUM_REG))
     {
         qDebug()<<"ConfigRequest resp";
         QVector<uint8_t> configurationFromUI;
         getConfigurationSettings(configurationFromUI);
-        uint8_t cnt = (addressReg - USER_ADDRESS_CONFIG_DATA) * 2;
+        //uint8_t cnt = (addressReg - USER_ADDRESS_CONFIG_DATA) * 2;
         //copy received configuration data into present configuration
-        foreach (uint8_t val, buff) {
-            configurationFromUI[cnt++] = val;
-        }
+       // foreach (uint8_t val, buff) {
+       //     configurationFromUI[cnt++] = val;
+       // }
         // if error Rx response format - show in error status
-        if( !setConfigurationSettings(configurationFromUI))
+        if( !setConfigurationSettings(buff))
         {
             swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_DATA);
             return;

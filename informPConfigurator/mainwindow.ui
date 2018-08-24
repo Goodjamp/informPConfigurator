@@ -202,7 +202,7 @@
            </font>
           </property>
           <property name="currentIndex">
-           <number>4</number>
+           <number>1</number>
           </property>
           <property name="iconSize">
            <size>
@@ -3291,7 +3291,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Давление, гПа</string>
+               <string>Давление, гекПа</string>
               </property>
              </widget>
             </item>

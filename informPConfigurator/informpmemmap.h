@@ -214,10 +214,24 @@ typedef struct{
 #pragma pack(pop)
 
 /********TOTAL  MEMORY MAP DESCRIPTION***************/
+
+/*this type use only for calculate offset of user configuration registers*/
 #pragma pack(push,1)
 typedef struct
 {
     S_dev_staff              configStaff;
+    BF_date_config           configDate;
+    S_connectmodbus          configModbus;
+    S_FRQmetter_user_config  configFrqMetering;
+    S_TIME_user_config       configClock;
+    S_sensor_user_config     configMeteo;
+    S_display_user_config    configLCD;
+}configAddressFields;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct
+{
     BF_date_config           configDate;
     S_connectmodbus          configModbus;
     S_FRQmetter_user_config  configFrqMetering;
@@ -234,7 +248,9 @@ typedef union{
 }transactionBufferT;
 #pragma pack(pop)
 
-#define CONFIGURATION_NUM_REG (uint16_t)(sizeof(configDescriptionT)/2)
-#define STATUS_NUM_REG        (uint16_t)(sizeof(statusDescriptionT)/2)
+#define ALL_CONFIG_NUM_REG    uint16_t(sizeof(configAddressFields) / 2 )
+#define USER_CONDFIG_ADDRESS  uint16_t(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
+#define USER_CONFIG_NUM_REG   uint16_t(sizeof(configDescriptionT) / 2 )
+#define STATUS_NUM_REG        uint16_t(sizeof(statusDescriptionT)/2)
 
 #endif // INFORMPMEMMAP_H
