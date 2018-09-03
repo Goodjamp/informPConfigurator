@@ -4,10 +4,10 @@
 #include "stdint.h"
 
 //address of first statys register
-#define USER_ADDRESS_STATUS_DATA  (uint16_t)500
+#define USER_ADDRESS_STATUS_DATA  static_cast<uint16_t>(500)
 
 //address of first configuration register
-#define USER_ADDRESS_CONFIG_DATA  (uint16_t)1000
+#define USER_ADDRESS_CONFIG_DATA  static_cast<uint16_t>(1000)
 
 
 /*******************************************************************/
@@ -248,9 +248,9 @@ typedef union{
 }transactionBufferT;
 #pragma pack(pop)
 
-#define ALL_CONFIG_NUM_REG    uint16_t(sizeof(configAddressFields) / 2 )
-#define USER_CONDFIG_ADDRESS  uint16_t(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
-#define USER_CONFIG_NUM_REG   uint16_t(sizeof(configDescriptionT) / 2 )
-#define STATUS_NUM_REG        uint16_t(sizeof(statusDescriptionT)/2)
+#define ALL_CONFIG_NUM_REG    static_cast<uint16_t>(sizeof(configAddressFields) / 2 )
+#define USER_CONDFIG_ADDRESS  static_cast<uint16_t>(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
+#define USER_CONFIG_NUM_REG   static_cast<uint16_t>(sizeof(configDescriptionT) / 2 )
+#define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT)/2)
 
 #endif // INFORMPMEMMAP_H

@@ -8,7 +8,7 @@
 #define  STATUS_REQUEST_TIMEOUT 1000
 
 
-#define WIN_NAME            (QString)" informP "
+#define WIN_NAME            static_cast<QString>(" informP ")
 
 
 
@@ -23,7 +23,8 @@
                                       "Ошибка данных. При частом возникновении перегрузите устройство "            /*in case of receive unexpected data*/\
                                       }
 
-
+#define LCD_ERROR_STRING_NAME "Ошибка конфигурации индикаторов"
+#define LCD_ERROR_STRING      "Не заданы величины для отображения на индикаторе №"
 
 #define LIST_OF_STATE "ВЫКЛ",\
                       "ВКЛ"
@@ -41,6 +42,7 @@
                             "14400",\
                             "19200",\
                             "38400",\
+                            "56000",\
                             "57600"
 
 #define LIST_OF_PARITY  { "None",\
@@ -66,9 +68,9 @@
                                 "Удаленный"
 
 /**********DEVICE STATUS LIST********/
-#define DEVICE_STATUS_FREQUENCY_METERING_MASK   (uint16_t)(1<<1)
-#define DEVICE_STATUS_CLOCK_MASK                (uint16_t)(1<<2)
-#define DEVICE_STATUS_METEO_DATA_MASK           (uint16_t)(1<<3)
+#define DEVICE_STATUS_FREQUENCY_METERING_MASK   static_cast<uint16_t>(1<<1)
+#define DEVICE_STATUS_CLOCK_MASK                static_cast<uint16_t>(1<<2)
+#define DEVICE_STATUS_METEO_DATA_MASK           static_cast<uint16_t>(1<<3)
 
 #define LIST_DEVICE_STATUS "РАБОТА",\
                            "АВАРИЯ"
@@ -96,8 +98,13 @@ typedef enum{
     SENSOR_STATUS_ERROR_REM_BATARY     = 6,
 }SENSOR_STATUS;
 
-/***************************STYLE DESCRIPTIONS**************/
-#define STYLE_STATUS_TEXT              "font: bold 16px;"
 
+#define MESSAGEBOX_BUTTON_STYLE   "QPushButton { background-color: rgb(255, 255, 120); \
+                                                 font-family: ""Segoe UI""; \
+                                                 font-size: 10pt;         \
+                                                 font-weight: 500;        \
+                                                 color: rgb(0, 0, 0);     \
+                                                 border-radius: 4px;      \
+                                                 border-width: 4px;}"
 
 #endif // CONTROLELEMENTDESCRIPTION_H

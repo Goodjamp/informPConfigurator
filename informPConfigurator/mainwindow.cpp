@@ -1,7 +1,6 @@
 #include "stdint.h"
 
 #include "QDebug"
-#include "QSpacerItem"
 #include "QString"
 #include "QMessageBox"
 #include "QCheckBox"
@@ -172,9 +171,6 @@ void MainWindow::initUISetings(void)
     ui->comboBoxClockState->addItems(stateList);
     ui->comboBoxClockState->setCurrentIndex(0);
 
-    ui->comboBoxClockCorrectionSign->addItems(listOfSign);
-    ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
-
     QStringList minutesCorrectionList = {LIST_MINUTES_CORRECTION};
     ui->comboBoxClockCorrectionMinutes->addItems(minutesCorrectionList);
     ui->comboBoxClockCorrectionMinutes->setCurrentIndex(0);
@@ -211,7 +207,7 @@ void MainWindow::updateNumLCDString(uint8_t numString)
     for(uint8_t cnt = 0; cnt < numString; cnt++)
     {
         lcdStrVector.push_back(new lcdStr());
-        ((QHBoxLayout*)ui->tab_LCD->layout())->insertWidget(cnt + 3,lcdStrVector[cnt]);
+        (static_cast<QHBoxLayout*>(ui->tab_LCD->layout())->insertWidget(cnt + 3,lcdStrVector[cnt]));
         lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
     }
     ui->comboBoxLCDNumLSD->setCurrentIndex(numString - 1);
@@ -241,7 +237,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     //read all configuration fields
     /*********************read FRQ configuration*****************************/
     config->configFrqMetering.state = (ui->comboBoxFrqMeteringState->currentIndex() == 0) ? 0 : (1);
-    config->configFrqMetering.frqCorrection  = ui->comboBoxFrqMeteringNum1->currentIndex();
+    config->configFrqMetering.frqCorrection  = static_cast<uint16_t>(ui->comboBoxFrqMeteringNum1->currentIndex());
     config->configFrqMetering.frqCorrection *= 10;
     config->configFrqMetering.frqCorrection += ui->comboBoxFrqMeteringNum01->currentIndex();
     config->configFrqMetering.frqCorrection *= 10;
@@ -258,10 +254,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     {
         config->configClock.timeCorection += 30;
     }
-    if(ui->comboBoxClockCorrectionSign == 0)
-    {
-        config->configClock.timeCorection *= (-1);
-    }
+
     config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
     config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource->currentIndex() == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
@@ -300,13 +293,12 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     }
 
     // Set date and time configuration
-    config->configDate.year   = QDate::currentDate().year() - 2000;
-    config->configDate.mounth = QDate::currentDate().month();
-    config->configDate.day    = QDate::currentDate().day();
-    config->configDate.hour   = QTime::currentTime().hour();
-    config->configDate.minute = QTime::currentTime().minute();
-    config->configDate.second = QTime::currentTime().second();
-
+    config->configDate.year   = static_cast<uint32_t>(QDate::currentDate().year() - 2000);
+    config->configDate.mounth = static_cast<uint32_t>(QDate::currentDate().month());
+    config->configDate.day    = static_cast<uint32_t>(QDate::currentDate().day());
+    config->configDate.hour   = static_cast<uint32_t>(QTime::currentTime().hour());
+    config->configDate.minute = static_cast<uint32_t>(QTime::currentTime().minute());
+    config->configDate.second = static_cast<uint32_t>(QTime::currentTime().second());
 }
 
 
@@ -364,8 +356,31 @@ bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
     }
     for(uint8_t cnt = 0; cnt < config->configLCD.numScreen;)
     {
-        if(config->configLCD.screenConfig[cnt++].numParamiterPerScreen > NUMBER_OF_VALUE)
+        if(config->configLCD.screenConfig[cnt++].numParamiterPerScreen > NUMBER_OF_VALUE )
         {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+bool MainWindow::checkLCDConfiguration(QVector<uint8_t> &configBuff)
+{
+
+    configDescriptionT *config = (configDescriptionT*)configBuff.begin();
+
+    for(uint8_t cnt = 0; cnt < config->configLCD.numScreen; cnt++)
+    {
+        if(config->configLCD.screenConfig[cnt].numParamiterPerScreen > NUMBER_OF_VALUE || config->configLCD.screenConfig[cnt].numParamiterPerScreen == 0)
+        {
+            QMessageBox lcdErrorMessage(QMessageBox::Warning,
+                                        " ",
+                                        static_cast<QString>(LCD_ERROR_STRING_NAME) + '\n' + static_cast<QString>(LCD_ERROR_STRING) + QString::number(cnt, 10),
+                                        QMessageBox::Ok, this,
+                                        Qt::FramelessWindowHint);
+            lcdErrorMessage.setStyleSheet(MESSAGEBOX_BUTTON_STYLE);
+            lcdErrorMessage.exec();
             return false;
         }
     }
@@ -423,14 +438,6 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
          ui->checkBoxClockSetDaylight->setChecked(false);
     }
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
-    if(config->configClock.timeCorection < 0)
-    {
-        ui->comboBoxClockCorrectionSign->setCurrentIndex(1);
-    }
-    else
-    {
-        ui->comboBoxClockCorrectionSign->setCurrentIndex(0);
-    }
 
     uint16_t restTimeCorrection = (uint16_t)std::abs(config->configClock.timeCorection) % 60;
     if(restTimeCorrection)
@@ -592,27 +599,27 @@ void MainWindow::setMeteoStatusLineEdit(uint16_t meteoStatus)
     {
          ui->lineEditMeteoStatus->setText(statusModulList[0]);
     }
-    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_LOCAL))
+    if( meteoStatus & static_cast<uint16_t>(1 << SENSOR_STATUS_ERROR_LOCAL))
     {
          ui->lineEditMeteoStatus->setText(METEO_ERROR_LOCAL_RECEIVER_STR);
     }
-    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_RECEIVER))
+    if( meteoStatus & static_cast<uint16_t>(1 << SENSOR_STATUS_ERROR_RECEIVER))
     {
          ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_RECEIVER_STR);
     }
-    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_RX_TIMEOUT))
+    if( meteoStatus & static_cast<uint16_t>(1 << SENSOR_STATUS_ERROR_REM_RX_TIMEOUT))
     {
          ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_RX_TIMEOUT_STR);
     }
-    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_SENSOR))
+    if( meteoStatus & static_cast<uint16_t>(1 << SENSOR_STATUS_ERROR_REM_SENSOR))
     {
          ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_SENSOR_STR);
     }
-    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_MES))
+    if( meteoStatus & static_cast<uint16_t>(1 << SENSOR_STATUS_ERROR_REM_MES))
     {
          ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_MES_STR);
     }
-    if( meteoStatus & (uint16_t)(1 << SENSOR_STATUS_ERROR_REM_BATARY))
+    if( meteoStatus & static_cast<uint16_t>(1 << SENSOR_STATUS_ERROR_REM_BATARY))
     {
          ui->lineEditMeteoStatus->setText(METEO_ERROR_REM_BATARY_STR);
     }
@@ -679,8 +686,9 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
 
     /*********************set METEO configuration*****************************/
     setMeteoStatusLineEdit(status->statusMeteo.status_sensor);
-
-    ui->lineEditMeteoRezTemperature->setText(QString::number(status->statusMeteo.rezTemperature));
+    double temperature = status->statusMeteo.rezTemperature;
+    temperature /= 10;
+    ui->lineEditMeteoRezTemperature->setText(QString::number(temperature));
     ui->lineEditMeteoRezHumidity->setText(QString::number(status->statusMeteo.rezHumidity));
     ui->lineEditMeteoRezPressurePb->setText(QString::number(status->statusMeteo.rezPressure_mmHg));
     ui->lineEditMeteoRezhPa->setText(QString::number(status->statusMeteo.rezPressure_GPasc));
@@ -737,6 +745,10 @@ void MainWindow::on_pushButtonWrite_clicked()
     QVector<uint8_t>   buff(sizeof(configDescriptionT));
     //configDescriptionT *confiData = (configDescriptionT *)buff.data();
     getConfigurationSettings(buff);
+    if(!checkLCDConfiguration(buff))
+    {
+        return;
+    }
     // start transaction
     communicatioStack->setRegReq(USER_CONDFIG_ADDRESS,
                                  USER_CONFIG_NUM_REG,
@@ -769,7 +781,7 @@ void MainWindow::on_comboBoxLCDNumLSD_currentIndexChanged(int index)
     {
         return;
     }
-    updateNumLCDString(index + 1);
+    updateNumLCDString(static_cast<uint8_t>(index + 1));
 }
 
 
@@ -804,14 +816,8 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + ALL_CONFIG_NUM_REG))
     {
         qDebug()<<"ConfigRequest resp";
-        QVector<uint8_t> configurationFromUI;
-        getConfigurationSettings(configurationFromUI);
-        //uint8_t cnt = (addressReg - USER_ADDRESS_CONFIG_DATA) * 2;
-        //copy received configuration data into present configuration
-       // foreach (uint8_t val, buff) {
-       //     configurationFromUI[cnt++] = val;
-       // }
-        // if error Rx response format - show in error status
+        //QVector<uint8_t> configurationFromUI;
+        //getConfigurationSettings(configurationFromUI);
         if( !setConfigurationSettings(buff))
         {
             swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_DATA);
@@ -858,4 +864,14 @@ void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus
         swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
         return;
     }
+}
+
+void MainWindow::on_label_20_linkActivated(const QString &link)
+{
+    QMessageBox inform(QMessageBox::Information,
+                                " ",
+                                "Еще нету",
+                                QMessageBox::Ok, this,
+                                Qt::FramelessWindowHint);
+    inform.exec();
 }

@@ -39,4 +39,7 @@ LIBS    += -lhid\
 
 CONFIG  += c++11
 
-QMAKE_LFLAGS += -static-libgcc -static-libstdc++
+QMAKE_LFLAGS += -static-libgcc
+                -static-libstdc++
+                -static-lstdc++
+                -lpthread

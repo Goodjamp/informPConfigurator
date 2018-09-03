@@ -54,6 +54,8 @@ private slots:
     void slotResetResp (informPTransportClass::RESP_STATUS responseStatus);
     void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
 
+    void on_label_20_linkActivated(const QString &link);
+
 private:
     typedef enum
     {
@@ -91,6 +93,7 @@ private:
     void communicationComplited();
     void getConfigurationSettings(QVector<uint8_t> &configBuff);
     bool checkConfiguratinSettings(QVector<uint8_t> &configBuff);
+    bool checkLCDConfiguration(QVector<uint8_t> &configBuff);
     bool setConfigurationSettings(QVector<uint8_t> &config);
     void getStatusState(QVector<uint8_t> &configBuff);
     void setStatusState(QVector<uint8_t> &configBuff);
