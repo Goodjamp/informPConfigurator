@@ -10,7 +10,8 @@
 
 #define WIN_NAME            static_cast<QString>(" informP ")
 
-
+/****************Documentation file name*****************/
+#define DOCUMENTATION_FILE_NAME     static_cast<QString>("informPDocumentation.pdf")
 
 /*************LIST OF ERROR MRSAGES***/
 #define COMMUNICATION_STATUIS_LIST    {\

@@ -873,14 +873,7 @@ void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus
 
 void MainWindow::on_pushButtonDocLink_clicked()
 {
-
-    QProcess *process = new QProcess(this);
-//    QString documentation = "D:\\Private\\Programing\\PC\\Qt\\informPConfigurator\\build-informPConfigurator-Desktop_Qt_5_3_MinGW_32bit-Debug\\debug\\run.txt";
-    QString documentation = QString("file:///" + QCoreApplication::applicationDirPath()) + "/run.txt";
+    QString documentation = QString("file:///" + QCoreApplication::applicationDirPath()) + "/" + DOCUMENTATION_FILE_NAME;
     qDebug()<<documentation;
-    //process->start(documentation);
-   // process.start("git", QStringList() << "gui");
-
-    //QDesktopServices desk;
     QDesktopServices::openUrl(QUrl(documentation));
 }
