@@ -53,8 +53,7 @@ private slots:
     void slotSetRegResp(informPTransportClass::RESP_STATUS responseStatus);
     void slotResetResp (informPTransportClass::RESP_STATUS responseStatus);
     void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
-
-    void on_label_20_linkActivated(const QString &link);
+    void on_pushButtonDocLink_clicked();
 
 private:
     typedef enum

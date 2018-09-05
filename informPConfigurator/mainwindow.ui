@@ -3615,9 +3615,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="label_20">
+       <widget class="QPushButton" name="pushButtonDocLink">
         <property name="text">
-         <string>Ссылка на документацию устройства</string>
+         <string>Документация устройства</string>
         </property>
        </widget>
       </item>

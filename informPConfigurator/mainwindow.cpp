@@ -7,6 +7,10 @@
 #include "QList"
 #include "QLineEdit"
 #include "QDate"
+#include "QProcess"
+#include <QApplication>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -866,12 +870,17 @@ void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus
     }
 }
 
-void MainWindow::on_label_20_linkActivated(const QString &link)
+
+void MainWindow::on_pushButtonDocLink_clicked()
 {
-    QMessageBox inform(QMessageBox::Information,
-                                " ",
-                                "Еще нету",
-                                QMessageBox::Ok, this,
-                                Qt::FramelessWindowHint);
-    inform.exec();
+
+    QProcess *process = new QProcess(this);
+//    QString documentation = "D:\\Private\\Programing\\PC\\Qt\\informPConfigurator\\build-informPConfigurator-Desktop_Qt_5_3_MinGW_32bit-Debug\\debug\\run.txt";
+    QString documentation = QString("file:///" + QCoreApplication::applicationDirPath()) + "/run.txt";
+    qDebug()<<documentation;
+    //process->start(documentation);
+   // process.start("git", QStringList() << "gui");
+
+    //QDesktopServices desk;
+    QDesktopServices::openUrl(QUrl(documentation));
 }
