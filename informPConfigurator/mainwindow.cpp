@@ -690,10 +690,12 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
 
     /*********************set METEO configuration*****************************/
     setMeteoStatusLineEdit(status->statusMeteo.status_sensor);
-    double temperature = status->statusMeteo.rezTemperature;
-    temperature /= 10;
-    ui->lineEditMeteoRezTemperature->setText(QString::number(temperature));
-    ui->lineEditMeteoRezHumidity->setText(QString::number(status->statusMeteo.rezHumidity));
+    double tempDouble = status->statusMeteo.rezTemperature;
+    tempDouble /= 10;
+    ui->lineEditMeteoRezTemperature->setText(QString::number(tempDouble));
+    tempDouble = status->statusMeteo.rezHumidity;
+    tempDouble /= 10;
+    ui->lineEditMeteoRezHumidity->setText(QString::number(tempDouble));
     ui->lineEditMeteoRezPressurePb->setText(QString::number(status->statusMeteo.rezPressure_mmHg));
     ui->lineEditMeteoRezhPa->setText(QString::number(status->statusMeteo.rezPressure_GPasc));
 }

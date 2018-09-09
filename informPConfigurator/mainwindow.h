@@ -58,13 +58,13 @@ private slots:
 private:
     typedef enum
     {
-        SW_CONNECTION_STATUS_OK           = (uint8_t)0,
-        SW_CONNECTION_STATUS_DISCONNECTED = (uint8_t)1,
-        SW_CONNECTION_STATUS_ERROR_OPEN   = (uint8_t)2,
-        SW_CONNECTION_STATUS_ERROR_SW     = (uint8_t)3,
-        SW_CONNECTION_STATUS_ERROR_FW     = (uint8_t)4,
-        SW_CONNECTION_STATUS_ERROR_RESP   = (uint8_t)5,
-        SW_CONNECTION_STATUS_ERROR_DATA   = (uint8_t)6,
+        SW_CONNECTION_STATUS_OK           = static_cast<uint8_t>(0),
+        SW_CONNECTION_STATUS_DISCONNECTED = static_cast<uint8_t>(1),
+        SW_CONNECTION_STATUS_ERROR_OPEN   = static_cast<uint8_t>(2),
+        SW_CONNECTION_STATUS_ERROR_SW     = static_cast<uint8_t>(3),
+        SW_CONNECTION_STATUS_ERROR_FW     = static_cast<uint8_t>(4),
+        SW_CONNECTION_STATUS_ERROR_RESP   = static_cast<uint8_t>(5),
+        SW_CONNECTION_STATUS_ERROR_DATA   = static_cast<uint8_t>(6),
     }SW_CONNECTION_STATUS;
 
     QStringListModel   *deviceList;
