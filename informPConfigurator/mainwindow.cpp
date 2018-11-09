@@ -20,6 +20,7 @@
 #include "controlelementdescription.h"
 #include "communicationclass.h"
 #include <clockconfig.h>
+#include <clockmonitor.h>
 
 
 /*
@@ -180,8 +181,10 @@ void MainWindow::initUISetings(void)
     ui->comboBoxClockCorrectionMinutes->addItems(minutesCorrectionList);
     ui->comboBoxClockCorrectionMinutes->setCurrentIndex(0);
 
+    QStringList hourseCorrectionList;
     for(uint32_t correction = 0; correction < 12; correction++)
     {
+        hourseCorrectionList.append(QString::number(correction));
         ui->comboBoxClockCorrectionHours->addItem(QString::number(correction), 0);
     }
 
@@ -195,7 +198,8 @@ void MainWindow::initUISetings(void)
     {
         clockConfigVector[cnt] = new clockConfig();
         ui->tabWidgetClockConfig->addTab(clockConfigVector[cnt], tabName + QString::number(cnt + 1));
-
+        clockConfigVector[cnt]->setHorseRange(hourseCorrectionList);
+        clockConfigVector[cnt]->setMinutesRange(minutesCorrectionList);
     }
 
     /*****************************METEO  PARAMITERS*********************/
@@ -205,6 +209,15 @@ void MainWindow::initUISetings(void)
     QStringList meteoSourceList = {METEO_SOURCE_LIST};
     ui->comboBoxMeteoSourse->addItems(meteoSourceList);
     ui->comboBoxMeteoSourse->setCurrentIndex(0);
+
+    /****************************CLOCK MONITOR PARAMITERS****************************/
+    QString clockName = "Часы №";
+    for(uint8_t cnt = 0; cnt < clockMonitorVector.size(); cnt++)
+    {
+        clockMonitorVector[cnt] = new clockMonitor();
+        static_cast<QVBoxLayout*>(ui->scrollAreaWidgetContents->layout())->insertWidget(cnt + 1,clockMonitorVector[cnt]);
+        clockMonitorVector[cnt]->setClockName(clockName + QString::number(cnt+1));
+    }
 
 }
 

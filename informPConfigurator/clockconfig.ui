@@ -7,13 +7,25 @@
     <x>0</x>
     <y>0</y>
     <width>715</width>
-    <height>61</height>
+    <height>37</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_14">
      <item>
@@ -53,7 +65,7 @@
       <widget class="QComboBox" name="comboBoxClockCorrectionHours">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>50</width>
          <height>25</height>
         </size>
        </property>
@@ -102,7 +114,7 @@
       <widget class="QComboBox" name="comboBoxClockCorrectionMinutes">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>50</width>
          <height>25</height>
         </size>
        </property>
@@ -161,19 +173,6 @@
       </spacer>
      </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>7</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

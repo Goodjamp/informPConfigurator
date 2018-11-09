@@ -13,6 +13,7 @@
 #include "waitform.h"
 #include <lcdstr.h>
 #include <clockconfig.h>
+#include <clockmonitor.h>
 #include "hidInterface.h"
 #include "communicationclass.h"
 #include "informptransportclass.h"
@@ -81,6 +82,7 @@ private:
     QVector<lcdStr*> lcdStrVector;
     /*Clocks*/
     QVector<clockConfig*> clockConfigVector = QVector<clockConfig*>(4);
+    QVector<clockMonitor*> clockMonitorVector = QVector<clockMonitor*>(4);
     clockConfig* myClock;
     /*connunication in process flag*/
     bool communicationInProcess;
