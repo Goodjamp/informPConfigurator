@@ -19,6 +19,7 @@
 #include "informpmemmap.h"
 #include "controlelementdescription.h"
 #include "communicationclass.h"
+#include <clockconfig.h>
 
 
 /*
@@ -71,7 +72,7 @@ void MainWindow::setDeviseCloseUIState(void)
     ui->pushButtonReset->setDisabled(true);
     ui->tabWidget->setCurrentIndex(0);
     ui->tabWidgetCurrentMode->setCurrentIndex(0);
-    ui->tabWidgetCurrentMode->setDisabled(true);
+    //ui->tabWidgetCurrentMode->setDisabled(true);
 }
 
 
@@ -82,7 +83,7 @@ void MainWindow::setDeviseOpenUIState(void)
     ui->pushButtonRead->setDisabled(false);
     ui->pushButtonWrite->setDisabled(false);
     ui->pushButtonReset->setDisabled(false);
-    ui->tabWidgetCurrentMode->setDisabled(false);
+    //ui->tabWidgetCurrentMode->setDisabled(false);
 }
 
 
@@ -188,6 +189,15 @@ void MainWindow::initUISetings(void)
     ui->comboBoxClockSyncSource->addItems(syncSourceList);
     ui->comboBoxClockSyncSource->setCurrentIndex(0);
 
+    ui->tabWidgetClockConfig->removeTab(0);
+    QString tabName = "Часы №";
+    for(uint8_t cnt = 0; cnt < clockConfigVector.size(); cnt++)
+    {
+        clockConfigVector[cnt] = new clockConfig();
+        ui->tabWidgetClockConfig->addTab(clockConfigVector[cnt], tabName + QString::number(cnt + 1));
+
+    }
+
     /*****************************METEO  PARAMITERS*********************/
     ui->comboBoxMeteoState->addItems(stateList);
     ui->comboBoxMeteoState->setCurrentIndex(0);
@@ -211,7 +221,7 @@ void MainWindow::updateNumLCDString(uint8_t numString)
     for(uint8_t cnt = 0; cnt < numString; cnt++)
     {
         lcdStrVector.push_back(new lcdStr());
-        (static_cast<QHBoxLayout*>(ui->tab_LCD->layout())->insertWidget(cnt + 3,lcdStrVector[cnt]));
+        static_cast<QHBoxLayout*>(ui->scrollAreaWidgetContents_3->layout())->insertWidget(cnt + 1,lcdStrVector[cnt]);
         lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
     }
     ui->comboBoxLCDNumLSD->setCurrentIndex(numString - 1);

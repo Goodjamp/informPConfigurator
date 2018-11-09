@@ -201,6 +201,8 @@ typedef struct{
 /*************DISPLAY MODULE DESCRIPTION**************/
 #define NUMBER_OF_VALUE      7
 #define NUMBER_OF_LCD_STRING 4
+#define NUMBER_OF_CLOCKS     4
+
 
 #pragma pack(push,1)
 typedef struct{

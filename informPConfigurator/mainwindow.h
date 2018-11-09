@@ -12,9 +12,11 @@
 
 #include "waitform.h"
 #include <lcdstr.h>
+#include <clockconfig.h>
 #include "hidInterface.h"
 #include "communicationclass.h"
 #include "informptransportclass.h"
+#include "informpmemmap.h"
 
 namespace Ui {
 class MainWindow;
@@ -77,6 +79,9 @@ private:
 
     /*widjets*/
     QVector<lcdStr*> lcdStrVector;
+    /*Clocks*/
+    QVector<clockConfig*> clockConfigVector = QVector<clockConfig*>(4);
+    clockConfig* myClock;
     /*connunication in process flag*/
     bool communicationInProcess;
 
