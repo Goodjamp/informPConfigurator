@@ -44,9 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
     communicatioWaitWindow = new waitForm(this);
     listOfConnectinStatus    = new QList<QString>(COMMUNICATION_STATUIS_LIST);
 
-    //listOfConnectinStatus-> (COMMUNICATION_STATUIS_LIST
-
-
     connect(timerCommunicatioControl, &QTimer::timeout, this, &MainWindow::communicatioTimeout,  Qt::QueuedConnection);
     connect(timerStatusUpdate,  &QTimer::timeout, this, &MainWindow::statusRequestTimeout, Qt::QueuedConnection);
     /*rx response connectin*/
