@@ -163,7 +163,7 @@ void MainWindow::initUISetings(void)
 
     /*****************************LCD ADJUSTMENT PARAMITERS*********************/
     QStringList numIndicatorsList;// = {LIST_MINUTES_CORRECTION};
-    for(uint8_t cnt = 1; cnt <= NUMBER_OF_LCD_STRING; cnt++)
+    for(uint8_t cnt = 1; cnt <= QUANTITY_LCD_STRING; cnt++)
     {
         numIndicatorsList.push_back(QString::number(cnt, 10));
     }
@@ -175,14 +175,11 @@ void MainWindow::initUISetings(void)
     ui->comboBoxClockState->setCurrentIndex(0);
 
     QStringList minutesCorrectionList = {LIST_MINUTES_CORRECTION};
-    ui->comboBoxClockCorrectionMinutes->addItems(minutesCorrectionList);
-    ui->comboBoxClockCorrectionMinutes->setCurrentIndex(0);
 
     QStringList hourseCorrectionList;
     for(uint32_t correction = 0; correction < 12; correction++)
     {
         hourseCorrectionList.append(QString::number(correction));
-        ui->comboBoxClockCorrectionHours->addItem(QString::number(correction), 0);
     }
 
     QStringList syncSourceList = {LIST_SYNC_SOURCE};
@@ -273,13 +270,13 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
 
     /*********************read CLOCK configuration*****************************/
     config->configClock.state = (ui->comboBoxClockState->currentIndex() == 0) ? 0 : (1);
-    config->configClock.timeCorection = ui->comboBoxClockCorrectionHours->currentIndex() * 60;
-    if(ui->comboBoxClockCorrectionMinutes->currentIndex() == 1)
+
+    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
-        config->configClock.timeCorection += 30;
+        config->configClock.clockConfig[k].isDaylightSaving = clockConfigVector[k]->getDayLight();
+        config->configClock.clockConfig[k].timeCorection    = clockConfigVector[k]->getCorrection();
     }
 
-    config->configClock.isDaylightSaving      = (ui->checkBoxClockSetDaylight->isChecked()) ? (1) : (0);
     config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource->currentIndex() == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
 
     /*********************read METEO configuration*****************************/
@@ -305,7 +302,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
         uint16_t flag = 0x1;
         config->configLCD.screenConfig[k].numParamiterPerScreen = 0;
         config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
-        for(uint8_t m = 0; m < NUMBER_OF_VALUE; m++)
+        for(uint8_t m = 0; m < QUANTITY_VALUE; m++)
         {
             if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
             {
@@ -338,12 +335,24 @@ bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
     }
 
     /*********************check CLOCK configuration*****************************/
-    if((config->configClock.state != 0 && config->configClock.state != (1))                                                                   ||
-       ((uint16_t)std::abs(config->configClock.timeCorection) % 30 != 0) || ((uint16_t)std::abs(config->configClock.timeCorection ) > 11* 60) ||
-       (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count()))
 
+
+    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
-        return false;
+        config->configClock.clockConfig[k].isDaylightSaving = clockConfigVector[k]->getDayLight();
+        config->configClock.clockConfig[k].timeCorection    = clockConfigVector[k]->getCorrection();
+    }
+
+    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
+    {
+        if((config->configClock.state != 0 && config->configClock.state != (1))
+           || ((uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection) % 30 != 0)
+           || ((uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection ) > 11* 60)
+           || (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count())
+          )
+        {
+            return false;
+        }
     }
 
     /*********************check METEO configuration*****************************/
@@ -374,13 +383,13 @@ bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
     }
 
     /*********************check LCD configuration*****************************/
-    if(config->configLCD.numScreen > NUMBER_OF_LCD_STRING)
+    if(config->configLCD.numScreen > QUANTITY_LCD_STRING)
     {
         return false;
     }
     for(uint8_t cnt = 0; cnt < config->configLCD.numScreen;)
     {
-        if(config->configLCD.screenConfig[cnt++].numParamiterPerScreen > NUMBER_OF_VALUE )
+        if(config->configLCD.screenConfig[cnt++].numParamiterPerScreen > QUANTITY_VALUE )
         {
             return false;
         }
@@ -396,7 +405,7 @@ bool MainWindow::checkLCDConfiguration(QVector<uint8_t> &configBuff)
 
     for(uint8_t cnt = 0; cnt < config->configLCD.numScreen; cnt++)
     {
-        if(config->configLCD.screenConfig[cnt].numParamiterPerScreen > NUMBER_OF_VALUE || config->configLCD.screenConfig[cnt].numParamiterPerScreen == 0)
+        if(config->configLCD.screenConfig[cnt].numParamiterPerScreen > QUANTITY_VALUE || config->configLCD.screenConfig[cnt].numParamiterPerScreen == 0)
         {
             QMessageBox lcdErrorMessage(QMessageBox::Warning,
                                         " ",
@@ -453,24 +462,16 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
 
     /********************set CLOCK configuration*****************************/
     ui->comboBoxClockState->setCurrentIndex((config->configClock.state == 0) ? 0 : 1);
-    if(config->configClock.isDaylightSaving)
-    {
-         ui->checkBoxClockSetDaylight->setChecked(true);
-    }
-    else
-    {
-         ui->checkBoxClockSetDaylight->setChecked(false);
-    }
+
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
 
-    uint16_t restTimeCorrection = (uint16_t)std::abs(config->configClock.timeCorection) % 60;
-    if(restTimeCorrection)
+    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
-        tempIndex = 1;
+        clockConfigVector[k]->setDayLight(config->configClock.clockConfig[k].isDaylightSaving == 1);
+        uint16_t restTimeCorrection = (uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection / 60) ;
+        clockConfigVector[k]->setHourseCorrection(restTimeCorrection);
+        clockConfigVector[k]->setMinutesCorrection(config->configClock.clockConfig[k].timeCorection - restTimeCorrection * 60);
     }
-    ui->comboBoxClockCorrectionMinutes->setCurrentIndex(tempIndex);
-    tempIndex = 0;
-    ui->comboBoxClockCorrectionHours->setCurrentIndex( (std::abs(config->configClock.timeCorection) - restTimeCorrection) / 60 );
 
     /*********************set METEO configuration*****************************/
     ui->comboBoxMeteoState->setCurrentIndex((config->configMeteo.state == 0) ? 0 : 1);
@@ -498,7 +499,7 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     for(uint8_t cnt = 0; cnt < lcdStrVector.size(); cnt++)
     {
         uint16_t flag = 0x1;
-        for(uint k = 0; k < NUMBER_OF_VALUE; k++)
+        for(uint k = 0; k < QUANTITY_VALUE; k++)
         {
             if(flag & config->configLCD.screenConfig[cnt].bitsOfParamiters)
             {
@@ -584,11 +585,17 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
     {
         status->statusClock.status_TIME = statusModulList.indexOf(ui->lineEditClockStatus->text());
     }
-    getUint16FromStringInt(&status->statusClock.date_year,   ui->lineEditClockRezYear->text()   );
-    getUint16FromStringInt(&status->statusClock.date_month,  ui->lineEditClockRezMonth->text()  );
-    getUint16FromStringInt(&status->statusClock.date_day,    ui->lineEditClockRezDay->text()    );
-    getUint16FromStringInt(&status->statusClock.time_honour, ui->lineEditClockRezHour->text()   );
-    getUint16FromStringInt(&status->statusClock.time_minute, ui->lineEditClockRezMinutes->text());
+
+    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
+    {
+        status->statusClock.clock[k].date_year   = clockMonitorVector[k]->getYear();
+        status->statusClock.clock[k].date_month  = clockMonitorVector[k]->getMonth();
+        status->statusClock.clock[k].date_day    = clockMonitorVector[k]->getDate();
+        status->statusClock.clock[k].time_hour   = clockMonitorVector[k]->getHour() ;
+        status->statusClock.clock[k].time_minute = clockMonitorVector[k]->getMinutes();
+        status->statusClock.clock[k].time_second = clockMonitorVector[k]->getSeconds();
+
+    }
 
     /*********************read METEO configuration*****************************/
     if(statusModulList.indexOf(ui->lineEditMeteoStatus->text()) >= 0)
@@ -702,11 +709,15 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
     /*********************set CLOCK configuration*****************************/
     setModuleStatusLineEdit(ui->lineEditClockStatus, status->statusClock.status_TIME);
 
-    ui->lineEditClockRezYear->setText(QString::number(status->statusClock.date_year));
-    ui->lineEditClockRezMonth->setText(QString::number(status->statusClock.date_month));
-    ui->lineEditClockRezDay->setText(QString::number(status->statusClock.date_day));
-    ui->lineEditClockRezHour->setText(QString::number(status->statusClock.time_honour));
-    ui->lineEditClockRezMinutes->setText(QString::number(status->statusClock.time_minute));
+    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
+    {
+        clockMonitorVector[k]->setYear(status->statusClock.clock[k].date_year);
+        clockMonitorVector[k]->setMonth(status->statusClock.clock[k].date_month);
+        clockMonitorVector[k]->setDate(status->statusClock.clock[k].date_day);
+        clockMonitorVector[k]->setHour(status->statusClock.clock[k].time_hour);
+        clockMonitorVector[k]->setMinutes(status->statusClock.clock[k].time_minute);
+        clockMonitorVector[k]->setSeconds(status->statusClock.clock[k].time_second);
+    }
 
     /*********************set METEO configuration*****************************/
     setMeteoStatusLineEdit(status->statusMeteo.status_sensor);

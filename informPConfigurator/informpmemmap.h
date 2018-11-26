@@ -45,6 +45,8 @@ typedef struct{
 #pragma pack(pop)
 
 
+/*************TIME MODULE STATUS**********/
+#define CLOCK_QUANTITY   4
 #pragma pack(push,1)
 typedef struct
 {
@@ -57,19 +59,25 @@ typedef struct
 }serverSetTime;
 
 typedef struct{
-    uint16_t  status_TIME; // status register TIME module
     uint16_t  date_year;    // date: year
     uint16_t  date_month;   // date: month
     uint16_t  date_day;     // date: day
-    uint16_t  time_honour;  // time: honour
+    uint16_t  time_hour;  // time: honour
     uint16_t  time_minute;  // time: minute
     uint16_t  time_second;  // time: second
     uint16_t  DATE;
     uint16_t  TIME;
+}S_Clock;
+
+typedef struct{
+    uint16_t  status_TIME;  // status register TIME module addtres
+    S_Clock   clock[CLOCK_QUANTITY];
     serverSetTime serverTime;
 } S_TIME_oper_data;
 #pragma pack(pop)
 
+
+/*************METEO MODULE STATUS**********/
 #pragma pack(push,1)
 typedef struct{
     uint16_t  status_sensor;     // ñòàòóñ ðåãèñòðû sensor
@@ -176,11 +184,16 @@ typedef enum
 }SYNC_SOURCE;
 
 #pragma pack(push,1)
-typedef struct{
-    uint16_t  state;          // state of module ENABLE/DISABLE
-    int16_t   timeCorection;  // time correction in hours
+typedef struct
+{
+    uint16_t  timeCorection:15;  // time correction in minutes
     uint16_t  isDaylightSaving:1;
-    uint16_t  synchronizationSource:15;  // time correction in hours
+}clockIndConfigT;
+
+typedef struct{
+    uint16_t  state;                               // state of module ENABLE/DISABLE
+    uint16_t  synchronizationSource;
+    clockIndConfigT clockConfig[CLOCK_QUANTITY];
 }S_TIME_user_config;
 #pragma pack(pop)
 
@@ -199,9 +212,8 @@ typedef struct{
 #pragma pack(pop)
 
 /*************DISPLAY MODULE DESCRIPTION**************/
-#define NUMBER_OF_VALUE      7
-#define NUMBER_OF_LCD_STRING 4
-#define NUMBER_OF_CLOCKS     4
+#define QUANTITY_VALUE      7
+#define QUANTITY_LCD_STRING 4
 
 
 #pragma pack(push,1)
@@ -209,9 +221,9 @@ typedef struct{
     uint16_t state;                           // state of module: ENABLE/DISABLE
     uint16_t numScreen;                       // number of screen connected to device
     struct{                                   // configuration parameters of every screen
-       uint16_t numParamiterPerScreen: 3;
-       uint16_t bitsOfParamiters:     (16 - 3);
-    }screenConfig[NUMBER_OF_LCD_STRING];
+       uint32_t numParamiterPerScreen: 8;
+       uint32_t bitsOfParamiters:     (32 - 8);
+    }screenConfig[QUANTITY_LCD_STRING];
 }S_display_user_config;
 #pragma pack(pop)
 
@@ -253,6 +265,6 @@ typedef union{
 #define ALL_CONFIG_NUM_REG    static_cast<uint16_t>(sizeof(configAddressFields) / 2 )
 #define USER_CONDFIG_ADDRESS  static_cast<uint16_t>(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
 #define USER_CONFIG_NUM_REG   static_cast<uint16_t>(sizeof(configDescriptionT) / 2 )
-#define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT)/2)
+#define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT) / 2)
 
 #endif // INFORMPMEMMAP_H
