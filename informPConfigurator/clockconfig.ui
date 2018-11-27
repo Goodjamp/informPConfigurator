@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>716</width>
-    <height>91</height>
+    <height>177</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,13 +15,13 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>3</number>
+    <number>12</number>
    </property>
    <property name="leftMargin">
     <number>2</number>
    </property>
    <property name="topMargin">
-    <number>2</number>
+    <number>15</number>
    </property>
    <property name="rightMargin">
     <number>2</number>
@@ -74,7 +74,7 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>100</width>
+         <width>50</width>
          <height>25</height>
         </size>
        </property>
@@ -123,7 +123,7 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>100</width>
+         <width>50</width>
          <height>25</height>
         </size>
        </property>

@@ -117,7 +117,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar6">
+      <widget class="QCheckBox" name="checkBoxPar4">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -234,7 +234,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="checkBoxPar6">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>19</horstretch>
@@ -292,7 +292,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_2">
+      <widget class="QCheckBox" name="checkBoxPar7">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -344,7 +344,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_3">
+      <widget class="QCheckBox" name="checkBoxPar8">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -396,7 +396,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_4">
+      <widget class="QCheckBox" name="checkBoxPar9">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -448,7 +448,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_5">
+      <widget class="QCheckBox" name="checkBoxPar10">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -500,7 +500,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_6">
+      <widget class="QCheckBox" name="checkBoxPar11">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -552,7 +552,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar7">
+      <widget class="QCheckBox" name="checkBoxPar12">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -610,7 +610,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar1">
+      <widget class="QCheckBox" name="checkBoxPar0">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -668,7 +668,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar4">
+      <widget class="QCheckBox" name="checkBoxPar3">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -726,7 +726,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar3">
+      <widget class="QCheckBox" name="checkBoxPar2">
        <property name="minimumSize">
         <size>
          <width>15</width>
@@ -784,7 +784,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar2">
+      <widget class="QCheckBox" name="checkBoxPar1">
        <property name="minimumSize">
         <size>
          <width>15</width>

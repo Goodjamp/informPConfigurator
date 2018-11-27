@@ -33,9 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QVector<uint8_t> qwe;
-    getStatusState(qwe);
-
     deviceList        = new QStringListModel(this);
     userHID           = new hidInterface();
     communicatioStack = new communicationClass(userHID);
@@ -229,7 +226,7 @@ void MainWindow::updateNumLCDString(uint8_t numString)
     {
         lcdStrVector.push_back(new lcdStr());
         static_cast<QHBoxLayout*>(ui->scrollAreaWidgetContents_3->layout())->insertWidget(cnt + 1,lcdStrVector[cnt]);
-        lcdStrVector[cnt]->setNameLCD(baseLCDName + QString::number(cnt + 1));
+        lcdStrVector[cnt]->addLCD(baseLCDName + QString::number(cnt + 1));
     }
     ui->comboBoxLCDNumLSD->setCurrentIndex(numString - 1);
 }
@@ -304,7 +301,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
         config->configLCD.screenConfig[k].bitsOfParamiters      = 0;
         for(uint8_t m = 0; m < QUANTITY_VALUE; m++)
         {
-            if(lcdStrVector[k]->listOfCheckbox[m]->isChecked())
+            if(lcdStrVector[k]->getChecked(m))
             {
                 config->configLCD.screenConfig[k].bitsOfParamiters |= flag;
                 config->configLCD.screenConfig[k].numParamiterPerScreen++;
@@ -335,13 +332,6 @@ bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
     }
 
     /*********************check CLOCK configuration*****************************/
-
-
-    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
-    {
-        config->configClock.clockConfig[k].isDaylightSaving = clockConfigVector[k]->getDayLight();
-        config->configClock.clockConfig[k].timeCorection    = clockConfigVector[k]->getCorrection();
-    }
 
     for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
@@ -464,11 +454,12 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     ui->comboBoxClockState->setCurrentIndex((config->configClock.state == 0) ? 0 : 1);
 
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
-
+    uint16_t temp;
     for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
         clockConfigVector[k]->setDayLight(config->configClock.clockConfig[k].isDaylightSaving == 1);
-        uint16_t restTimeCorrection = (uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection / 60) ;
+        temp = config->configClock.clockConfig[k].timeCorection;
+        uint16_t restTimeCorrection = static_cast<uint16_t>(config->configClock.clockConfig[k].timeCorection / 60);
         clockConfigVector[k]->setHourseCorrection(restTimeCorrection);
         clockConfigVector[k]->setMinutesCorrection(config->configClock.clockConfig[k].timeCorection - restTimeCorrection * 60);
     }
@@ -498,16 +489,16 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     //foreach(lcdStr *tempLcdStr, lcdStrVector)
     for(uint8_t cnt = 0; cnt < lcdStrVector.size(); cnt++)
     {
-        uint16_t flag = 0x1;
+        uint32_t flag = 0x1;
         for(uint k = 0; k < QUANTITY_VALUE; k++)
         {
             if(flag & config->configLCD.screenConfig[cnt].bitsOfParamiters)
             {
-                lcdStrVector[cnt]->listOfCheckbox[k]->setChecked(true);
+                lcdStrVector[cnt]->setChecked(k, true);
             }
             else
             {
-                lcdStrVector[cnt]->listOfCheckbox[k]->setChecked(false);
+                lcdStrVector[cnt]->setChecked(k, false);
             }
            flag <<= 1;
         }       
@@ -741,7 +732,25 @@ void MainWindow::communicatioTimeout()
 
 void MainWindow::statusRequestTimeout()
 {
-    communicatioStack->getRegReq(USER_ADDRESS_STATUS_DATA, STATUS_NUM_REG);
+    static bool dataOrder = true;
+    /*
+    uint16_t regAddress  = (dataOrder) ?
+            (USER_ADDRESS_STATUS_DATA):
+            (USER_ADDRESS_STATUS_DATA + offsetof(statusDescriptionT, statusClock) / 2);
+    uint16_t regQUantity = (dataOrder) ?
+                (offsetof(statusDescriptionT, statusClock) / 2) :
+                (STATUS_NUM_REG -  offsetof(statusDescriptionT, statusClock) / 2);
+                */
+    uint16_t regAddress  = (dataOrder) ?
+                           (USER_ADDRESS_STATUS_DATA):
+                           (USER_ADDRESS_STATUS_DATA + 28);
+    uint16_t regQUantity = (dataOrder) ?
+                           (28) :
+                           (STATUS_NUM_REG -  28);
+    dataOrder = !dataOrder;
+    qDebug()<<"Read status address = "<< regAddress;
+    qDebug()<<"Read status num reg = "<< regQUantity;
+    communicatioStack->getRegReq(regAddress, regQUantity);
 }
 
 
@@ -772,7 +781,9 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
 
 void MainWindow::on_pushButtonRead_clicked()
 {
+    qDebug()<<"Main Read Reg";
     communicatioStack->getRegReq(USER_CONDFIG_ADDRESS, USER_CONFIG_NUM_REG);
+    qDebug()<<"USER_CONFIG_NUM_REG = "<< USER_CONFIG_NUM_REG;
     communicatioIndicationStart();
 }
 

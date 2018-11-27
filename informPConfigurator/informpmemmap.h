@@ -62,7 +62,7 @@ typedef struct{
     uint16_t  date_year;    // date: year
     uint16_t  date_month;   // date: month
     uint16_t  date_day;     // date: day
-    uint16_t  time_hour;  // time: honour
+    uint16_t  time_hour;    // time: honour
     uint16_t  time_minute;  // time: minute
     uint16_t  time_second;  // time: second
     uint16_t  DATE;
@@ -80,13 +80,15 @@ typedef struct{
 /*************METEO MODULE STATUS**********/
 #pragma pack(push,1)
 typedef struct{
-    uint16_t  status_sensor;     // ñòàòóñ ðåãèñòðû sensor
+    uint16_t  status_sensor;
     int16_t   rezTemperature;    // address in memory map rez measure temperature*10
     uint16_t  rezHumidity;       // address in memory map rez measure humidity *10
     uint16_t  rezPressure_mmHg;  // measurement result Pressure mmHg
     uint16_t  rezPressure_GPasc; // measurement result Pressure GPasc
 } S_sensor_address;
 #pragma pack(pop)
+
+/********TOTAL  STATUS  DESCRIPTION***************/
 
 #pragma pack(push,1)
 typedef struct
@@ -98,6 +100,9 @@ typedef struct
     S_sensor_address       statusMeteo;
 }statusDescriptionT;
 #pragma pack(pop)
+
+
+
 
 /*******************************************************************/
 /************INFORMP CONFIGURATION MEMORY MAP DESCRIPTION***********/
@@ -142,7 +147,7 @@ typedef struct{
 }BF_date_config;
 #pragma pack(pop)
 
-/*************MODBUS MODULE DESCRIPTION****************/
+/*************MODBUS MODULE CONFIGURARION DESCRIPTION****************/
 typedef enum {
     PROTOCOL_MODBUS_MASTER = (uint8_t)0,
     PROTOCOL_MODBUS_SLAVE  = (uint8_t)1,
@@ -168,7 +173,7 @@ typedef struct {
 } S_connectmodbus;
 #pragma pack(pop)
 
-/*************FRQ METERING MODULE DESCRIPTION**********/
+/*************FRQ METERING MODULE CONFIGURARION DESCRIPTION**********/
 #pragma pack(push,1)
 typedef struct{
     uint16_t state;           // state of module ENABLE/DISABLE
@@ -176,7 +181,7 @@ typedef struct{
 }S_FRQmetter_user_config;
 #pragma pack(pop)
 
-/*************CLOCK MODULE DESCRIPTION****************/
+/*************CLOCK MODULE CONFIGURARION DESCRIPTION****************/
 typedef enum
 {
     SYNC_SOURCE_GPS    = 0,
@@ -197,7 +202,7 @@ typedef struct{
 }S_TIME_user_config;
 #pragma pack(pop)
 
-/*************METEO MODULE DESCRIPTION****************/
+/*************METEO MODULE CONFIGURARION  DESCRIPTION****************/
 typedef enum
 {
     METEO_SOURCE_LOCAL,
@@ -211,8 +216,8 @@ typedef struct{
 }S_sensor_user_config;
 #pragma pack(pop)
 
-/*************DISPLAY MODULE DESCRIPTION**************/
-#define QUANTITY_VALUE      7
+/*************DISPLAY MODULE CONFIGURARION DESCRIPTION**************/
+#define QUANTITY_VALUE      13
 #define QUANTITY_LCD_STRING 4
 
 
@@ -227,7 +232,7 @@ typedef struct{
 }S_display_user_config;
 #pragma pack(pop)
 
-/********TOTAL  MEMORY MAP DESCRIPTION***************/
+/********TOTAL  CONFIGURARION  DESCRIPTION***************/
 
 /*this type use only for calculate offset of user configuration registers*/
 #pragma pack(push,1)
@@ -266,5 +271,6 @@ typedef union{
 #define USER_CONDFIG_ADDRESS  static_cast<uint16_t>(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
 #define USER_CONFIG_NUM_REG   static_cast<uint16_t>(sizeof(configDescriptionT) / 2 )
 #define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT) / 2)
+
 
 #endif // INFORMPMEMMAP_H

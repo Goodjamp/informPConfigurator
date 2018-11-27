@@ -17,9 +17,11 @@ public:
     explicit lcdStr(QWidget *parent = 0);
     ~lcdStr();
 
-    void setNameLCD(QString newName);
-    QVector<QCheckBox*> listOfCheckbox;
+    void addLCD(QString name);
+    void setChecked(uint8_t number, bool check);
+    bool getChecked(uint8_t number);
 private:
+    QVector<QCheckBox*> listOfCheckbox;
     Ui::lcdStr *ui;
 };
 

@@ -107,13 +107,13 @@
          <widget class="QLineEdit" name="lineEditConnectionStatus">
           <property name="minimumSize">
            <size>
-            <width>520</width>
+            <width>800</width>
             <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>520</width>
+            <width>1400</width>
             <height>25</height>
            </size>
           </property>
@@ -3094,7 +3094,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>276</width>
+               <width>275</width>
                <height>212</height>
               </rect>
              </property>
@@ -3158,7 +3158,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>10</width>
+                <width>5</width>
                 <height>20</height>
                </size>
               </property>
@@ -3439,13 +3439,13 @@
              <widget class="QLineEdit" name="lineEditMeteoStatus">
               <property name="minimumSize">
                <size>
-                <width>130</width>
+                <width>140</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>130</width>
+                <width>140</width>
                 <height>25</height>
                </size>
               </property>

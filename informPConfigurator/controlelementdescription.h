@@ -5,7 +5,7 @@
 #define  PID_INFORM_P          0x5711
 
 #define  COMMUNICATION_TIMEOUT  2000
-#define  STATUS_REQUEST_TIMEOUT 1000
+#define  STATUS_REQUEST_TIMEOUT 200
 
 
 #define WIN_NAME            static_cast<QString>(" informP ")
