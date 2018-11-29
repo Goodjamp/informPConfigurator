@@ -38,7 +38,7 @@ private:
     {
         COMUNICATION_GET_REG = (uint8_t)0x0,
         COMUNICATION_SET_REG = (uint8_t)0x1,
-        COMUNICATION_RESET   = (uint8_t)0x2,
+        COMUNICATION_RESET   = (uint8_t)0x2
     }REQ_COMMAND;
 
     typedef enum

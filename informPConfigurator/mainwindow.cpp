@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    statusModulList  = {LIST_MODULE_STATUS};
+    statusDeviceList = {LIST_DEVICE_STATUS};
     deviceList        = new QStringListModel(this);
     userHID           = new hidInterface();
     communicatioStack = new communicationClass(userHID);
@@ -58,6 +60,15 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::setDateAndTimeDisable(bool isDiasble)
+{
+    ui->comboBoxClockSetYear->setDisabled(isDiasble);
+    ui->comboBoxClockSetMounth->setDisabled(isDiasble);
+    ui->comboBoxClockSetDate->setDisabled(isDiasble);
+    ui->comboBoxClockSetHour->setDisabled(isDiasble);
+    ui->comboBoxClockSetMinutes->setDisabled(isDiasble);
+}
+
 void MainWindow::setDeviseCloseUIState(void)
 {
     ui->pushButtonCloseDevice->setDisabled(true);
@@ -67,6 +78,7 @@ void MainWindow::setDeviseCloseUIState(void)
     ui->pushButtonReset->setDisabled(true);
     ui->tabWidget->setCurrentIndex(0);
     ui->tabWidgetCurrentMode->setCurrentIndex(0);
+    //ui->groupBoxSetDateAndTime->setDisabled(true);
     //ui->tabWidgetCurrentMode->setDisabled(true);
 }
 
@@ -78,11 +90,12 @@ void MainWindow::setDeviseOpenUIState(void)
     ui->pushButtonRead->setDisabled(false);
     ui->pushButtonWrite->setDisabled(false);
     ui->pushButtonReset->setDisabled(false);
+    //ui->groupBoxSetDateAndTime->setDisabled(false);
     //ui->tabWidgetCurrentMode->setDisabled(false);
 }
 
 
-void MainWindow::swUpdateConnectionStatus(SW_CONNECTION_STATUS inStatus)
+void MainWindow::updateConnectionStatus(SW_CONNECTION_STATUS inStatus)
 {
     ui->lineEditConnectionStatus->setText(listOfConnectinStatus->at(inStatus));
     switch(inStatus)
@@ -125,7 +138,7 @@ void MainWindow::initUISetings(void)
     QStringList listOfSign = {LIST_OF_SIGN};
 
     /******************CONNECTION STATUS ADJUSTMENT PARAMITERS*********************/
-    swUpdateConnectionStatus(SW_CONNECTION_STATUS_DISCONNECTED);
+    updateConnectionStatus(SW_CONNECTION_STATUS_DISCONNECTED);
 
     /*****************************MODBUS ADJUSTMENT PARAMITERS*********************/
     // Set baud rate list items
@@ -191,6 +204,37 @@ void MainWindow::initUISetings(void)
         ui->tabWidgetClockConfig->addTab(clockConfigVector[cnt], tabName + QString::number(cnt + 1));
         clockConfigVector[cnt]->setHorseRange(hourseCorrectionList);
         clockConfigVector[cnt]->setMinutesRange(minutesCorrectionList);
+    }
+
+    #define YEARS     40
+    #define MOUNTH    12
+    #define DATE      31
+    #define HOURS     24
+    #define MINUTES   60
+
+    for(uint8_t k = 0; k <= YEARS; k++)
+    {
+        ui->comboBoxClockSetYear->addItem(QString::number(2018 + k, 10));
+    }
+
+    for(uint8_t k = 1; k <= MOUNTH; k++)
+    {
+        ui->comboBoxClockSetMounth->addItem(QString::number(k, 10));
+    }
+
+    for(uint8_t k = 1; k <= DATE; k++)
+    {
+        ui->comboBoxClockSetDate->addItem(QString::number(k, 10));
+    }
+
+    for(uint8_t k = 0; k < HOURS; k++)
+    {
+        ui->comboBoxClockSetHour->addItem(QString::number(k, 10));
+    }
+
+    for(uint8_t k = 0; k < MINUTES; k++)
+    {
+        ui->comboBoxClockSetMinutes->addItem(QString::number(k, 10));
     }
 
     /*****************************METEO  PARAMITERS*********************/
@@ -319,6 +363,26 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     config->configDate.second = static_cast<uint32_t>(QTime::currentTime().second());
 }
 
+void MainWindow::getDeteAndTimeSettings(QVector<uint8_t> &buff)
+{
+    if(ui->checkBoxSyncPC->isChecked()) // Get PC date and Time
+    {
+        ((serverSetTime*)buff.data())->Year    = static_cast<uint16_t>(QDate::currentDate().year() - 2000);
+        ((serverSetTime*)buff.data())->Month   = static_cast<uint16_t>(QDate::currentDate().month());
+        ((serverSetTime*)buff.data())->Day     = static_cast<uint16_t>(QDate::currentDate().day());
+        ((serverSetTime*)buff.data())->Hour    = static_cast<uint16_t>(QTime::currentTime().hour());
+        ((serverSetTime*)buff.data())->Minutes = static_cast<uint16_t>(QTime::currentTime().minute());
+    }
+    else
+    {
+        ((serverSetTime*)buff.data())->Year    = ui->comboBoxClockSetYear->currentIndex() + 18;
+        ((serverSetTime*)buff.data())->Month   = ui->comboBoxClockSetMounth->currentIndex() + 1;
+        ((serverSetTime*)buff.data())->Day     = ui->comboBoxClockSetDate->currentIndex() + 1;
+        ((serverSetTime*)buff.data())->Hour    = ui->comboBoxClockSetHour->currentIndex();
+        ((serverSetTime*)buff.data())->Minutes = ui->comboBoxClockSetMinutes->currentIndex();
+    }
+    ((serverSetTime*)buff.data())->Seconds = 0;
+}
 
 bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
 {
@@ -546,8 +610,8 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
 {
     configBuff.resize(sizeof(statusDescriptionT));
     statusDescriptionT *status      = (statusDescriptionT*)configBuff.begin();
-    QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
-    QList<QString> statusModulList  = {LIST_MODULE_STATUS};
+    //QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
+    //QList<QString> statusModulList  = {LIST_MODULE_STATUS};
 
     if( statusDeviceList.indexOf(ui->lineEditDevStatus->text()) >=0 )
     {
@@ -589,6 +653,8 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
     }
 
     /*********************read METEO configuration*****************************/
+    QString temp = ui->lineEditMeteoStatus->text();
+    uint8_t index = statusModulList.indexOf(ui->lineEditMeteoStatus->text());
     if(statusModulList.indexOf(ui->lineEditMeteoStatus->text()) >= 0)
     {
         status->statusMeteo.status_sensor = statusModulList.indexOf(ui->lineEditMeteoStatus->text());
@@ -602,7 +668,7 @@ void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
 
 void MainWindow::setModuleStatusLineEdit(QLineEdit *statusLineEdit, uint16_t statusIndex)
 {
-    QList<QString> statusModulList  = {LIST_MODULE_STATUS};
+   // QList<QString> statusModulList  = {LIST_MODULE_STATUS};
     if(statusIndex >= statusModulList.size())
     {
         return;
@@ -616,7 +682,7 @@ void MainWindow::setModuleStatusLineEdit(QLineEdit *statusLineEdit, uint16_t sta
 
 void MainWindow::setMeteoStatusLineEdit(uint16_t meteoStatus)
 {
-    QList<QString> statusModulList  = {LIST_MODULE_STATUS};
+    //QList<QString> statusModulList  = {LIST_MODULE_STATUS};
     if( meteoStatus == 0)
     {
          ui->lineEditMeteoStatus->setText(statusModulList[0]);
@@ -655,7 +721,7 @@ void MainWindow::setMeteoStatusLineEdit(uint16_t meteoStatus)
 
 void MainWindow::setDeviceStatusLineEdit(uint16_t statusIndex)
 {
-    QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
+    //QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
     //statusDeviceList.size()
     uint8_t statusTextIndex = (statusIndex > 0) ? 1 : 0;
     //Set global device status
@@ -726,7 +792,7 @@ void MainWindow::setStatusState(QVector<uint8_t> &configBuff)
 void MainWindow::communicatioTimeout()
 {
     communicationComplited();
-    swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_SW);
+    updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_SW);
 }
 
 
@@ -748,8 +814,6 @@ void MainWindow::statusRequestTimeout()
                            (28) :
                            (STATUS_NUM_REG -  28);
     dataOrder = !dataOrder;
-    qDebug()<<"Read status address = "<< regAddress;
-    qDebug()<<"Read status num reg = "<< regQUantity;
     communicatioStack->getRegReq(regAddress, regQUantity);
 }
 
@@ -759,7 +823,7 @@ void MainWindow::on_pushButtonCloseDevice_clicked()
     userHID->closeInterface();
     timerStatusUpdate->stop();
     setDeviseCloseUIState();
-    swUpdateConnectionStatus(SW_CONNECTION_STATUS_DISCONNECTED);
+    updateConnectionStatus(SW_CONNECTION_STATUS_DISCONNECTED);
 }
 
 
@@ -769,13 +833,13 @@ void MainWindow::on_pushButtonOpenDevice_clicked()
     if( !userHID->openInterface(VID_INFORM_P, PID_INFORM_P))
     {
         setDeviseCloseUIState();
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_OPEN);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_OPEN);
         return;
     }
     setDeviseOpenUIState();
     //Read all configuration registers
     communicatioStack->getRegReq(USER_CONDFIG_ADDRESS, USER_CONFIG_NUM_REG);
-    swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
+    updateConnectionStatus(SW_CONNECTION_STATUS_OK);
 }
 
 
@@ -840,10 +904,10 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
     switch(responseStatus)
     {
     case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
         return;
     case informPTransportClass::RESP_STATUS_PROTOCOL_ERROR:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
         return;
     }
 
@@ -868,7 +932,7 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
         //getConfigurationSettings(configurationFromUI);
         if( !setConfigurationSettings(buff))
         {
-            swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_DATA);
+            updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_DATA);
             return;
         }
 
@@ -877,7 +941,7 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
     {
         //swUpdateConnectionStatus(ERROR_RX_DATA_ADDRESS);
     }
-    swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
+    updateConnectionStatus(SW_CONNECTION_STATUS_OK);
 }
 
 
@@ -888,10 +952,10 @@ void MainWindow::slotSetRegResp(informPTransportClass::RESP_STATUS responseStatu
     switch(responseStatus)
     {
     case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
         return;
     case informPTransportClass::RESP_STATUS_PROTOCOL_ERROR:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
         return;
     }
 }
@@ -903,13 +967,13 @@ void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus
     switch(responseStatus)
     {
     case informPTransportClass::RESP_STATUS_OK:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_OK);
+        updateConnectionStatus(SW_CONNECTION_STATUS_OK);
         return;
     case informPTransportClass::RESP_STATUS_COMMINICATION_ERROR:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_FW);
         return;
     case informPTransportClass::RESP_STATUS_PROTOCOL_ERROR:
-        swUpdateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
+        updateConnectionStatus(SW_CONNECTION_STATUS_ERROR_RESP);
         return;
     }
 }
@@ -920,4 +984,21 @@ void MainWindow::on_pushButtonDocLink_clicked()
     QString documentation = QString("file:///" + QCoreApplication::applicationDirPath()) + "/" + DOCUMENTATION_FILE_NAME;
     qDebug()<<documentation;
     QDesktopServices::openUrl(QUrl(documentation));
+}
+
+void MainWindow::on_pushButtonSetTime_clicked()
+{
+    QVector<uint8_t>   buff(sizeof(serverSetTime));
+    //configDescriptionT *confiData = (configDescriptionT *)buff.data();
+    getDeteAndTimeSettings(buff);
+    // start transaction
+    communicatioStack->setRegReq(USER_ADDRESS_STATUS_DATA + offsetof(statusDescriptionT, statusClock)/2 + offsetof(S_TIME_oper_data, serverTime)/2,
+                                 sizeof(serverSetTime)/2,
+                                 buff);
+    communicatioIndicationStart();
+}
+
+void MainWindow::on_checkBoxSyncPC_stateChanged(int arg1)
+{
+    setDateAndTimeDisable(ui->checkBoxSyncPC->isChecked());
 }

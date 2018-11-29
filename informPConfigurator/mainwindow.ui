@@ -805,7 +805,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox">
+               <widget class="QGroupBox" name="groupBoxSetDateAndTime">
                 <property name="minimumSize">
                  <size>
                   <width>400</width>
@@ -1031,19 +1031,19 @@
                     <widget class="QComboBox" name="comboBoxClockSetMounth">
                      <property name="minimumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>6</pointsize>
+                       <pointsize>8</pointsize>
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
@@ -1054,19 +1054,19 @@
                     <widget class="QComboBox" name="comboBoxClockSetYear">
                      <property name="minimumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>6</pointsize>
+                       <pointsize>8</pointsize>
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
@@ -1106,19 +1106,19 @@
                     <widget class="QComboBox" name="comboBoxClockSetDate">
                      <property name="minimumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>6</pointsize>
+                       <pointsize>8</pointsize>
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
@@ -1129,19 +1129,19 @@
                     <widget class="QComboBox" name="comboBoxClockSetHour">
                      <property name="minimumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>6</pointsize>
+                       <pointsize>8</pointsize>
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
@@ -1149,22 +1149,22 @@
                     </widget>
                    </item>
                    <item row="1" column="4">
-                    <widget class="QComboBox" name="comboBoxClockSetSecond">
+                    <widget class="QComboBox" name="comboBoxClockSetMinutes">
                      <property name="minimumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>50</width>
-                       <height>20</height>
+                       <width>60</width>
+                       <height>25</height>
                       </size>
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>6</pointsize>
+                       <pointsize>8</pointsize>
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
@@ -1214,6 +1214,13 @@
                        <width>150</width>
                        <height>30</height>
                       </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>11</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
                      </property>
                      <property name="text">
                       <string>Установить</string>

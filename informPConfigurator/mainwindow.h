@@ -58,6 +58,10 @@ private slots:
     void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
     void on_pushButtonDocLink_clicked();
 
+    void on_pushButtonSetTime_clicked();
+
+    void on_checkBoxSyncPC_stateChanged(int arg1);
+
 private:
     typedef enum
     {
@@ -87,13 +91,16 @@ private:
     /*connunication in process flag*/
     bool communicationInProcess;
 
+    QList<QString> statusModulList;
+    QList<QString> statusDeviceList;
+
 private:
     Ui::MainWindow *ui;
 
     void initUISetings(void);
     void setDeviseCloseUIState(void);
     void setDeviseOpenUIState(void);
-    void swUpdateConnectionStatus(SW_CONNECTION_STATUS inStatus);
+    void updateConnectionStatus(SW_CONNECTION_STATUS inStatus);
     void updateNumLCDString(uint8_t numString);
     void communicatioIndicationStart();
     void communicationComplited();
@@ -108,7 +115,8 @@ private:
     void setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex);
     void setMeteoStatusLineEdit(uint16_t meteoStatus);
     void setDeviceStatusLineEdit(uint16_t statusIndex);
-
+    void setDateAndTimeDisable(bool isDiasble);
+    void getDeteAndTimeSettings(QVector<uint8_t> &buff);
 
 };
 
