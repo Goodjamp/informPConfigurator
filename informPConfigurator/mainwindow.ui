@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1198</width>
+    <width>1170</width>
     <height>443</height>
    </rect>
   </property>
@@ -161,7 +161,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabConfiguration">
        <attribute name="title">
@@ -202,7 +202,7 @@
            </font>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="iconSize">
            <size>
@@ -1771,7 +1771,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1151</width>
+                 <width>1123</width>
                  <height>163</height>
                 </rect>
                </property>
@@ -3564,7 +3564,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>275</width>
+               <width>264</width>
                <height>209</height>
               </rect>
              </property>
@@ -3634,17 +3634,17 @@
               </property>
              </spacer>
             </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="lineEditMeteoRezhPa">
+            <item row="3" column="1">
+             <widget class="QLabel" name="label_90">
               <property name="minimumSize">
                <size>
-                <width>50</width>
+                <width>120</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>50</width>
+                <width>120</width>
                 <height>25</height>
                </size>
               </property>
@@ -3656,13 +3656,7 @@
                </font>
               </property>
               <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
+               <string>Давление, мм. рт. ст</string>
               </property>
              </widget>
             </item>
@@ -3724,17 +3718,17 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QLabel" name="label_90">
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="lineEditMeteoRezHumidity">
               <property name="minimumSize">
                <size>
-                <width>120</width>
+                <width>50</width>
                 <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>120</width>
+                <width>50</width>
                 <height>25</height>
                </size>
               </property>
@@ -3746,12 +3740,50 @@
                </font>
               </property>
               <property name="text">
-               <string>Давление, мм. рт. ст</string>
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="lineEditMeteoRezHumidity">
+            <item row="4" column="2">
+             <widget class="QLineEdit" name="lineEditMeteoRezhPa">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="lineEditMeteoRezTemperature">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -3808,77 +3840,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="label_92">
-              <property name="minimumSize">
-               <size>
-                <width>120</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>120</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Температура, С</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="lineEditMeteoRezTemperature">
-              <property name="minimumSize">
-               <size>
-                <width>50</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <spacer name="horizontalSpacer_65">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>10</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="label_93">
               <property name="minimumSize">
@@ -3905,6 +3866,45 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_92">
+              <property name="minimumSize">
+               <size>
+                <width>120</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>120</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Температура, С</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <spacer name="horizontalSpacer_65">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>10</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item row="0" column="2">
              <widget class="QLineEdit" name="lineEditMeteoStatus">
               <property name="minimumSize">
@@ -3927,6 +3927,53 @@
               </property>
               <property name="statusPr" stdset="0">
                <UInt>0</UInt>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLineEdit" name="lineEdit">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>нету</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLabel" name="label">
+              <property name="minimumSize">
+               <size>
+                <width>120</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>120</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Осадки</string>
               </property>
              </widget>
             </item>
@@ -4171,7 +4218,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1198</width>
+     <width>1170</width>
      <height>21</height>
     </rect>
    </property>

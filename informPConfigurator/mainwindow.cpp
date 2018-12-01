@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    statusDevise.resize(sizeof(statusDescriptionT));
     statusModulList  = {LIST_MODULE_STATUS};
     statusDeviceList = {LIST_DEVICE_STATUS};
     deviceList        = new QStringListModel(this);
@@ -606,66 +606,6 @@ bool MainWindow::getInt16FromStringInt(int16_t *rezConvertOut, QString inString)
 }
 
 
-void MainWindow::getStatusState(QVector<uint8_t> &configBuff)
-{
-    configBuff.resize(sizeof(statusDescriptionT));
-    statusDescriptionT *status      = (statusDescriptionT*)configBuff.begin();
-    //QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
-    //QList<QString> statusModulList  = {LIST_MODULE_STATUS};
-
-    if( statusDeviceList.indexOf(ui->lineEditDevStatus->text()) >=0 )
-    {
-        status->statusDevice.device_statys  = statusDeviceList.indexOf(ui->lineEditDevStatus->text());
-    }
-
-    /*********************read FRQ configuration*****************************/
-    if(statusModulList.indexOf(ui->lineEditFrqMeteringStatus->text()) >= 0)
-    {
-        status->statusFrqMetering.status_FRQmetter = statusModulList.indexOf(ui->lineEditFrqMeteringStatus->text());
-    }  
-
-    {
-        double rezValue;
-        bool rezConver;
-        rezValue = ui->lineEditFrqMeteringFrq->text().toDouble(&rezConver);
-        if(rezConver)
-        {
-            status->statusFrqMetering.rez_FRQmetter = (uint16_t)(rezValue * 1000);
-        }
-    }
-
-
-    /*********************read CLOCK configuration*****************************/
-    if(statusModulList.indexOf(ui->lineEditClockStatus->text()) >= 0)
-    {
-        status->statusClock.status_TIME = statusModulList.indexOf(ui->lineEditClockStatus->text());
-    }
-
-    for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
-    {
-        status->statusClock.clock[k].date_year   = clockMonitorVector[k]->getYear();
-        status->statusClock.clock[k].date_month  = clockMonitorVector[k]->getMonth();
-        status->statusClock.clock[k].date_day    = clockMonitorVector[k]->getDate();
-        status->statusClock.clock[k].time_hour   = clockMonitorVector[k]->getHour() ;
-        status->statusClock.clock[k].time_minute = clockMonitorVector[k]->getMinutes();
-        status->statusClock.clock[k].time_second = clockMonitorVector[k]->getSeconds();
-
-    }
-
-    /*********************read METEO configuration*****************************/
-    QString temp = ui->lineEditMeteoStatus->text();
-    uint8_t index = statusModulList.indexOf(ui->lineEditMeteoStatus->text());
-    if(statusModulList.indexOf(ui->lineEditMeteoStatus->text()) >= 0)
-    {
-        status->statusMeteo.status_sensor = statusModulList.indexOf(ui->lineEditMeteoStatus->text());
-    }
-    getInt16FromStringInt(&status->statusMeteo.rezTemperature,     ui->lineEditMeteoRezTemperature->text());
-    getUint16FromStringInt(&status->statusMeteo.rezHumidity,       ui->lineEditMeteoRezHumidity->text()   );
-    getUint16FromStringInt(&status->statusMeteo.rezPressure_mmHg,  ui->lineEditMeteoRezPressurePb->text() );
-    getUint16FromStringInt(&status->statusMeteo.rezPressure_GPasc, ui->lineEditMeteoRezhPa->text()        );
-}
-
-
 void MainWindow::setModuleStatusLineEdit(QLineEdit *statusLineEdit, uint16_t statusIndex)
 {
    // QList<QString> statusModulList  = {LIST_MODULE_STATUS};
@@ -721,7 +661,6 @@ void MainWindow::setMeteoStatusLineEdit(uint16_t meteoStatus)
 
 void MainWindow::setDeviceStatusLineEdit(uint16_t statusIndex)
 {
-    //QList<QString> statusDeviceList = {LIST_DEVICE_STATUS};
     //statusDeviceList.size()
     uint8_t statusTextIndex = (statusIndex > 0) ? 1 : 0;
     //Set global device status
@@ -799,14 +738,6 @@ void MainWindow::communicatioTimeout()
 void MainWindow::statusRequestTimeout()
 {
     static bool dataOrder = true;
-    /*
-    uint16_t regAddress  = (dataOrder) ?
-            (USER_ADDRESS_STATUS_DATA):
-            (USER_ADDRESS_STATUS_DATA + offsetof(statusDescriptionT, statusClock) / 2);
-    uint16_t regQUantity = (dataOrder) ?
-                (offsetof(statusDescriptionT, statusClock) / 2) :
-                (STATUS_NUM_REG -  offsetof(statusDescriptionT, statusClock) / 2);
-                */
     uint16_t regAddress  = (dataOrder) ?
                            (USER_ADDRESS_STATUS_DATA):
                            (USER_ADDRESS_STATUS_DATA + 28);
@@ -855,7 +786,6 @@ void MainWindow::on_pushButtonRead_clicked()
 void MainWindow::on_pushButtonWrite_clicked()
 {
     QVector<uint8_t>   buff(sizeof(configDescriptionT));
-    //configDescriptionT *confiData = (configDescriptionT *)buff.data();
     getConfigurationSettings(buff);
     if(!checkLCDConfiguration(buff))
     {
@@ -915,14 +845,12 @@ void MainWindow::slotGetRegResp(informPTransportClass::RESP_STATUS responseStatu
         (addressReg + numReg <= USER_ADDRESS_STATUS_DATA + STATUS_NUM_REG))
     {
         qDebug()<<"StatusRequest resp";
-        QVector<uint8_t> statusFromUI(sizeof(statusDescriptionT));
-        getStatusState(statusFromUI);
         uint8_t cnt = (addressReg - USER_ADDRESS_STATUS_DATA) * 2;
         // copy new status data to current status buffer
         foreach (uint8_t val, buff) {
-            statusFromUI[cnt++] = val;
+            statusDevise[cnt++] = val;
         }
-        setStatusState(statusFromUI);
+        setStatusState(statusDevise);
     }
     else if( (addressReg >= USER_ADDRESS_CONFIG_DATA) &&
              (addressReg + numReg <= USER_ADDRESS_CONFIG_DATA + ALL_CONFIG_NUM_REG))
@@ -978,7 +906,6 @@ void MainWindow::slotResetResp(informPTransportClass::RESP_STATUS responseStatus
     }
 }
 
-
 void MainWindow::on_pushButtonDocLink_clicked()
 {
     QString documentation = QString("file:///" + QCoreApplication::applicationDirPath()) + "/" + DOCUMENTATION_FILE_NAME;
@@ -989,7 +916,6 @@ void MainWindow::on_pushButtonDocLink_clicked()
 void MainWindow::on_pushButtonSetTime_clicked()
 {
     QVector<uint8_t>   buff(sizeof(serverSetTime));
-    //configDescriptionT *confiData = (configDescriptionT *)buff.data();
     getDeteAndTimeSettings(buff);
     // start transaction
     communicatioStack->setRegReq(USER_ADDRESS_STATUS_DATA + offsetof(statusDescriptionT, statusClock)/2 + offsetof(S_TIME_oper_data, serverTime)/2,

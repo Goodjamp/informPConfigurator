@@ -93,6 +93,7 @@ private:
 
     QList<QString> statusModulList;
     QList<QString> statusDeviceList;
+    QVector<uint8_t> statusDevise;//(sizeof(statusDescriptionT));
 
 private:
     Ui::MainWindow *ui;
@@ -108,7 +109,6 @@ private:
     bool checkConfiguratinSettings(QVector<uint8_t> &configBuff);
     bool checkLCDConfiguration(QVector<uint8_t> &configBuff);
     bool setConfigurationSettings(QVector<uint8_t> &config);
-    void getStatusState(QVector<uint8_t> &configBuff);
     void setStatusState(QVector<uint8_t> &configBuff);
     bool getUint16FromStringInt(uint16_t *rezConvertOut, QString inString);
     bool getInt16FromStringInt(int16_t *rezConvertOut, QString inString);
