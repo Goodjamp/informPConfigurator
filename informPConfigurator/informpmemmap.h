@@ -81,10 +81,11 @@ typedef struct{
 #pragma pack(push,1)
 typedef struct{
     uint16_t  status_sensor;
-    int16_t   rezTemperature;    // address in memory map rez measure temperature*10
+    uint16_t  rezTemperature;    // address in memory map rez measure temperature*10
     uint16_t  rezHumidity;       // address in memory map rez measure humidity *10
-    uint16_t  rezPressure_mmHg;  // measurement result Pressure mmHg
-    uint16_t  rezPressure_GPasc; // measurement result Pressure GPasc
+    uint16_t  rezPressure_mmHg;  // address in memory map rez Pressure mmHg
+    uint16_t  rezPressure_GPasc; // address in memory map rez Pressure GPasc
+    uint16_t  rezRain;           // address in memory map rez rain
 } S_sensor_address;
 #pragma pack(pop)
 
