@@ -79,8 +79,8 @@ void MainWindow::setDeviseCloseUIState(void)
     ui->pushButtonReset->setDisabled(true);
     ui->tabWidget->setCurrentIndex(0);
     ui->tabWidgetCurrentMode->setCurrentIndex(0);
-    //ui->groupBoxSetDateAndTime->setDisabled(true);
-    //ui->tabWidgetCurrentMode->setDisabled(true);
+    ui->groupBoxSetDateAndTime->setDisabled(true);
+    ui->tabWidgetCurrentMode->setDisabled(true);
 }
 
 
@@ -91,8 +91,8 @@ void MainWindow::setDeviseOpenUIState(void)
     ui->pushButtonRead->setDisabled(false);
     ui->pushButtonWrite->setDisabled(false);
     ui->pushButtonReset->setDisabled(false);
-    //ui->groupBoxSetDateAndTime->setDisabled(false);
-    //ui->tabWidgetCurrentMode->setDisabled(false);
+    ui->groupBoxSetDateAndTime->setDisabled(false);
+    ui->tabWidgetCurrentMode->setDisabled(false);
 }
 
 
