@@ -45,6 +45,8 @@ typedef struct{
 #pragma pack(pop)
 
 
+/*************TIME MODULE STATUS**********/
+#define CLOCK_QUANTITY   4
 #pragma pack(push,1)
 typedef struct
 {
@@ -57,28 +59,37 @@ typedef struct
 }serverSetTime;
 
 typedef struct{
-    uint16_t  status_TIME; // status register TIME module
     uint16_t  date_year;    // date: year
     uint16_t  date_month;   // date: month
     uint16_t  date_day;     // date: day
-    uint16_t  time_honour;  // time: honour
+    uint16_t  time_hour;    // time: honour
     uint16_t  time_minute;  // time: minute
     uint16_t  time_second;  // time: second
     uint16_t  DATE;
     uint16_t  TIME;
+}S_Clock;
+
+typedef struct{
+    uint16_t  status_TIME;  // status register TIME module addtres
+    S_Clock   clock[CLOCK_QUANTITY];
     serverSetTime serverTime;
 } S_TIME_oper_data;
 #pragma pack(pop)
 
+
+/*************METEO MODULE STATUS**********/
 #pragma pack(push,1)
 typedef struct{
-    uint16_t  status_sensor;     // ñòàòóñ ðåãèñòðû sensor
-    int16_t   rezTemperature;    // address in memory map rez measure temperature*10
+    uint16_t  status_sensor;
+    uint16_t  rezTemperature;    // address in memory map rez measure temperature*10
     uint16_t  rezHumidity;       // address in memory map rez measure humidity *10
-    uint16_t  rezPressure_mmHg;  // measurement result Pressure mmHg
-    uint16_t  rezPressure_GPasc; // measurement result Pressure GPasc
+    uint16_t  rezPressure_mmHg;  // address in memory map rez Pressure mmHg
+    uint16_t  rezPressure_GPasc; // address in memory map rez Pressure GPasc
+    uint16_t  rezRain;           // address in memory map rez rain
 } S_sensor_address;
 #pragma pack(pop)
+
+/********TOTAL  STATUS  DESCRIPTION***************/
 
 #pragma pack(push,1)
 typedef struct
@@ -90,6 +101,9 @@ typedef struct
     S_sensor_address       statusMeteo;
 }statusDescriptionT;
 #pragma pack(pop)
+
+
+
 
 /*******************************************************************/
 /************INFORMP CONFIGURATION MEMORY MAP DESCRIPTION***********/
@@ -134,7 +148,7 @@ typedef struct{
 }BF_date_config;
 #pragma pack(pop)
 
-/*************MODBUS MODULE DESCRIPTION****************/
+/*************MODBUS MODULE CONFIGURARION DESCRIPTION****************/
 typedef enum {
     PROTOCOL_MODBUS_MASTER = (uint8_t)0,
     PROTOCOL_MODBUS_SLAVE  = (uint8_t)1,
@@ -160,7 +174,7 @@ typedef struct {
 } S_connectmodbus;
 #pragma pack(pop)
 
-/*************FRQ METERING MODULE DESCRIPTION**********/
+/*************FRQ METERING MODULE CONFIGURARION DESCRIPTION**********/
 #pragma pack(push,1)
 typedef struct{
     uint16_t state;           // state of module ENABLE/DISABLE
@@ -168,7 +182,7 @@ typedef struct{
 }S_FRQmetter_user_config;
 #pragma pack(pop)
 
-/*************CLOCK MODULE DESCRIPTION****************/
+/*************CLOCK MODULE CONFIGURARION DESCRIPTION****************/
 typedef enum
 {
     SYNC_SOURCE_GPS    = 0,
@@ -176,15 +190,20 @@ typedef enum
 }SYNC_SOURCE;
 
 #pragma pack(push,1)
-typedef struct{
-    uint16_t  state;          // state of module ENABLE/DISABLE
-    int16_t   timeCorection;  // time correction in hours
+typedef struct
+{
+    uint16_t  timeCorection:15;  // time correction in minutes
     uint16_t  isDaylightSaving:1;
-    uint16_t  synchronizationSource:15;  // time correction in hours
+}clockIndConfigT;
+
+typedef struct{
+    uint16_t  state;                               // state of module ENABLE/DISABLE
+    uint16_t  synchronizationSource;
+    clockIndConfigT clockConfig[CLOCK_QUANTITY];
 }S_TIME_user_config;
 #pragma pack(pop)
 
-/*************METEO MODULE DESCRIPTION****************/
+/*************METEO MODULE CONFIGURARION  DESCRIPTION****************/
 typedef enum
 {
     METEO_SOURCE_LOCAL,
@@ -198,22 +217,23 @@ typedef struct{
 }S_sensor_user_config;
 #pragma pack(pop)
 
-/*************DISPLAY MODULE DESCRIPTION**************/
-#define NUMBER_OF_VALUE      7
-#define NUMBER_OF_LCD_STRING 4
+/*************DISPLAY MODULE CONFIGURARION DESCRIPTION**************/
+#define QUANTITY_VALUE      13
+#define QUANTITY_LCD_STRING 4
+
 
 #pragma pack(push,1)
 typedef struct{
     uint16_t state;                           // state of module: ENABLE/DISABLE
     uint16_t numScreen;                       // number of screen connected to device
     struct{                                   // configuration parameters of every screen
-       uint16_t numParamiterPerScreen: 3;
-       uint16_t bitsOfParamiters:     (16 - 3);
-    }screenConfig[NUMBER_OF_LCD_STRING];
+       uint32_t numParamiterPerScreen: 8;
+       uint32_t bitsOfParamiters:     (32 - 8);
+    }screenConfig[QUANTITY_LCD_STRING];
 }S_display_user_config;
 #pragma pack(pop)
 
-/********TOTAL  MEMORY MAP DESCRIPTION***************/
+/********TOTAL  CONFIGURARION  DESCRIPTION***************/
 
 /*this type use only for calculate offset of user configuration registers*/
 #pragma pack(push,1)
@@ -251,6 +271,7 @@ typedef union{
 #define ALL_CONFIG_NUM_REG    static_cast<uint16_t>(sizeof(configAddressFields) / 2 )
 #define USER_CONDFIG_ADDRESS  static_cast<uint16_t>(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
 #define USER_CONFIG_NUM_REG   static_cast<uint16_t>(sizeof(configDescriptionT) / 2 )
-#define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT)/2)
+#define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT) / 2)
+
 
 #endif // INFORMPMEMMAP_H

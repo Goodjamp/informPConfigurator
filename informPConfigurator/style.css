@@ -101,6 +101,29 @@ QLineEdit[statusPr="0"]
     border-width: 2px;	
  }
  
+ QPlainTextEdit[statusPlainText="0"]
+{
+	background-color: rgb(250, 250, 150);
+	font-family: "Segoe UI";
+	font-size: 8pt;
+	font-weight: 600;
+	color: rgb(0, 0, 0);
+	border-radius: 8px;
+    border-width: 2px;	
+}
+ 
+
+ QPlainTextEdit[statusPlainText="2"]
+{
+	background-color: rgb(250, 120, 120);
+	font-family: "Segoe UI";
+	font-size: 8pt;
+	font-weight: 600;
+	color: rgb(0, 0, 0);
+	border-radius: 8px;
+    border-width: 2px;	
+ }
+ 
 /************************CONNECTION STATUS************************/
 QLineEdit[statusConnection="0"]
 {

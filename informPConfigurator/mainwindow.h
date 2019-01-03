@@ -12,9 +12,12 @@
 
 #include "waitform.h"
 #include <lcdstr.h>
+#include <clockconfig.h>
+#include <clockmonitor.h>
 #include "hidInterface.h"
 #include "communicationclass.h"
 #include "informptransportclass.h"
+#include "informpmemmap.h"
 
 namespace Ui {
 class MainWindow;
@@ -55,6 +58,10 @@ private slots:
     void slotGetRegResp(informPTransportClass::RESP_STATUS responseStatus, uint16_t addressReg, uint16_t numReg, QVector<uint8_t> buff);
     void on_pushButtonDocLink_clicked();
 
+    void on_pushButtonSetTime_clicked();
+
+    void on_checkBoxSyncPC_stateChanged(int arg1);
+
 private:
     typedef enum
     {
@@ -77,8 +84,16 @@ private:
 
     /*widjets*/
     QVector<lcdStr*> lcdStrVector;
+    /*Clocks*/
+    QVector<clockConfig*> clockConfigVector = QVector<clockConfig*>(4);
+    QVector<clockMonitor*> clockMonitorVector = QVector<clockMonitor*>(4);
+    clockConfig* myClock;
     /*connunication in process flag*/
     bool communicationInProcess;
+
+    QList<QString> statusModulList;
+    QList<QString> statusDeviceList;
+    QVector<uint8_t> statusDevise;//(sizeof(statusDescriptionT));
 
 private:
     Ui::MainWindow *ui;
@@ -86,7 +101,7 @@ private:
     void initUISetings(void);
     void setDeviseCloseUIState(void);
     void setDeviseOpenUIState(void);
-    void swUpdateConnectionStatus(SW_CONNECTION_STATUS inStatus);
+    void updateConnectionStatus(SW_CONNECTION_STATUS inStatus);
     void updateNumLCDString(uint8_t numString);
     void communicatioIndicationStart();
     void communicationComplited();
@@ -94,14 +109,14 @@ private:
     bool checkConfiguratinSettings(QVector<uint8_t> &configBuff);
     bool checkLCDConfiguration(QVector<uint8_t> &configBuff);
     bool setConfigurationSettings(QVector<uint8_t> &config);
-    void getStatusState(QVector<uint8_t> &configBuff);
     void setStatusState(QVector<uint8_t> &configBuff);
     bool getUint16FromStringInt(uint16_t *rezConvertOut, QString inString);
     bool getInt16FromStringInt(int16_t *rezConvertOut, QString inString);
     void setModuleStatusLineEdit(QLineEdit *statuSlineEdit, uint16_t statusIndex);
     void setMeteoStatusLineEdit(uint16_t meteoStatus);
     void setDeviceStatusLineEdit(uint16_t statusIndex);
-
+    void setDateAndTimeDisable(bool isDiasble);
+    void getDeteAndTimeSettings(QVector<uint8_t> &buff);
 
 };
 

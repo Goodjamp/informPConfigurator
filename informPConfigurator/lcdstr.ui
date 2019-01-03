@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1346</width>
-    <height>31</height>
+    <width>981</width>
+    <height>27</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>0</width>
-    <height>20</height>
+    <height>27</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>31</height>
+    <height>27</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -45,8 +45,8 @@
     <widget class="Line" name="line">
      <property name="minimumSize">
       <size>
-       <width>0</width>
-       <height>10</height>
+       <width>15</width>
+       <height>5</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -66,7 +66,7 @@
       <number>0</number>
      </property>
      <property name="rightMargin">
-      <number>8</number>
+      <number>0</number>
      </property>
      <property name="bottomMargin">
       <number>0</number>
@@ -87,6 +87,7 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>11</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -110,28 +111,29 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
-         <height>0</height>
+         <width>15</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar6">
+      <widget class="QCheckBox" name="checkBoxPar4">
        <property name="minimumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="font">
         <font>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -148,7 +150,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>15</width>
          <height>20</height>
         </size>
        </property>
@@ -168,8 +170,8 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
-         <height>0</height>
+         <width>15</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
@@ -178,13 +180,13 @@
       <widget class="QCheckBox" name="checkBoxPar5">
        <property name="minimumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
@@ -200,13 +202,331 @@
       </widget>
      </item>
      <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_9">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxPar6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>19</horstretch>
+         <verstretch>20</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_11">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_12">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxPar7">
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_19">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="line_11">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_20">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxPar8">
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_21">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="line_12">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_22">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxPar9">
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_23">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="line_13">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_24">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxPar10">
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_25">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="line_14">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_26">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxPar11">
+       <property name="minimumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_14">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>15</width>
          <height>20</height>
         </size>
        </property>
@@ -226,23 +546,23 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>43</width>
          <height>0</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar7">
+      <widget class="QCheckBox" name="checkBoxPar12">
        <property name="minimumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
@@ -264,7 +584,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>42</width>
          <height>20</height>
         </size>
        </property>
@@ -284,23 +604,23 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>43</width>
          <height>0</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar1">
+      <widget class="QCheckBox" name="checkBoxPar0">
        <property name="minimumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
@@ -322,7 +642,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>42</width>
          <height>20</height>
         </size>
        </property>
@@ -342,23 +662,23 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>43</width>
          <height>0</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar4">
+      <widget class="QCheckBox" name="checkBoxPar3">
        <property name="minimumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
@@ -380,7 +700,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>42</width>
          <height>20</height>
         </size>
        </property>
@@ -400,23 +720,23 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>43</width>
          <height>0</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar3">
+      <widget class="QCheckBox" name="checkBoxPar2">
        <property name="minimumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>19</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
@@ -438,7 +758,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>42</width>
          <height>20</height>
         </size>
        </property>
@@ -458,23 +778,23 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>43</width>
          <height>0</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxPar2">
+      <widget class="QCheckBox" name="checkBoxPar1">
        <property name="minimumSize">
         <size>
-         <width>20</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>100</width>
+         <width>16</width>
          <height>20</height>
         </size>
        </property>
@@ -496,7 +816,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>42</width>
          <height>20</height>
         </size>
        </property>

@@ -5,7 +5,7 @@
 #define  PID_INFORM_P          0x5711
 
 #define  COMMUNICATION_TIMEOUT  2000
-#define  STATUS_REQUEST_TIMEOUT 1000
+#define  STATUS_REQUEST_TIMEOUT 200
 
 
 #define WIN_NAME            static_cast<QString>(" informP ")
@@ -82,12 +82,16 @@
                            "АВАРИЯ"
 
 /***********REMOTE METEOPOST STATUS DESCRIPTION***********/
-#define METEO_ERROR_LOCAL_RECEIVER_STR  "Авар. датчика"
-#define METEO_ERROR_REM_RECEIVER_STR    "Авар. прм"
+#define METEO_ERROR_LOCAL_RECEIVER_STR  "Авария датчика (локально)"
+#define METEO_ERROR_REM_RECEIVER_STR    "Авария приемника"
 #define METEO_ERROR_REM_RX_TIMEOUT_STR  "Отсутст. сигн метеопоста"
-#define METEO_ERROR_REM_SENSOR_STR      "Авар. удал. датчика"
-#define METEO_ERROR_REM_MES_STR         "Авар. удал. изм."
-#define METEO_ERROR_REM_BATARY_STR      "Низ. заряд акум."
+#define METEO_ERROR_REM_SENSOR_STR      "Авар. метео датчика (удал.)"
+#define METEO_ERROR_REM_MES_STR         "Авар. датчика осадков (удал.)"
+#define METEO_ERROR_REM_BATARY_STR      "Низкий заряд батареи (удал.)"
+
+/**********RAIN SENSOR DATA*******************************/
+#define RAIN_SENSOR_NO_RAIN_STR         "Отсутствуют"
+#define RAIN_SENSOR_RAIN_STR            "Дождь"
 
 typedef enum{
     SENSOR_STATUS_ALLARM_LOCAL         = 0,

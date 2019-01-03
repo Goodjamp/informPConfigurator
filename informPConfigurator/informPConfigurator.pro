@@ -18,7 +18,9 @@ SOURCES += main.cpp\
            hidInterface.cpp \
            waitform.cpp \
            communicationclass.cpp \
-           informptransportclass.cpp
+           informptransportclass.cpp \
+    clockconfig.cpp \
+    clockmonitor.cpp
 
 HEADERS += mainwindow.h \
            lcdstr.h \
@@ -27,11 +29,15 @@ HEADERS += mainwindow.h \
            informpmemmap.h \
            waitform.h \
            communicationclass.h \
-           informptransportclass.h
+           informptransportclass.h \
+    clockconfig.h \
+    clockmonitor.h
 
 FORMS   += mainwindow.ui \
            lcdstr.ui \
-           waitform.ui
+           waitform.ui \
+    clockconfig.ui \
+    clockmonitor.ui
 
 LIBS    += -lhid\
            -lsetupapi\
