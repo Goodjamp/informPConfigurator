@@ -14,21 +14,6 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>12</number>
-   </property>
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>15</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_14">
      <item>
@@ -58,9 +43,25 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_18">
-       <property name="text">
-        <string>+</string>
+      <widget class="QComboBox" name="comboBoxClockCorrectionSign">
+       <property name="minimumSize">
+        <size>
+         <width>35</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>35</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
       </widget>
      </item>

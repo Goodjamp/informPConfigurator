@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QStringList>
+#include <QString>
 
 namespace Ui {
 class clockConfig;
@@ -20,9 +21,9 @@ public:
     void setMinutesRange(QStringList items);
     void setDayLight(bool state);
     bool setMinutesCorrection(uint16_t minutes);
-    bool setHourseCorrection(uint16_t hour);
+    bool setHourseCorrection(int16_t hour);
     uint8_t getDayLight(void);
-    uint16_t getCorrection(void);
+    int16_t getCorrection(void);
 
 private:
     Ui::clockConfig *ui;

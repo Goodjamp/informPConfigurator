@@ -6,6 +6,8 @@ clockConfig::clockConfig(QWidget *parent) :
     ui(new Ui::clockConfig)
 {
     ui->setupUi(this);
+    QStringList signList = {"+", "-"};
+    ui->comboBoxClockCorrectionSign->addItems(signList);
 }
 
 clockConfig::~clockConfig()
@@ -26,10 +28,10 @@ void clockConfig::setMinutesRange(QStringList items)
     ui->comboBoxClockCorrectionMinutes->setCurrentIndex(0);
 }
 
-
-uint16_t clockConfig::getCorrection(void)
+int16_t clockConfig::getCorrection(void)
 {
-    return static_cast<uint16_t>(ui->comboBoxClockCorrectionHours->currentIndex() * 60 + ((ui->comboBoxClockCorrectionMinutes->currentIndex() == 1) ? (30) : (0)));
+    int16_t correction = static_cast<uint16_t>(ui->comboBoxClockCorrectionHours->currentIndex() * 60 + ((ui->comboBoxClockCorrectionMinutes->currentIndex() == 1) ? (30) : (0)));
+    return (ui->comboBoxClockCorrectionSign->currentText() == "-") ? (-correction) : (correction);
 }
 
 uint8_t clockConfig::getDayLight(void)
@@ -52,12 +54,9 @@ bool clockConfig::setMinutesCorrection(uint16_t minutes)
     return true;
 }
 
-bool clockConfig::setHourseCorrection(uint16_t hour)
+bool clockConfig::setHourseCorrection(int16_t hour)
 {
-    if(hour >= 12)
-    {
-        return false;
-    }
-    ui->comboBoxClockCorrectionHours->setCurrentIndex(hour);
+    ui->comboBoxClockCorrectionHours->setCurrentIndex((hour < 0) ? (-1 * hour) : (hour));
+    ui->comboBoxClockCorrectionSign->setCurrentIndex((hour < 0) ? (1) : (0));
     return true;
 }

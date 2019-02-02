@@ -192,7 +192,8 @@ typedef enum
 #pragma pack(push,1)
 typedef struct
 {
-    uint16_t  timeCorection:15;  // time correction in minutes
+    uint16_t  timeCorection:14;  // time correction in minutes
+    uint16_t  isMinusCorrection:1;
     uint16_t  isDaylightSaving:1;
 }clockIndConfigT;
 

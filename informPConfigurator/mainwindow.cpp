@@ -188,7 +188,7 @@ void MainWindow::initUISetings(void)
     QStringList minutesCorrectionList = {LIST_MINUTES_CORRECTION};
 
     QStringList hourseCorrectionList;
-    for(uint32_t correction = 0; correction < 12; correction++)
+    for(uint32_t correction = 0; correction < CLOCK_CORECTION_HOUR; correction++)
     {
         hourseCorrectionList.append(QString::number(correction));
     }
@@ -205,6 +205,7 @@ void MainWindow::initUISetings(void)
         ui->tabWidgetClockConfig->addTab(clockConfigVector[cnt], tabName + QString::number(cnt + 1));
         clockConfigVector[cnt]->setHorseRange(hourseCorrectionList);
         clockConfigVector[cnt]->setMinutesRange(minutesCorrectionList);
+
     }
 
     #define YEARS     40
@@ -315,8 +316,10 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
 
     for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
-        config->configClock.clockConfig[k].isDaylightSaving = clockConfigVector[k]->getDayLight();
-        config->configClock.clockConfig[k].timeCorection    = clockConfigVector[k]->getCorrection();
+        config->configClock.clockConfig[k].isDaylightSaving  = clockConfigVector[k]->getDayLight();
+        int16_t temp = clockConfigVector[k]->getCorrection();
+        config->configClock.clockConfig[k].timeCorection     = (temp >= 0) ? (temp) : (-temp);
+        config->configClock.clockConfig[k].isMinusCorrection = (temp >= 0) ? (0) : (1);
     }
 
     config->configClock.synchronizationSource = (ui->comboBoxClockSyncSource->currentIndex() == 0) ? (SYNC_SOURCE_GPS) : (SYNC_SOURCE_SERVER);
@@ -402,7 +405,7 @@ bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
     {
         if((config->configClock.state != 0 && config->configClock.state != (1))
            || ((uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection) % 30 != 0)
-           || ((uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection ) > 11* 60)
+           || ((uint16_t)std::abs(config->configClock.clockConfig[k].timeCorection ) > CLOCK_CORECTION_HOUR * 60)
            || (config->configClock.synchronizationSource >= ui->comboBoxClockSyncSource->count())
           )
         {
@@ -519,14 +522,13 @@ bool MainWindow::setConfigurationSettings(QVector<uint8_t> &configBuff)
     ui->comboBoxClockState->setCurrentIndex((config->configClock.state == 0) ? 0 : 1);
 
     ui->comboBoxClockSyncSource->setCurrentIndex(config->configClock.synchronizationSource);
-    uint16_t temp;
     for(uint8_t k = 0; k < CLOCK_QUANTITY; k++)
     {
         clockConfigVector[k]->setDayLight(config->configClock.clockConfig[k].isDaylightSaving == 1);
-        temp = config->configClock.clockConfig[k].timeCorection;
-        uint16_t restTimeCorrection = static_cast<uint16_t>(config->configClock.clockConfig[k].timeCorection / 60);
-        clockConfigVector[k]->setHourseCorrection(restTimeCorrection);
-        clockConfigVector[k]->setMinutesCorrection(config->configClock.clockConfig[k].timeCorection - restTimeCorrection * 60);
+        clockConfigVector[k]->setHourseCorrection((config->configClock.clockConfig[k].isMinusCorrection) ?
+                                                  (-1 * static_cast<int16_t>(config->configClock.clockConfig[k].timeCorection / 60)) :
+                                                       (static_cast<int16_t>(config->configClock.clockConfig[k].timeCorection / 60)));
+        clockConfigVector[k]->setMinutesCorrection(config->configClock.clockConfig[k].timeCorection % 60);
     }
 
     /*********************set METEO configuration*****************************/

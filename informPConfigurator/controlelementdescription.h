@@ -10,6 +10,8 @@
 
 #define WIN_NAME            static_cast<QString>(" informP ")
 
+#define CLOCK_CORECTION_HOUR  25
+
 /****************Documentation file name*****************/
 #define DOCUMENTATION_FILE_NAME     static_cast<QString>("informPDocumentation.pdf")
 
