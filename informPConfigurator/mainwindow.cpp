@@ -68,6 +68,7 @@ void MainWindow::setDateAndTimeDisable(bool isDiasble)
     ui->comboBoxClockSetDate->setDisabled(isDiasble);
     ui->comboBoxClockSetHour->setDisabled(isDiasble);
     ui->comboBoxClockSetMinutes->setDisabled(isDiasble);
+    ui->comboBoxClockSetSecond->setDisabled(isDiasble);
 }
 
 void MainWindow::setDeviseCloseUIState(void)
@@ -213,6 +214,7 @@ void MainWindow::initUISetings(void)
     #define DATE      31
     #define HOURS     24
     #define MINUTES   60
+    #define SECONDS   60
 
     for(uint8_t k = 0; k <= YEARS; k++)
     {
@@ -238,6 +240,12 @@ void MainWindow::initUISetings(void)
     {
         ui->comboBoxClockSetMinutes->addItem(QString::number(k, 10));
     }
+
+    for(uint8_t k = 0; k < SECONDS; k++)
+    {
+        ui->comboBoxClockSetSecond->addItem(QString::number(k, 10));
+    }
+
 
     /*****************************METEO  PARAMITERS*********************/
     ui->comboBoxMeteoState->addItems(stateList);
@@ -367,7 +375,7 @@ void MainWindow::getConfigurationSettings(QVector<uint8_t> &configBuff)
     config->configDate.second = static_cast<uint32_t>(QTime::currentTime().second());
 }
 
-void MainWindow::getDeteAndTimeSettings(QVector<uint8_t> &buff)
+void MainWindow::getDateAndTimeSettings(QVector<uint8_t> &buff)
 {
     if(ui->checkBoxSyncPC->isChecked()) // Get PC date and Time
     {
@@ -376,6 +384,7 @@ void MainWindow::getDeteAndTimeSettings(QVector<uint8_t> &buff)
         ((serverSetTime*)buff.data())->Day     = static_cast<uint16_t>(QDate::currentDate().day());
         ((serverSetTime*)buff.data())->Hour    = static_cast<uint16_t>(QTime::currentTime().hour());
         ((serverSetTime*)buff.data())->Minutes = static_cast<uint16_t>(QTime::currentTime().minute());
+        ((serverSetTime*)buff.data())->Seconds = static_cast<uint16_t>(QTime::currentTime().second());
     }
     else
     {
@@ -384,8 +393,8 @@ void MainWindow::getDeteAndTimeSettings(QVector<uint8_t> &buff)
         ((serverSetTime*)buff.data())->Day     = ui->comboBoxClockSetDate->currentIndex() + 1;
         ((serverSetTime*)buff.data())->Hour    = ui->comboBoxClockSetHour->currentIndex();
         ((serverSetTime*)buff.data())->Minutes = ui->comboBoxClockSetMinutes->currentIndex();
+        ((serverSetTime*)buff.data())->Seconds = ui->comboBoxClockSetSecond->currentIndex();
     }
-    ((serverSetTime*)buff.data())->Seconds = 0;
 }
 
 bool MainWindow::checkConfiguratinSettings(QVector<uint8_t> &configBuff)
@@ -931,7 +940,7 @@ void MainWindow::on_pushButtonDocLink_clicked()
 void MainWindow::on_pushButtonSetTime_clicked()
 {
     QVector<uint8_t>   buff(sizeof(serverSetTime));
-    getDeteAndTimeSettings(buff);
+    getDateAndTimeSettings(buff);
     // start transaction
     communicatioStack->setRegReq(USER_ADDRESS_STATUS_DATA + offsetof(statusDescriptionT, statusClock)/2 + offsetof(S_TIME_oper_data, serverTime)/2,
                                  sizeof(serverSetTime)/2,

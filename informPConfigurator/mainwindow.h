@@ -116,7 +116,7 @@ private:
     void setMeteoStatusLineEdit(uint16_t meteoStatus);
     void setDeviceStatusLineEdit(uint16_t statusIndex);
     void setDateAndTimeDisable(bool isDiasble);
-    void getDeteAndTimeSettings(QVector<uint8_t> &buff);
+    void getDateAndTimeSettings(QVector<uint8_t> &buff);
 
 };
 
