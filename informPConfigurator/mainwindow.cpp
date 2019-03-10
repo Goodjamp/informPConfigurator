@@ -952,3 +952,13 @@ void MainWindow::on_checkBoxSyncPC_stateChanged(int arg1)
 {
     setDateAndTimeDisable(ui->checkBoxSyncPC->isChecked());
 }
+
+void MainWindow::on_comboBoxClockSyncSource_currentIndexChanged(const QString &arg1)
+{
+    QStringList clockSourse = {LIST_SYNC_SOURCE};
+    if(QString::compare(arg1, clockSourse[0], Qt::CaseInsensitive)) {
+       ui->groupBoxSetDateAndTime->setEnabled(true);
+       return;
+    }
+    ui->groupBoxSetDateAndTime->setEnabled(false);
+}

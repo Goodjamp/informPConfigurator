@@ -62,6 +62,8 @@ private slots:
 
     void on_checkBoxSyncPC_stateChanged(int arg1);
 
+    void on_comboBoxClockSyncSource_currentIndexChanged(const QString &arg1);
+
 private:
     typedef enum
     {
