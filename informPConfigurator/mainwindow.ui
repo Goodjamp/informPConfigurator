@@ -4089,40 +4089,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelConfigurationYear">
-        <property name="maximumSize">
-         <size>
-          <width>20</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>--</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_19">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>.</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="labelConfigurationMounth">
+       <widget class="QLabel" name="labelConfigurationDay">
         <property name="maximumSize">
          <size>
           <width>20</width>
@@ -4152,7 +4119,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelConfigurationDay">
+       <widget class="QLabel" name="labelConfigurationMounth">
         <property name="maximumSize">
          <size>
           <width>20</width>
@@ -4166,6 +4133,39 @@
         </property>
         <property name="text">
          <string>--</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_19">
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelConfigurationYear">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>--</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
