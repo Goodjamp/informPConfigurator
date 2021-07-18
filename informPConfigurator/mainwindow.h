@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QLineEdit>
 #include <QList>
+#include <QGroupBox>
 
 #include "waitform.h"
 #include <lcdstr.h>
@@ -64,6 +65,8 @@ private slots:
 
     void on_comboBoxClockSyncSource_currentIndexChanged(const QString &arg1);
 
+    void on_radioButtonBui_toggled(bool checked);
+
 private:
     typedef enum
     {
@@ -83,6 +86,7 @@ private:
     QTimer             *timerStatusUpdate;
     QList<QString>     *listOfConnectinStatus;
     waitForm           *communicatioWaitWindow;
+    QGroupBox          *modbusBUiGroupBox;
 
     /*widjets*/
     QVector<lcdStr*> lcdStrVector;

@@ -89,6 +89,18 @@ typedef struct{
 } S_sensor_address;
 #pragma pack(pop)
 
+/*************BUI OPER DATA**********/
+#pragma pack(push,1)
+typedef struct{
+    uint16_t  buiStatus;
+    uint16_t  buiMatrixSymbol;
+    uint16_t  buiSegmentSymbol0;
+    uint16_t  buiSegmentSymbol1;
+    uint16_t  buiSegmentSymbol2;
+    uint16_t  buiSegmentSymbol3;
+} S_bui_oper_data;
+#pragma pack(pop)
+
 /********TOTAL  STATUS  DESCRIPTION***************/
 
 #pragma pack(push,1)
@@ -99,6 +111,7 @@ typedef struct
     S_FRQmetter_oper_data  statusFrqMetering;
     S_TIME_oper_data       statusClock;
     S_sensor_address       statusMeteo;
+    S_bui_oper_data        statusBui;
 }statusDescriptionT;
 #pragma pack(pop)
 
@@ -164,7 +177,7 @@ typedef struct {
  } S_port_config;
 
 typedef struct {
-    uint16_t state;
+    uint8_t state;
     S_port_config s_port_config;   //
     uint8_t type;
     uint16_t waitresp;
@@ -174,10 +187,19 @@ typedef struct {
 } S_connectmodbus;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct {
+    uint8_t state;
+    uint16_t baudrate;
+    uint8_t parity;
+    uint8_t address;
+} S_bui_config;
+#pragma pack(pop)
+
 /*************FRQ METERING MODULE CONFIGURARION DESCRIPTION**********/
 #pragma pack(push,1)
 typedef struct{
-    uint16_t state;           // state of module ENABLE/DISABLE
+    uint8_t state;           // state of module ENABLE/DISABLE
     int16_t  frqCorrection;   // correction of measured frequency: 1 = 1/100 Hz
 }S_FRQmetter_user_config;
 #pragma pack(pop)
@@ -198,8 +220,8 @@ typedef struct
 }clockIndConfigT;
 
 typedef struct{
-    uint16_t  state;                               // state of module ENABLE/DISABLE
-    uint16_t  synchronizationSource;
+    uint8_t state;                               // state of module ENABLE/DISABLE
+    uint16_t synchronizationSource;
     clockIndConfigT clockConfig[CLOCK_QUANTITY];
 }S_TIME_user_config;
 #pragma pack(pop)
@@ -213,19 +235,35 @@ typedef enum
 
 #pragma pack(push,1)
 typedef struct{
-    uint16_t state;         // state of module ENABLE/DISABLE
+    uint8_t state;    // state of module ENABLE/DISABLE
     uint16_t source;  // pressure sensitivity
 }S_sensor_user_config;
 #pragma pack(pop)
 
 /*************DISPLAY MODULE CONFIGURARION DESCRIPTION**************/
-#define QUANTITY_VALUE      13
+typedef enum {
+    LCD_VALUE_DATE_1,
+    LCD_VALUE_TIME_1,
+    LCD_VALUE_DATE_2,
+    LCD_VALUE_TIME_2,
+    LCD_VALUE_DATE_3,
+    LCD_VALUE_TIME_3,
+    LCD_VALUE_DATE_4,
+    LCD_VALUE_TIME_4,
+    LCD_VALUE_FRQ,
+    LCD_VALUE_TEMPERATURE,
+    LCD_VALUE_HUMIDITY,
+    LCD_VALUE_PRESSURE,
+    LCD_VALUE_PRESSURE_GPA,
+    LCD_VALUE_PRESSURE_BUI,
+    LCD_VALUE_CNT
+} LcdValue;
 #define QUANTITY_LCD_STRING 4
 
 
 #pragma pack(push,1)
 typedef struct{
-    uint16_t state;                           // state of module: ENABLE/DISABLE
+    uint8_t state;                           // state of module: ENABLE/DISABLE
     uint16_t numScreen;                       // number of screen connected to device
     struct{                                   // configuration parameters of every screen
        uint32_t numParamiterPerScreen: 8;
@@ -247,6 +285,7 @@ typedef struct
     S_TIME_user_config       configClock;
     S_sensor_user_config     configMeteo;
     S_display_user_config    configLCD;
+    S_bui_config             configBui;
 }configAddressFields;
 #pragma pack(pop)
 
@@ -259,6 +298,7 @@ typedef struct
     S_TIME_user_config       configClock;
     S_sensor_user_config     configMeteo;
     S_display_user_config    configLCD;
+    S_bui_config             configBui;
 }configDescriptionT;
 #pragma pack(pop)
 
@@ -269,10 +309,10 @@ typedef union{
 }transactionBufferT;
 #pragma pack(pop)
 
-#define ALL_CONFIG_NUM_REG    static_cast<uint16_t>(sizeof(configAddressFields) / 2 )
-#define USER_CONDFIG_ADDRESS  static_cast<uint16_t>(USER_ADDRESS_CONFIG_DATA + offsetof(configAddressFields, configDate) / 2)
-#define USER_CONFIG_NUM_REG   static_cast<uint16_t>(sizeof(configDescriptionT) / 2 )
-#define STATUS_NUM_REG        static_cast<uint16_t>(sizeof(statusDescriptionT) / 2)
+#define ALL_CONFIG_NUM_REG    static_cast<uint16_t>((sizeof(configAddressFields) + 1) / 2 )
+#define USER_CONDFIG_ADDRESS  static_cast<uint16_t>(USER_ADDRESS_CONFIG_DATA + (offsetof(configAddressFields, configDate) / 2))
+#define USER_CONFIG_NUM_REG   static_cast<uint16_t>((sizeof(configDescriptionT) + 1) / 2 )
+#define STATUS_NUM_REG        static_cast<uint16_t>((sizeof(statusDescriptionT) + 1) / 2)
 
 
 #endif // INFORMPMEMMAP_H

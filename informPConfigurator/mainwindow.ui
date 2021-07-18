@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1170</width>
+    <width>1200</width>
     <height>434</height>
    </rect>
   </property>
@@ -209,7 +209,7 @@
            </font>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>4</number>
           </property>
           <property name="iconSize">
            <size>
@@ -326,6 +326,8 @@
                 <property name="font">
                  <font>
                   <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -350,6 +352,8 @@
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -390,6 +394,8 @@
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -417,6 +423,8 @@
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -444,6 +452,8 @@
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="text">
@@ -1205,6 +1215,7 @@
                     <widget class="QLabel" name="label_2">
                      <property name="font">
                       <font>
+                       <pointsize>10</pointsize>
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
@@ -1491,9 +1502,40 @@
           </widget>
           <widget class="QWidget" name="tab_Modbus">
            <attribute name="title">
-            <string>Modbus</string>
+            <string>Modbus / БУИ</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLaytModbusBui">
+              <item>
+               <widget class="QRadioButton" name="radioButtonModbus">
+                <property name="text">
+                 <string>Modbus</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButtonBui">
+                <property name="text">
+                 <string>БУИ</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_16">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
             <item>
              <widget class="Line" name="line">
               <property name="minimumSize">
@@ -1812,10 +1854,10 @@
               <widget class="QWidget" name="scrollAreaWidgetContents_3">
                <property name="geometry">
                 <rect>
-                 <x>0</x>
+                 <x>-71</x>
                  <y>0</y>
-                 <width>1125</width>
-                 <height>172</height>
+                 <width>1220</width>
+                 <height>140</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_21">
@@ -2794,6 +2836,42 @@
                      </property>
                     </spacer>
                    </item>
+                   <item>
+                    <widget class="Line" name="line_9">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="minimumSize">
+                      <size>
+                       <width>96</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>96</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>9</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>BUI</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </widget>
                 </item>
@@ -3607,8 +3685,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>250</width>
-               <height>213</height>
+               <width>260</width>
+               <height>203</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_22"/>
@@ -3990,6 +4068,7 @@
               </property>
               <property name="font">
                <font>
+                <pointsize>10</pointsize>
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
@@ -4021,6 +4100,7 @@
               </property>
               <property name="font">
                <font>
+                <pointsize>10</pointsize>
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
@@ -4286,8 +4366,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1170</width>
-     <height>18</height>
+     <width>1200</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
